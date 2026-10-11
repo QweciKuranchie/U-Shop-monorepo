@@ -59,15 +59,23 @@ export default function NewsletterForm({
   return (
     <div className={`w-full ${className}`}>
       {status === "success" ? (
-        <div className="flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/20 px-4 py-3 rounded-xl text-emerald-400 text-sm">
+        <div role="status" className="flex items-center gap-2.5 bg-emerald-500/10 border border-emerald-500/20 px-4 py-3 rounded-xl text-emerald-400 text-sm">
           <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
           <span>{message}</span>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+          <label htmlFor={`newsletter-email-${source}`} className="sr-only">
+            Email address
+          </label>
           <div className="flex w-full">
             <input
+              id={`newsletter-email-${source}`}
               type="email"
+              name="email"
+              autoComplete="email"
+              inputMode="email"
+              maxLength={254}
               required
               value={email}
               onChange={(e) => {
@@ -79,14 +87,15 @@ export default function NewsletterForm({
               }}
               placeholder="Enter your email address"
               disabled={status === "loading"}
-              className="px-4 py-2.5 bg-gray-800 border border-gray-700 text-white text-sm rounded-l-xl
+              aria-invalid={status === "error"}
+              className="min-h-11 px-4 py-2.5 bg-gray-800 border border-gray-700 text-white text-sm rounded-l-xl
                 placeholder:text-gray-500 focus:outline-hidden focus:ring-1 focus:ring-ushop-pink focus:border-ushop-pink
                 w-full disabled:opacity-50 transition-colors"
             />
             <button
               type="submit"
               disabled={status === "loading" || !email}
-              className="px-5 py-2.5 bg-ushop-pink border border-transparent text-white text-sm font-bold rounded-r-xl
+              className="min-h-11 px-5 py-2.5 bg-ushop-pink border border-transparent text-white text-sm font-bold rounded-r-xl
                 hover:bg-ushop-pink/90 transition-colors whitespace-nowrap disabled:opacity-50 flex items-center justify-center min-w-[110px] shrink-0"
             >
               {status === "loading" ? (
@@ -100,15 +109,20 @@ export default function NewsletterForm({
             </button>
           </div>
 
+          <p className="text-[11px] text-gray-400">
+            No spam. Unsubscribe anytime. See our{" "}
+            <a href="/privacy" className="underline hover:text-white">privacy policy</a>.
+          </p>
+
           {status === "already_subscribed" && (
-            <p className="text-amber-400 text-xs flex items-center gap-1.5 mt-1">
+            <p role="status" className="text-amber-400 text-xs flex items-center gap-1.5 mt-1">
               <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span>{message}</span>
             </p>
           )}
 
           {status === "error" && (
-            <p className="text-red-400 text-xs flex items-center gap-1.5 mt-1">
+            <p role="alert" className="text-red-400 text-xs flex items-center gap-1.5 mt-1">
               <AlertCircle className="w-3.5 h-3.5 shrink-0" />
               <span>{message}</span>
             </p>

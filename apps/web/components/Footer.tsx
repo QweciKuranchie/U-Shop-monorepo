@@ -105,8 +105,7 @@ const Footer = () => {
                 <div>
                   <SubTitle>Join the Newsletter</SubTitle>
                   <SubText>
-                    Subscribe to our newsletter to receive updates and exclusive
-                    deals
+                    Get new arrivals, deals and updates by email
                   </SubText>
                 </div>
               </div>
