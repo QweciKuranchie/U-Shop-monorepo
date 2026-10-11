@@ -1,24 +1,34 @@
-import { createServerClient } from "@repo/supabase/server";
+export const dynamic = "force-dynamic";
+
 import { client } from "@repo/sanity";
-import { SELLER_STORE_QUERY, SELLER_PRODUCTS_COUNT_QUERY, SELLER_ORDERS_COUNT_QUERY } from "@repo/sanity/queries";
+import { SELLER_PRODUCTS_COUNT_QUERY, SELLER_ORDERS_QUERY } from "@repo/sanity/queries";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { SalesChart } from "@/components/dashboard/SalesChart";
 import { ShoppingBag, ShoppingCart, DollarSign, Clock } from "lucide-react";
+import { getCurrentStore } from "@/lib/currentStore";
+import {
+  aggregateWeeklyRevenue,
+  countsAsRevenue,
+  formatGhs,
+  needsDispatch,
+  sellerSubtotal,
+  type SellerOrder,
+} from "@/lib/sellerOrders";
 
 export default async function DashboardPage() {
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const store = await getCurrentStore();
 
-  const store = user ? await client.fetch(SELLER_STORE_QUERY, { userId: user.id }) : null;
+  // Everything below is scoped to this store; nothing is global or sample data.
+  const [productsCount, orders] = store
+    ? await Promise.all([
+        client.fetch<number>(SELLER_PRODUCTS_COUNT_QUERY, { storeId: store._id }),
+        client.fetch<SellerOrder[]>(SELLER_ORDERS_QUERY, { storeId: store._id }),
+      ])
+    : [0, [] as SellerOrder[]];
 
-  const [productsCount, ordersCount] = await Promise.all([
-    store?._id
-      ? client.fetch(SELLER_PRODUCTS_COUNT_QUERY, { storeId: store._id })
-      : Promise.resolve(0),
-    client.fetch(SELLER_ORDERS_COUNT_QUERY),
-  ]);
+  const revenue = orders.filter(countsAsRevenue).reduce((sum, o) => sum + sellerSubtotal(o), 0);
+  const pending = orders.filter(needsDispatch).length;
+  const weekly = aggregateWeeklyRevenue(orders);
 
   return (
     <div className="space-y-6">
@@ -28,12 +38,12 @@ export default async function DashboardPage() {
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard title="Active Listings" value={productsCount ?? 0} description="Published products" icon={ShoppingBag} />
-        <KpiCard title="Total Orders" value={ordersCount ?? 0} description="Lifetime store orders" icon={ShoppingCart} />
-        <KpiCard title="Total Revenue" value="GH₵ 12,450.00" description="+18% from last month" icon={DollarSign} />
-        <KpiCard title="Pending Fulfillment" value="3" description="Requires dispatch" icon={Clock} />
+        <KpiCard title="Total Orders" value={orders.length} description="Orders with your products" icon={ShoppingCart} />
+        <KpiCard title="Total Revenue" value={formatGhs(revenue)} description="Paid orders, your items only" icon={DollarSign} />
+        <KpiCard title="Pending Fulfillment" value={pending} description="Requires dispatch" icon={Clock} />
       </div>
       <div className="grid gap-4 md:grid-cols-4">
-        <SalesChart />
+        <SalesChart data={weekly} />
       </div>
     </div>
   );
