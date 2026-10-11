@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   StarIcon,
   ThumbsUp,
@@ -8,6 +8,7 @@ import {
   ShieldCheck,
   Plus,
   Loader2,
+  Store,
 } from "lucide-react";
 import {  Button  } from "@repo/ui";
 import ReviewSidebar from "@/components/ReviewSidebar";
@@ -26,6 +27,7 @@ interface Review {
   content: string;
   helpful: number;
   isVerifiedPurchase: boolean;
+  sellerReply?: { text?: string; repliedAt?: string } | null;
   createdAt: string;
   user: {
     firstName: string;
@@ -44,6 +46,14 @@ interface ProductReviewsProps {
   initialReviews?: Review[];
 }
 
+const SORTS = [
+  { value: "recent", label: "Most recent" },
+  { value: "helpful", label: "Most helpful" },
+  { value: "highest", label: "Highest rated" },
+  { value: "lowest", label: "Lowest rated" },
+] as const;
+type SortValue = (typeof SORTS)[number]["value"];
+
 const ProductReviews = React.memo(
   ({ productId, productName, initialReviews }: ProductReviewsProps) => {
     const { isSignedIn } = useUser();
@@ -55,6 +65,8 @@ const ProductReviews = React.memo(
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [visibleCount, setVisibleCount] = useState(5);
+    const [sort, setSort] = useState<SortValue>("recent");
+    const [ratingFilter, setRatingFilter] = useState<number | null>(null);
 
     const loadReviews = useCallback(async () => {
       if (!productId) return;
@@ -155,6 +167,20 @@ const ProductReviews = React.memo(
       oneStar: reviews.filter((r) => r.rating === 1).length,
     };
 
+    const verifiedCount = reviews.filter((r) => r.isVerifiedPurchase).length;
+
+    const visibleReviews = useMemo(() => {
+      const filtered = ratingFilter ? reviews.filter((r) => r.rating === ratingFilter) : reviews;
+      const byDate = (a: Review, b: Review) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return [...filtered].sort((a, b) => {
+        if (sort === "helpful") return (b.helpful || 0) - (a.helpful || 0) || byDate(a, b);
+        if (sort === "highest") return b.rating - a.rating || byDate(a, b);
+        if (sort === "lowest") return a.rating - b.rating || byDate(a, b);
+        return byDate(a, b);
+      });
+    }, [reviews, sort, ratingFilter]);
+
     return (
       <div className="space-y-8 mt-12 pt-12 border-t border-gray-100">
         {/* Header with Title & Action Button */}
@@ -164,7 +190,7 @@ const ProductReviews = React.memo(
               Customer Reviews
             </h2>
             <p className="text-sm text-zinc-500 mt-1">
-              Read what verified buyers are saying about {productName}
+              Read what buyers are saying about {productName}
             </p>
           </div>
 
@@ -191,10 +217,11 @@ const ProductReviews = React.memo(
               <div className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
                 {averageRating.toFixed(1)}
               </div>
-              <div className="flex items-center gap-1 my-2">
+              <div className="flex items-center gap-1 my-2" role="img" aria-label={`Average rating ${averageRating.toFixed(1)} out of 5`}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <StarIcon
                     key={star}
+                    aria-hidden="true"
                     size={18}
                     className={
                       star <= Math.round(averageRating)
@@ -205,7 +232,8 @@ const ProductReviews = React.memo(
                 ))}
               </div>
               <div className="text-xs font-semibold text-gray-500">
-                Based on {totalReviews} verified {totalReviews === 1 ? "review" : "reviews"}
+                Based on {totalReviews} {totalReviews === 1 ? "review" : "reviews"}
+                {verifiedCount > 0 && ` (${verifiedCount} verified ${verifiedCount === 1 ? "purchase" : "purchases"})`}
               </div>
             </div>
 
@@ -219,10 +247,19 @@ const ProductReviews = React.memo(
                 { stars: 1, count: distribution.oneStar },
               ].map(({ stars, count }) => {
                 const percent = totalReviews > 0 ? Math.round((count / totalReviews) * 100) : 0;
+                const active = ratingFilter === stars;
                 return (
-                  <div key={stars} className="flex items-center gap-3 text-xs">
+                  <button
+                    type="button"
+                    key={stars}
+                    disabled={count === 0}
+                    aria-pressed={active}
+                    aria-label={`${stars} star reviews: ${count}. ${active ? "Clear filter" : "Show only these"}`}
+                    onClick={() => { setRatingFilter(active ? null : stars); setVisibleCount(5); }}
+                    className={`flex w-full items-center gap-3 text-xs rounded-md px-1 py-0.5 text-left disabled:opacity-50 disabled:cursor-default ${active ? "bg-yellow-50 ring-1 ring-yellow-300" : "hover:bg-white/70"}`}
+                  >
                     <span className="w-12 text-gray-600 font-medium flex items-center gap-1">
-                      {stars} <StarIcon size={12} className="fill-yellow-400 text-yellow-400" />
+                      {stars} <StarIcon aria-hidden="true" size={12} className="fill-yellow-400 text-yellow-400" />
                     </span>
                     <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
@@ -231,7 +268,7 @@ const ProductReviews = React.memo(
                       />
                     </div>
                     <span className="w-12 text-right text-gray-500 font-semibold">{count}</span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -266,7 +303,29 @@ const ProductReviews = React.memo(
             </div>
           ) : (
             <>
-              {reviews.slice(0, visibleCount).map((review) => (
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-xs text-gray-500" aria-live="polite">
+                  {ratingFilter
+                    ? `Showing ${visibleReviews.length} ${ratingFilter}-star ${visibleReviews.length === 1 ? "review" : "reviews"}`
+                    : `${reviews.length} ${reviews.length === 1 ? "review" : "reviews"}`}
+                  {ratingFilter && (
+                    <button type="button" className="ml-2 underline text-ushop-purple" onClick={() => setRatingFilter(null)}>
+                      Clear filter
+                    </button>
+                  )}
+                </p>
+                <label className="flex items-center gap-2 text-xs text-gray-600">
+                  Sort by
+                  <select
+                    value={sort}
+                    onChange={(e) => { setSort(e.target.value as SortValue); setVisibleCount(5); }}
+                    className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs"
+                  >
+                    {SORTS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                </label>
+              </div>
+              {visibleReviews.slice(0, visibleCount).map((review) => (
                 <div
                   key={review._id}
                   className="bg-white border border-gray-100 rounded-2xl p-5 sm:p-6 shadow-2xs hover:border-ushop-purple/20 transition-all"
@@ -292,10 +351,11 @@ const ProductReviews = React.memo(
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1" role="img" aria-label={`${review.rating} out of 5 stars`}>
                       {[1, 2, 3, 4, 5].map((star) => (
                         <StarIcon
                           key={star}
+                          aria-hidden="true"
                           size={14}
                           className={
                             star <= review.rating
@@ -328,6 +388,7 @@ const ProductReviews = React.memo(
 
                     <button
                       onClick={() => handleMarkHelpful(review._id)}
+                      aria-pressed={Boolean(helpfulRatings[review._id])}
                       className={`flex items-center gap-1.5 text-xs font-semibold py-1 px-3 rounded-full border transition-all ${
                         helpfulRatings[review._id]
                           ? "bg-emerald-50 border-emerald-200 text-emerald-700 font-bold"
@@ -338,17 +399,33 @@ const ProductReviews = React.memo(
                       <span>Helpful ({review.helpful || 0})</span>
                     </button>
                   </div>
+
+                  {review.sellerReply?.text && (
+                    <div className="mt-4 rounded-xl bg-purple-50/60 border border-purple-100 p-4">
+                      <p className="text-xs font-bold text-ushop-purple-dark flex items-center gap-1.5">
+                        <Store size={13} aria-hidden="true" /> Response from the seller
+                        {review.sellerReply.repliedAt && (
+                          <span className="font-normal text-gray-400">
+                            · {new Date(review.sellerReply.repliedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                          </span>
+                        )}
+                      </p>
+                      <p className="mt-1 text-xs sm:text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+                        {review.sellerReply.text}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
 
-              {reviews.length > visibleCount && (
+              {visibleReviews.length > visibleCount && (
                 <div className="text-center pt-2">
                   <Button
                     variant="outline"
                     onClick={() => setVisibleCount((prev) => prev + 5)}
                     className="text-xs font-bold rounded-xl border-gray-200 hover:border-ushop-purple text-gray-700"
                   >
-                    Load More Reviews ({reviews.length - visibleCount} remaining)
+                    Load More Reviews ({visibleReviews.length - visibleCount} remaining)
                   </Button>
                 </div>
               )}

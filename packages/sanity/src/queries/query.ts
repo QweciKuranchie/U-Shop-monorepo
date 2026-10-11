@@ -126,6 +126,7 @@ const PRODUCT_BY_SLUG_QUERY = defineQuery(
       content,
       helpful,
       isVerifiedPurchase,
+      sellerReply,
       "createdAt": _createdAt,
       "user": coalesce(user->{ firstName, lastName }, { "firstName": coalesce(userName, "Customer"), "lastName": "" })
     }

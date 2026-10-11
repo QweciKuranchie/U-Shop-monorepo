@@ -191,14 +191,18 @@ const ProductContent = ({
 
               {/* Enhanced Rating Display */}
               {totalReviews > 0 ? (
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-0.5">
+                <a
+                  href="#reviews"
+                  className="flex items-center gap-3 w-fit hover:opacity-80"
+                  aria-label={`Rated ${averageRating.toFixed(1)} out of 5 from ${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}. Jump to reviews`}
+                >
+                  <div className="flex items-center gap-0.5" aria-hidden="true">
                     {[...Array(5)].map((_, index) => (
                       <StarIcon
                         key={index}
                         size={16}
                         className={`${
-                          index < Math.floor(averageRating)
+                          index < Math.round(averageRating)
                             ? "text-yellow-400 fill-yellow-400"
                             : "text-zinc-300"
                         }`}
@@ -209,7 +213,7 @@ const ProductContent = ({
                     {averageRating.toFixed(1)} ({totalReviews}{" "}
                     {totalReviews === 1 ? "review" : "reviews"})
                   </span>
-                </div>
+                </a>
               ) : (
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
@@ -427,7 +431,7 @@ const ProductContent = ({
                 Secure Payment
               </h3>
               <p className="text-xs text-zinc-500">
-                100% secure payment with SSL encryption
+                Pay by card or Mobile Money through Paystack, or on delivery
               </p>
             </Card>
 
@@ -460,6 +464,7 @@ const ProductContent = ({
 
         {/* Customer Reviews */}
         <ProductSectionWrapper delay={0.9}>
+          <div id="reviews" className="scroll-mt-24" />
           <ProductReviews
             productId={product._id}
             productName={product.name || "this product"}

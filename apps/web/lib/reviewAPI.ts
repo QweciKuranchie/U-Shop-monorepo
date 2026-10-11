@@ -22,6 +22,7 @@ export interface ProductReviewsData {
     content: string;
     helpful: number;
     isVerifiedPurchase: boolean;
+    sellerReply?: { text?: string; repliedAt?: string } | null;
     createdAt: string;
     user: {
       _id: string;
