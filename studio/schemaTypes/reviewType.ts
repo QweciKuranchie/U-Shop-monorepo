@@ -98,6 +98,16 @@ export const reviewType = defineType({
       hidden: true,
     }),
     defineField({
+      name: "sellerReply",
+      title: "Seller Reply",
+      type: "object",
+      description: "Public reply from the seller who owns the reviewed product",
+      fields: [
+        defineField({ name: "text", title: "Reply", type: "text", validation: (Rule) => Rule.max(500) }),
+        defineField({ name: "repliedAt", title: "Replied At", type: "datetime", readOnly: true }),
+      ],
+    }),
+    defineField({
       name: "adminNotes",
       title: "Admin Notes",
       type: "text",

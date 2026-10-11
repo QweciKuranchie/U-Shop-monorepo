@@ -744,6 +744,14 @@ export const productType = defineType({
       hidden: ({ parent }) => parent?.warrantyType === "no_warranty",
       validation: (Rule) => Rule.max(500).error("Warranty description max length is 500 chars."),
     }),
+    defineField({
+      name: "freeTechSupport",
+      title: "Free Tech Support",
+      type: "boolean",
+      group: "inventory_warranty",
+      description: "Tick if you offer free technical support to buyers of this product.",
+      initialValue: false,
+    }),
 
     // ─── TAB 4: IMAGES ──────────────────────────────────────────
     defineField({
