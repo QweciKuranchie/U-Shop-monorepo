@@ -3,6 +3,7 @@
 import { Product } from "@repo/sanity";
 import {  Card, CardContent, CardHeader, CardTitle  } from "@repo/ui";
 import {  Badge  } from "@repo/ui";
+import { FREE_SHIPPING_THRESHOLD, MIN_SHIPPING_FEE } from "@repo/utils/pricing";
 import { Package, Truck, Shield, Award } from "lucide-react";
 
 interface ProductSpecsProps {
@@ -68,10 +69,11 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-emerald-600 font-medium">✓ Free Shipping</span>
+            <span className="text-emerald-600 font-medium">
+              Free on orders of GH₵{FREE_SHIPPING_THRESHOLD}+
+            </span>
           </div>
-          <div className="text-gray-600">Estimated: 2-5 business days</div>
-          <div className="text-gray-600">Express: 1-2 business days</div>
+          <div className="text-gray-600">Delivery from GH₵{MIN_SHIPPING_FEE}, shown at checkout</div>
         </CardContent>
       </Card>
 
@@ -89,8 +91,8 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
             Manufacturer Warranty
           </div>
           <div className="text-gray-600">
-            <span className="font-medium text-ushop-purple">30 Days</span>{" "}
-            Return Policy
+            <span className="font-medium text-ushop-purple">7 Days</span>{" "}
+            Return Policy (defective items)
           </div>
           <div className="text-gray-600">Free Tech Support</div>
         </CardContent>

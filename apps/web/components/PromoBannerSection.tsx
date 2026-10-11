@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Truck } from "lucide-react";
 import Container from "./Container";
+import { FREE_SHIPPING_THRESHOLD } from "@repo/utils/pricing";
 
 const sliderBanners = [
   {
@@ -252,7 +253,7 @@ const PromoBannerSection: React.FC = () => {
               Free Shipping
             </h4>
             <p className="text-xs sm:text-sm text-gray-500">
-              Free Delivery Now On Your First Order
+              {`Free delivery on orders of GH₵${FREE_SHIPPING_THRESHOLD} and above`}
             </p>
           </div>
         </div>

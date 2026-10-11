@@ -13,6 +13,8 @@ import AddToWishlistBtn from "@/components/AddToWishlistBtn";
 
 import { Product } from "@repo/sanity";
 import { urlFor } from "@repo/sanity";
+import { FREE_SHIPPING_THRESHOLD, MIN_SHIPPING_FEE } from "@repo/utils/pricing";
+import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -61,6 +63,21 @@ const ProductContent = ({
 
   // Active image selector state
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product?.name || "UShop", url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard");
+      }
+    } catch (err) {
+      // The user dismissing the share sheet is not an error.
+      if ((err as Error)?.name !== "AbortError") toast.error("Couldn't share this product");
+    }
+  };
 
   // Build category hierarchy array from root ancestor down to leaf
   const buildCategoryHierarchy = (cat: { title?: string; slug?: { current?: string }; parent?: unknown }) => {
@@ -333,15 +350,30 @@ const ProductContent = ({
 
             {/* Action Links */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 border-b border-zinc-100 py-4 sm:py-5">
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              <Link
+                href="/contact"
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <HelpCircle size={15} className="shrink-0" />
                 <span className="truncate">Ask question</span>
-              </button>
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              </Link>
+              <button
+                type="button"
+                onClick={() =>
+                  document
+                    .getElementById("delivery-info")
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                }
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <Truck size={15} className="shrink-0" />
                 <span className="truncate">Delivery & Return</span>
               </button>
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <Share2 size={15} className="shrink-0" />
                 <span className="truncate">Share</span>
               </button>
@@ -349,18 +381,16 @@ const ProductContent = ({
 
             {/* Delivery Information */}
             <ProductActionWrapper delay={0.5}>
-              <div className="flex flex-col border border-zinc-200/80 rounded-2xl overflow-hidden bg-white shadow-xs">
+              <div id="delivery-info" className="flex flex-col border border-zinc-200/80 rounded-2xl overflow-hidden bg-white shadow-xs scroll-mt-24">
                 <div className="p-4 flex items-start gap-3.5 border-b border-zinc-100">
                   <Truck size={24} className="text-ushop-pink mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-zinc-800">
-                      Free Delivery
+                      Delivery from GH₵{MIN_SHIPPING_FEE}
                     </p>
                     <p className="text-xs text-zinc-500 mt-0.5">
-                      Enter your Postal code for Delivery Availability.{" "}
-                      <button className="underline hover:text-ushop-pink transition-colors font-medium">
-                        Check now
-                      </button>
+                      Free on orders of GH₵{FREE_SHIPPING_THRESHOLD}+. The exact fee
+                      depends on your delivery location and is shown at checkout.
                     </p>
                   </div>
                 </div>
@@ -368,13 +398,13 @@ const ProductContent = ({
                   <CornerDownLeft size={24} className="text-ushop-pink mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-zinc-800">
-                      Return Delivery
+                      Returns
                     </p>
                     <p className="text-xs text-zinc-500 mt-0.5">
-                      Free 30 days Delivery Returns.{" "}
-                      <button className="underline hover:text-ushop-pink transition-colors font-medium">
+                      Defective or not-as-described items can be returned within 7 days of delivery.{" "}
+                      <Link href="/faqs" className="underline hover:text-ushop-pink transition-colors font-medium">
                         Details
-                      </button>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -407,7 +437,7 @@ const ProductContent = ({
                 Fast Delivery
               </h3>
               <p className="text-xs text-zinc-500">
-                Free shipping on orders over GH₵50
+                {`Free shipping on orders over GH₵${FREE_SHIPPING_THRESHOLD}`}
               </p>
             </Card>
 
@@ -417,7 +447,7 @@ const ProductContent = ({
                 Easy Returns
               </h3>
               <p className="text-xs text-zinc-500">
-                30-day hassle-free returns
+                7-day returns for defective items
               </p>
             </Card>
           </div>
