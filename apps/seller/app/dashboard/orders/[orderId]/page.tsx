@@ -1,7 +1,13 @@
+export const dynamic = "force-dynamic";
+
 import { client } from "@repo/sanity";
+import { SELLER_ORDER_DETAIL_QUERY } from "@repo/sanity/queries";
 import { Card, CardContent, CardHeader, CardTitle, Badge } from "@repo/ui";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { getCurrentStore } from "@/lib/currentStore";
+import { formatGhs, sellerSubtotal, type SellerOrder } from "@/lib/sellerOrders";
 
 export default async function OrderDetailPage({
   params,
@@ -9,11 +15,13 @@ export default async function OrderDetailPage({
   params: Promise<{ orderId: string }>;
 }) {
   const { orderId } = await params;
-  const order = await client.fetch(`*[_type == "order" && _id == $orderId][0]`, { orderId });
+  const store = await getCurrentStore();
+  // Scoped to the seller's store: another seller's order is indistinguishable from a missing one.
+  const order: SellerOrder | null = store
+    ? await client.fetch(SELLER_ORDER_DETAIL_QUERY, { orderId, storeId: store._id })
+    : null;
 
-  if (!order) {
-    return <div>Order not found.</div>;
-  }
+  if (!order) notFound();
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -26,12 +34,18 @@ export default async function OrderDetailPage({
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>Order Summary</CardTitle>
+          <CardTitle>Your items in this order</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Total Price:</span>
-            <span className="font-bold">GH₵ {order.totalPrice || 0}</span>
+          {(order.sellerItems ?? []).map((item, i) => (
+            <div key={i} className="flex justify-between text-sm">
+              <span>{item.quantity} × {item.productName ?? "Product"}</span>
+              <span>{formatGhs((Number(item.price) || 0) * (Number(item.quantity) || 0))}</span>
+            </div>
+          ))}
+          <div className="flex justify-between text-sm border-t pt-3">
+            <span className="text-muted-foreground">Your subtotal:</span>
+            <span className="font-bold">{formatGhs(sellerSubtotal(order))}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Payment Status:</span>
@@ -39,7 +53,7 @@ export default async function OrderDetailPage({
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Fulfillment Status:</span>
-            <Badge>{order.orderStatus || "processing"}</Badge>
+            <Badge>{order.orderStatus || "pending"}</Badge>
           </div>
         </CardContent>
       </Card>
