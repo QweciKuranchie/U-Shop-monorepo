@@ -6,14 +6,6 @@ const BANNER_QUERY = defineQuery(
 const FEATURED_CATEGORY_QUERY = defineQuery(
   `*[_type == 'category' && featured == true] | order(name desc)`
 );
-const ALL_PRODUCTS_QUERY = defineQuery(
-  `*[_type=="product"] | order(name asc){
-    ...,
-    "categories": categories[]->title,
-    "averageRating": coalesce(math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating), averageRating, 0),
-    "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
-  }`
-);
 const DEAL_PRODUCTS = defineQuery(
   `*[_type == 'product' && (isFlashSale == true || isStudentDeal == true || isClearance == true || isBlackFriday == true || isSpecialOffer == true || status == 'hot' || discount > 0)] | order(_createdAt desc){
     ...,
@@ -412,7 +404,6 @@ const PRODUCTS_BY_STORE_SLUG_QUERY = defineQuery(
 export {
   BANNER_QUERY,
   FEATURED_CATEGORY_QUERY,
-  ALL_PRODUCTS_QUERY,
   DEAL_PRODUCTS,
   POPULAR_PRODUCTS as FEATURE_PRODUCTS,
   POPULAR_PRODUCTS,

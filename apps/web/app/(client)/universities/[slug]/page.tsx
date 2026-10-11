@@ -6,7 +6,9 @@ import ProductCard from "@/components/ProductCard";
 import StoreCard from "@/components/stores/StoreCard";
 import HorizontalScrollContainer from "@/components/common/HorizontalScrollContainer";
 import NoProductAvailable from "@/components/product/NoProductsAvailable";
-import { getSingleUniversityBySlug, getProductsByUniversitySlug, getAllProducts, getStores } from "@repo/sanity/queries";
+import { getSingleUniversityBySlug, getProductsByUniversitySlug, getStores } from "@repo/sanity/queries";
+import { getFallbackProducts } from "@/lib/catalogFallback";
+import { topRated } from "@/lib/trending";
 import { getUniversityImageUrl } from "@/lib/universityImages";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,22 +59,23 @@ const SingleUniversityPage = async ({ params }: Props) => {
     return notFound();
   }
 
-  // If no products specific to this campus are returned, fetch general all products as fallbacks
-  let displayProducts: Product[] = fetchedProducts as Product[];
-  if (!displayProducts || displayProducts.length === 0) {
-    const all = await getAllProducts();
-    displayProducts = (all || []) as Product[];
+  // If no products specific to this campus are returned, show general products instead.
+  // That used to load the ENTIRE catalogue; now it is one bounded page plus the true
+  // total (so counters stay honest and a "browse all" link can take over).
+  let displayProducts: Product[] = (fetchedProducts || []) as Product[];
+  let displayTotal = displayProducts.length;
+  const isFallback = displayProducts.length === 0;
+  if (isFallback) {
+    const fallback = await getFallbackProducts();
+    displayProducts = fallback.products;
+    displayTotal = fallback.total;
   }
 
   const allStores = (allStoresData || []) as ExtendedStore[];
   const imageUrl = getUniversityImageUrl(university);
 
   // 1. Trending Products on Campus (Sorted by highest rating / hot status / fallback top items)
-  const trendingProducts = [...displayProducts].sort((a, b) => {
-    const aRating = (a as Product & { rating?: number }).rating || 0;
-    const bRating = (b as Product & { rating?: number }).rating || 0;
-    return bRating - aRating;
-  }).slice(0, 10);
+  const trendingProducts = topRated(displayProducts, 10);
 
   // Filter stores matching campus city or verified student sellers
   const uniCity = (university.city || "").toLowerCase();
@@ -147,7 +150,7 @@ const SingleUniversityPage = async ({ params }: Props) => {
             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 w-fit">
               <Building2 className="w-6 h-6 text-ushop-pink" />
               <div className="text-left">
-                <div className="text-lg font-extrabold text-white">{displayProducts.length}</div>
+                <div className="text-lg font-extrabold text-white">{displayTotal}</div>
                 <div className="text-xs text-gray-300 font-medium">Campus Products</div>
               </div>
             </div>
@@ -258,12 +261,21 @@ const SingleUniversityPage = async ({ params }: Props) => {
               </p>
             </div>
             <span className="text-xs text-gray-500 font-medium bg-gray-100 px-3 py-1 rounded-full">
-              {displayProducts.length} items
+              {displayTotal} items
             </span>
           </div>
 
           {displayProducts && displayProducts.length > 0 ? (
-            <PaginatedProductGrid products={displayProducts} initialLimit={12} incrementBy={12} />
+            <>
+              <PaginatedProductGrid products={displayProducts} initialLimit={12} incrementBy={12} />
+              {isFallback && displayTotal > displayProducts.length && (
+                <div className="mt-6 text-center">
+                  <Link href="/product" className="text-sm font-bold text-ushop-pink hover:underline">
+                    Browse all {displayTotal} products
+                  </Link>
+                </div>
+              )}
+            </>
           ) : (
             <div className="py-12">
               <NoProductAvailable className="bg-transparent" />
