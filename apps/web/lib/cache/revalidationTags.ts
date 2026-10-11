@@ -11,6 +11,7 @@ const TAGS_BY_TYPE: Readonly<Record<string, readonly string[]>> = {
   category: ["categories", "featured", "homepage", "navigation"],
   brand: ["brands", "products"],
   banner: ["banners", "homepage"],
+  homepageBanner: ["banners", "homepage"],
   store: ["stores", "products"],
   location: ["locations", "universities", "products"],
   university: ["locations", "universities", "products"],

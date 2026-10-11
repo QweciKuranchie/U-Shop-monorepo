@@ -19,7 +19,7 @@ New Sanity types (also copied to `studio/schemaTypes`): `adminLog`, `restock`, `
 
 ## Not ported
 - **Admin chat** (REST + Socket.IO + WebRTC calls): U-Shop has no realtime backend; needs a decision on provider.
-- **Homepage "sections"**: covered in U-Shop by Sanity `banner` documents.
+- **Homepage banners** (`/dashboard/homepage`): the source's "section" module was a backend-only CMS API (never wired to a UI). In U-Shop it is a full editor: Sanity `homepageBanner` docs per placement (hero, action cards, promo slider/side/bottom), image upload, colour/icon presets, reorder, active toggle, schedule window, "load defaults". Storefront falls back to built-in defaults when a placement is empty. Add `homepageBanner` to the Sanity webhook for instant updates; otherwise ≤5 min cache.
 - **ADMIN vs SUPERADMIN hierarchy**: U-Shop has a single admin role (`verifyIsAdmin`).
 - **Interaction analytics** (views/clicks): requires storefront tracking that doesn't exist yet.
 

@@ -3,6 +3,16 @@ import { defineQuery } from "next-sanity";
 const BANNER_QUERY = defineQuery(
   `*[_type == 'banner'] | order(publishedAt desc)`
 );
+/** Active homepage banners (inside their schedule window), in display order. */
+const HOMEPAGE_BANNERS_QUERY = defineQuery(
+  `*[_type == "homepageBanner" && isActive != false
+      && (!defined(startsAt) || startsAt <= now())
+      && (!defined(endsAt) || endsAt >= now())]
+    | order(placement asc, order asc, _createdAt asc){
+      _id, placement, title, badge, subtitle, price, buttonText, link, style, icon, order,
+      "imageUrl": coalesce(image.asset->url, imageUrl)
+    }`
+);
 const FEATURED_CATEGORY_QUERY = defineQuery(
   `*[_type == 'category' && featured == true] | order(name desc)`
 );
@@ -411,6 +421,7 @@ const PRODUCTS_BY_STORE_SLUG_QUERY = defineQuery(
 
 export {
   BANNER_QUERY,
+  HOMEPAGE_BANNERS_QUERY,
   FEATURED_CATEGORY_QUERY,
   ALL_PRODUCTS_QUERY,
   DEAL_PRODUCTS,

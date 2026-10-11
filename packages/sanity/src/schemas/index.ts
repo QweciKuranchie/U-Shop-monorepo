@@ -19,6 +19,7 @@ import { universityType } from "./universityType";
 import { adminLogType } from "./adminLogType";
 import { restockType } from "./restockType";
 import { stockMovementType } from "./stockMovementType";
+import { homepageBannerType } from "./homepageBannerType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -42,5 +43,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     adminLogType,
     restockType,
     stockMovementType,
+    homepageBannerType,
   ],
 }

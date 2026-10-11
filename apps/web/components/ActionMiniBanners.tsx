@@ -2,83 +2,25 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import { Store, ShieldCheck, Flame, PhoneCall, ArrowRight, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import Container from "./Container";
+import { Store, ShieldCheck, Flame, PhoneCall, Tag, Gift, Truck, ArrowRight, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { safeHref, type HomepageBanner } from "@repo/sanity";
+import { miniStyle } from "@/lib/homepageBannerStyles";
 
-interface MiniBannerItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  badge: string;
-  actionText: string;
-  href: string;
-  isExternal?: boolean;
-  isPhone?: boolean;
-  gradientClass: string;
-  borderClass: string;
-  iconBgClass: string;
-  iconColorClass: string;
-  icon: React.ReactNode;
+const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  store: Store,
+  shield: ShieldCheck,
+  flame: Flame,
+  phone: PhoneCall,
+  tag: Tag,
+  gift: Gift,
+  truck: Truck,
+};
+
+interface ActionMiniBannersProps {
+  banners: HomepageBanner[];
 }
 
-const miniBanners: MiniBannerItem[] = [
-  {
-    id: "sell-on-ushop",
-    title: "Sell on U-Shop",
-    subtitle: "Open your store & reach thousands of campus buyers today.",
-    badge: "For Merchants",
-    actionText: "Register as Seller",
-    href: "https://seller.ushopgh.com",
-    isExternal: true,
-    gradientClass: "from-[#6B1FA8] via-[#5D1694] to-[#450C72] text-white",
-    borderClass: "border-purple-300/20 hover:border-purple-300/40",
-    iconBgClass: "bg-white/15 text-white",
-    iconColorClass: "text-white",
-    icon: <Store className="w-5 h-5" />,
-  },
-  {
-    id: "verified-stores",
-    title: "Verified Stores",
-    subtitle: "Shop directly from trusted Personal, Business, and Student sellers.",
-    badge: "Verified Sellers",
-    actionText: "Browse Stores",
-    href: "/stores",
-    gradientClass: "from-[#063c28] via-[#094d35] to-[#04281b] text-white",
-    borderClass: "border-emerald-300/20 hover:border-emerald-300/40",
-    iconBgClass: "bg-white/15 text-white",
-    iconColorClass: "text-white",
-    icon: <ShieldCheck className="w-5 h-5" />,
-  },
-  {
-    id: "deals-offers",
-    title: "Hot Deals & Offers",
-    subtitle: "Save big with daily discounts, clearance & flash sales.",
-    badge: "Up to 40% Off",
-    actionText: "View All Deals",
-    href: "/deals",
-    gradientClass: "from-[#E8000B] via-[#D4009B] to-[#B00080] text-white",
-    borderClass: "border-red-300/20 hover:border-red-300/40",
-    iconBgClass: "bg-white/15 text-white",
-    iconColorClass: "text-white",
-    icon: <Flame className="w-5 h-5" />,
-  },
-  {
-    id: "call-to-order",
-    title: "Call To Order",
-    subtitle: "Speak directly with our support team for instant order help.",
-    badge: "Direct Support",
-    actionText: "+233 50 956 5794",
-    href: "tel:+233509565794",
-    isPhone: true,
-    gradientClass: "from-[#0f172a] via-[#1e293b] to-[#0a0f1d] text-white",
-    borderClass: "border-slate-400/20 hover:border-slate-400/40",
-    iconBgClass: "bg-white/15 text-white",
-    iconColorClass: "text-white",
-    icon: <PhoneCall className="w-5 h-5" />,
-  },
-];
-
-const ActionMiniBanners: React.FC = () => {
+const ActionMiniBanners: React.FC<ActionMiniBannersProps> = ({ banners }) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   const handleScroll = (direction: "left" | "right") => {
@@ -116,7 +58,26 @@ const ActionMiniBanners: React.FC = () => {
           ref={scrollRef}
           className="flex overflow-x-auto gap-3.5 sm:gap-4 pb-2 pt-1 snap-x snap-mandatory scrollbar-none scroll-smooth"
         >
-          {miniBanners.map((banner) => {
+          {banners.map((item) => {
+            const href = safeHref(item.link);
+            const isExternal = /^https?:\/\//i.test(href);
+            const isPhone = /^(tel:|mailto:)/i.test(href);
+            const style = miniStyle(item.style);
+            const Icon = ICONS[item.icon ?? ""] ?? Store;
+            const banner = {
+              id: item._id,
+              title: item.title,
+              subtitle: item.subtitle ?? "",
+              badge: item.badge ?? "",
+              actionText: item.buttonText || "Learn more",
+              href,
+              isExternal,
+              isPhone,
+              gradientClass: style.gradient,
+              borderClass: style.border,
+              iconBgClass: "bg-white/15 text-white",
+              icon: <Icon className="w-5 h-5" />,
+            };
             const content = (
               <div
                 className={`h-full rounded-2xl p-4 sm:p-5 bg-gradient-to-br ${banner.gradientClass} border ${banner.borderClass} shadow-md hover:shadow-xl hoverEffect transform hover:-translate-y-0.5 flex flex-col justify-between relative overflow-hidden group cursor-pointer`}
@@ -132,9 +93,11 @@ const ActionMiniBanners: React.FC = () => {
                     {banner.icon}
                   </div>
 
-                  <span className="text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs tracking-wide uppercase">
-                    {banner.badge}
-                  </span>
+                  {banner.badge && (
+                    <span className="text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs tracking-wide uppercase">
+                      {banner.badge}
+                    </span>
+                  )}
                 </div>
 
                 {/* Middle: Title & Subtitle */}

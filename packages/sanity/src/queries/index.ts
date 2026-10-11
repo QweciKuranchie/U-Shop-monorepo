@@ -10,6 +10,7 @@ import {
   type CatalogParams,
 } from "../catalogQuery";
 import { getOrderById } from "./userQueries";
+import type { HomepageBanner } from "../homepageBanners";
 
 export * from "./userQueries";
 export * from "./emailUserQueries";
@@ -20,6 +21,7 @@ import { ADDRESS_QUERY,
   ALL_PRODUCTS_QUERY,
   ADMIN_CATEGORIES_QUERY,
   BANNER_QUERY,
+  HOMEPAGE_BANNERS_QUERY,
   BRAND_QUERY,
   BRANDS_QUERY,
   BRANDS_WITH_PRODUCT_COUNT_QUERY,
@@ -39,6 +41,25 @@ import { ADDRESS_QUERY,
   UNIVERSITIES_QUERY,
   SINGLE_UNIVERSITY_BY_SLUG_QUERY,
   PRODUCTS_BY_UNIVERSITY_SLUG_QUERY,} from "./query";
+
+/**
+ * Active homepage banners managed from the admin panel. Returns [] on error so the
+ * storefront falls back to its built-in defaults (see resolveHomepageBanners).
+ * Schedule windows are evaluated when the cache entry is rebuilt (<= 5 min lag).
+ */
+const getHomepageBanners = unstable_cache(
+  async (): Promise<HomepageBanner[]> => {
+    try {
+      const { data } = await sanityFetch({ query: HOMEPAGE_BANNERS_QUERY });
+      return (data ?? []) as HomepageBanner[];
+    } catch (error) {
+      console.error("Error fetching homepage banners:", error);
+      return [];
+    }
+  },
+  ["homepage-banners"],
+  { revalidate: 300, tags: ["homepage", "banners"] }
+);
 
 const getBanner = unstable_cache(
   async () => {
@@ -627,6 +648,7 @@ const getProductsByStoreSlug = unstable_cache(
 );
 
 export {getBanner,
+  getHomepageBanners,
   getFeaturedCategory,
   getAllProducts,
   getProductsPage,
