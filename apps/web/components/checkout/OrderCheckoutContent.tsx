@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import PriceFormatter from "@/components/PriceFormatter";
 import Image from "next/image";
-import { urlFor } from "@repo/sanity";
+import { productImageUrl } from "@repo/sanity";
 import { toast } from "sonner";
 import { PAYMENT_METHODS, PaymentMethod } from "@/lib/orderStatus";
 import Link from "next/link";
@@ -171,7 +171,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                     <Image
                       src={
                         item.product?.images?.[0]
-                          ? urlFor(item.product.images[0]).url()
+                          ? productImageUrl(item.product.images[0]) ?? "/placeholder.svg"
                           : "/placeholder.jpg"
                       }
                       alt={item.product?.name || "Product"}

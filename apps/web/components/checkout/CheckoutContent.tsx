@@ -25,7 +25,7 @@ import {
 import useCartStore, { CartItem } from "@/store";
 import PriceFormatter from "@/components/PriceFormatter";
 import Image from "next/image";
-import { urlFor } from "@repo/sanity";
+import { productImageUrl } from "@repo/sanity";
 import {  Input  } from "@repo/ui";
 import { toast } from "sonner";
 import { PAYMENT_METHODS, PaymentMethod } from "@/lib/orderStatus";
@@ -655,7 +655,7 @@ export function CheckoutContent() {
                     <Image
                       src={
                         item.product.images?.[0]
-                          ? urlFor(item.product.images[0]).url()
+                          ? productImageUrl(item.product.images[0]) ?? "/placeholder.svg"
                           : "/placeholder.jpg"
                       }
                       alt={item.product.name || "Product"}

@@ -7,6 +7,7 @@ import ProductsDetails from "@/components/ProductsDetails";
 import DynamicBreadcrumb from "@/components/DynamicBreadcrumb";
 import ProductSpecs from "@/components/ProductSpecs";
 import ProductReviews from "@/components/ProductReviews";
+import ProductGallery from "@/components/product/ProductGallery";
 import AddToCartBtn from "@/components/AddToCartBtn";
 import BuyNowBtn from "@/components/BuyNowBtn";
 import AddToWishlistBtn from "@/components/AddToWishlistBtn";
@@ -60,7 +61,6 @@ const ProductContent = ({
   const totalReviews = product?.totalReviews || 0;
 
   // Active image selector state
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Build category hierarchy array from root ancestor down to leaf
   const buildCategoryHierarchy = (cat: { title?: string; slug?: { current?: string }; parent?: unknown }) => {
@@ -110,49 +110,10 @@ const ProductContent = ({
         />
 
         <div className="flex flex-col md:flex-row gap-10 pb-6">
-          {/* Product Image Gallery */}
-          {product?.images && product.images.length > 0 && (
-            <ProductImageWrapper>
-              <div className="space-y-4">
-                {/* Main Image */}
-                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-ushop_light_bg border border-zinc-100 shadow-xs group">
-                  <Image
-                    src={urlFor(product.images[activeImageIndex]).url()}
-                    alt={product.name || "Product Image"}
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Thumbnails */}
-                {product.images.length > 1 && (
-                  <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-none sm:flex-wrap">
-                    {product.images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveImageIndex(idx)}
-                        className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 bg-ushop_light_bg hoverEffect ${
-                          idx === activeImageIndex
-                            ? "border-ushop-pink shadow-xs"
-                            : "border-zinc-200/60 hover:border-zinc-300"
-                        }`}
-                      >
-                        <Image
-                          src={urlFor(img).url()}
-                          alt={`Thumbnail ${idx + 1}`}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </ProductImageWrapper>
-          )}
+          {/* Product Image Gallery: angles, lifestyle shots, zoom and video */}
+          <ProductImageWrapper>
+            <ProductGallery product={product as unknown as React.ComponentProps<typeof ProductGallery>["product"]} />
+          </ProductImageWrapper>
 
           {/* Product Details */}
           <ProductDetailsWrapper>

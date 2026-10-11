@@ -3,6 +3,7 @@ import { client, writeClient } from "@repo/sanity";
 import { SELLER_STORE_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { omitProtectedFields } from "@repo/utils";
+import { parseMedia } from "@/lib/media";
 
 // Fields a seller must not set on their own listing: ownership, merchandising
 // controlled by U-Shop, and review-derived aggregates.
@@ -39,7 +40,19 @@ export async function PATCH(
   if (!updates || Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "No permitted fields to update" }, { status: 400 });
   }
-  const updated = await writeClient.patch(id).set(updates).commit();
+  // Images/video are validated and normalised (ImageKit URLs only, max 8 photos).
+  const unset: string[] = [];
+  if ("images" in updates || "video" in updates) {
+    const media = parseMedia(updates as Record<string, unknown>);
+    if ("error" in media) return NextResponse.json({ error: media.error }, { status: 400 });
+    delete (updates as Record<string, unknown>).images;
+    delete (updates as Record<string, unknown>).video;
+    Object.assign(updates, media.data);
+    unset.push(...media.unset);
+  }
+  let patch = writeClient.patch(id).set(updates);
+  if (unset.length) patch = patch.unset(unset);
+  const updated = await patch.commit();
   return NextResponse.json({ product: updated });
 }
 

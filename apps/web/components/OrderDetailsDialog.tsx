@@ -13,7 +13,7 @@ import {
   Button,
 } from "@repo/ui";
 import PriceFormatter from "./PriceFormatter";
-import { MY_ORDERS_QUERYResult, urlFor } from "@repo/sanity";
+import { MY_ORDERS_QUERYResult, productImageUrl } from "@repo/sanity";
 import Image from "next/image";
 
 interface OrderDetailsDialogProps {
@@ -112,7 +112,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                 <TableCell className="flex items-center gap-2">
                   {product?.product?.images && (
                     <Image
-                      src={urlFor(product?.product?.images[0]).url()}
+                      src={(productImageUrl(product?.product?.images?.[0]) ?? "/placeholder.svg")}
                       alt="productImage"
                       width={50}
                       height={50}

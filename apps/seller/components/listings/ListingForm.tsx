@@ -1,7 +1,8 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { MediaUploader, type MediaImage, type MediaVideo } from "./MediaUploader";
 import { Button, Input, Label, Textarea, Card, CardContent, CardHeader, CardTitle } from "@repo/ui";
 
 interface ListingFormProps {
@@ -12,6 +13,14 @@ interface ListingFormProps {
 export function ListingForm({ initialData }: ListingFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [images, setImages] = useState<MediaImage[]>(() =>
+    ((initialData?.images ?? []) as MediaImage[]).map((img) => ({
+      ...img,
+      _key: img._key || Math.random().toString(36).slice(2, 12),
+    }))
+  );
+  const [video, setVideo] = useState<MediaVideo | null>(initialData?.video?.url ? initialData.video : null);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,7 +32,15 @@ export function ListingForm({ initialData }: ListingFormProps) {
       stock: Number(formData.get("stock") || 1),
       description: formData.get("description"),
       condition: formData.get("condition") || "new",
+      images,
+      // null clears an existing video on edit; undefined leaves a new listing without one
+      video: video ?? (initialData?._id ? null : undefined),
     };
+    setError("");
+    if (images.length === 0) {
+      setError("Add at least one product photo.");
+      return;
+    }
 
     startTransition(async () => {
       const url = initialData?._id ? `/api/seller/listings/${initialData._id}` : "/api/seller/listings";
@@ -37,6 +54,9 @@ export function ListingForm({ initialData }: ListingFormProps) {
       if (res.ok) {
         router.push("/dashboard/listings");
         router.refresh();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Couldn't save the listing. Please try again.");
       }
     });
   };
@@ -79,6 +99,8 @@ export function ListingForm({ initialData }: ListingFormProps) {
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" name="description" defaultValue={initialData?.description} rows={4} />
           </div>
+          <MediaUploader images={images} onImagesChange={setImages} video={video} onVideoChange={setVideo} />
+          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <Button type="submit" disabled={isPending} className="w-full">
             {isPending ? "Saving..." : initialData?._id ? "Update Listing" : "Publish Listing"}
           </Button>

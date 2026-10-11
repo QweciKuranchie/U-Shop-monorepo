@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { urlFor } from "@repo/sanity";
+import { productImageUrl } from "@repo/sanity";
 import PriceFormatter from "../PriceFormatter";
 import { Search, ChevronRight, Loader2, Package } from "lucide-react";
 
@@ -36,10 +36,10 @@ export function LiveSearchPopover({
   const getProductImage = (product: SearchResultProduct): string | null => {
     try {
       if (Array.isArray(product.images) && product.images.length > 0 && product.images[0]) {
-        return urlFor(product.images[0] as Parameters<typeof urlFor>[0]).url();
+        return productImageUrl(product.images[0]);
       }
       if (product.images && typeof product.images === "object") {
-        return urlFor(product.images as Parameters<typeof urlFor>[0]).url();
+        return productImageUrl(product.images);
       }
     } catch (e) {
       console.error("Error generating product image URL in live search:", e);
