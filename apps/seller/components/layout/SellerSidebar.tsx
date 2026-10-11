@@ -3,13 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ShoppingBag, ShoppingCart, DollarSign, BarChart3, Store } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, ShoppingCart, DollarSign, BarChart3, Store, Star } from "lucide-react";
 import { cn } from "@repo/utils";
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { name: "Listings", href: "/dashboard/listings", icon: ShoppingBag },
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingCart },
+  { name: "Reviews", href: "/dashboard/reviews", icon: Star },
   { name: "Payouts", href: "/dashboard/payouts", icon: DollarSign },
   { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
   { name: "Store Settings", href: "/dashboard/store", icon: Store },

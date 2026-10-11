@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
         content,
         helpful,
         isVerifiedPurchase,
+        sellerReply,
         createdAt,
         user-> {
           _id,
