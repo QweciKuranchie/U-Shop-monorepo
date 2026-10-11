@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import { safeHref, type HomepageBanner } from "@repo/sanity";
 
 interface HomeBannerProps {
@@ -12,17 +12,32 @@ interface HomeBannerProps {
 
 function HomeBanner({ slides }: HomeBannerProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Autoplay stops while the user hovers/focuses the banner, if they press pause,
+  // or if their OS asks for reduced motion (WCAG 2.2.2).
+  const [hoverOrFocus, setHoverOrFocus] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const count = slides.length;
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  const autoplay = count > 1 && !hoverOrFocus && !userPaused && !reducedMotion;
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % Math.max(count, 1));
   }, [count]);
 
   useEffect(() => {
-    if (count < 2) return;
-    const interval = setInterval(nextSlide, 4000);
+    if (!autoplay) return;
+    const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [nextSlide, count]);
+  }, [nextSlide, autoplay]);
 
   // If banners are removed while the page is open, never point past the end.
   const active = currentSlide < count ? currentSlide : 0;
@@ -33,15 +48,29 @@ function HomeBanner({ slides }: HomeBannerProps) {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-3xl">
+    <section
+      className="relative overflow-hidden rounded-3xl"
+      aria-roledescription="carousel"
+      aria-label="Featured promotions"
+      onMouseEnter={() => setHoverOrFocus(true)}
+      onMouseLeave={() => setHoverOrFocus(false)}
+      onFocus={() => setHoverOrFocus(true)}
+      onBlur={() => setHoverOrFocus(false)}
+    >
       {/* Slides container */}
       <div
+        aria-live={autoplay ? "off" : "polite"}
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${active * 100}%)` }}
       >
         {slides.map((slide, slideIndex) => (
           <div
             key={slide._id}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${slideIndex + 1} of ${count}`}
+            aria-hidden={slideIndex !== active}
+            inert={slideIndex !== active}
             className="relative flex flex-col-reverse md:flex-row items-center justify-between bg-ushop-purple-dark text-white py-10 px-8 md:px-16 min-w-full min-h-[480px]"
           >
             {/* Background decorative elements */}
@@ -81,7 +110,7 @@ function HomeBanner({ slides }: HomeBannerProps) {
                   width={400}
                   height={400}
                   className="relative z-10 w-48 sm:w-56 md:w-72 object-contain drop-shadow-2xl"
-                  priority={slideIndex === 0}
+                  preload={slideIndex === 0}
                 />
               )}
             </div>
@@ -96,6 +125,7 @@ function HomeBanner({ slides }: HomeBannerProps) {
             key={index}
             onClick={() => handleDotClick(index)}
             aria-label={`Go to slide ${index + 1}`}
+            aria-current={active === index}
             className={`rounded-full transition-all duration-300 hoverEffect ${
               active === index
                 ? "w-7 h-2.5 bg-ushop-pink"
@@ -104,7 +134,18 @@ function HomeBanner({ slides }: HomeBannerProps) {
           />
         ))}
       </div>}
-    </div>
+
+      {count > 1 && (
+        <button
+          type="button"
+          onClick={() => setUserPaused((p) => !p)}
+          aria-label={userPaused ? "Play slideshow" : "Pause slideshow"}
+          className="absolute bottom-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-black/30 text-white hover:bg-black/50"
+        >
+          {userPaused ? <Play className="h-4 w-4" aria-hidden="true" /> : <Pause className="h-4 w-4" aria-hidden="true" />}
+        </button>
+      )}
+    </section>
   );
 }
 

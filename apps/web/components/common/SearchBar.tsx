@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, useId } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { cn } from "@repo/utils";
@@ -18,32 +18,44 @@ function SearchBar({ onSearch, className }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const listId = useId();
+  const abortRef = useRef<AbortController | null>(null);
 
-  // Debounced API search call
+  // Debounced API search call. A newer keystroke aborts the in-flight request so a
+  // slow, stale response can never overwrite newer results (and we save bandwidth).
   const fetchResults = useCallback(async (searchQuery: string) => {
+    abortRef.current?.abort();
     if (!searchQuery || searchQuery.trim().length < 2) {
       setResults([]);
       setIsOpen(false);
       return;
     }
 
+    const controller = new AbortController();
+    abortRef.current = controller;
     setIsLoading(true);
     setIsOpen(true);
+    setActiveIndex(-1);
 
     try {
       const response = await fetch(
-        `/api/search?q=${encodeURIComponent(searchQuery.trim())}`
+        `/api/search?q=${encodeURIComponent(searchQuery.trim())}`,
+        { signal: controller.signal }
       );
       if (response.ok) {
         const data = await response.json();
         setResults(data.products || []);
       }
     } catch (error) {
+      if ((error as Error)?.name === "AbortError") return;
       console.error("Live search fetch error:", error);
     } finally {
-      setIsLoading(false);
+      if (abortRef.current === controller) setIsLoading(false);
     }
   }, []);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -73,8 +85,31 @@ function SearchBar({ onSearch, className }: SearchBarProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Keyboard support for the suggestion list (ARIA combobox pattern).
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setIsOpen(false);
+      setActiveIndex(-1);
+      return;
+    }
+    if (!isOpen || results.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % results.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const active = activeIndex >= 0 ? results[activeIndex] : undefined;
+    if (isOpen && active?.slug?.current) {
+      setIsOpen(false);
+      router.push(`/product/${active.slug.current}`);
+      return;
+    }
     const trimmed = query.trim();
     if (!trimmed) return;
 
@@ -103,9 +138,18 @@ function SearchBar({ onSearch, className }: SearchBarProps) {
         className="flex items-center w-full overflow-hidden rounded-full border border-gray-300 bg-white transition-all focus-within:border-ushop-purple focus-within:ring-2 focus-within:ring-ushop-purple/20 shadow-xs"
       >
         <input
-          type="text"
+          type="search"
+          role="combobox"
+          aria-label="Search products"
+          aria-autocomplete="list"
+          aria-expanded={isOpen}
+          aria-controls={`${listId}-listbox`}
+          aria-activedescendant={activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined}
+          autoComplete="off"
+          enterKeyHint="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
           onFocus={() => {
             if (query.trim().length >= 2) setIsOpen(true);
           }}
@@ -139,6 +183,8 @@ function SearchBar({ onSearch, className }: SearchBarProps) {
         isLoading={isLoading}
         results={results}
         query={query}
+        listId={`${listId}-listbox`}
+        activeIndex={activeIndex}
         onSelect={() => setIsOpen(false)}
       />
     </div>

@@ -21,6 +21,8 @@ interface LiveSearchPopoverProps {
   isLoading: boolean;
   results: SearchResultProduct[];
   query: string;
+  listId: string;
+  activeIndex: number;
   onSelect: () => void;
 }
 
@@ -29,6 +31,8 @@ export function LiveSearchPopover({
   isLoading,
   results,
   query,
+  listId,
+  activeIndex,
   onSelect,
 }: LiveSearchPopoverProps) {
   if (!isOpen) return null;
@@ -60,29 +64,34 @@ export function LiveSearchPopover({
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400">
               Matching Products
             </span>
-            <span className="text-[11px] font-semibold text-ushop-pink">
+            <span className="text-[11px] font-semibold text-ushop-pink" role="status">
               {results.length} found
             </span>
           </div>
 
-          <div className="max-h-72 overflow-y-auto divide-y divide-gray-50">
-            {results.map((product) => {
+          <div id={listId} role="listbox" aria-label="Search suggestions" className="max-h-72 overflow-y-auto divide-y divide-gray-50">
+            {results.map((product, index) => {
               const imageSrc = getProductImage(product);
 
               return (
                 <Link
                   key={product._id}
+                  id={`${listId.replace(/-listbox$/, "")}-opt-${index}`}
+                  role="option"
+                  aria-selected={index === activeIndex}
+                  tabIndex={-1}
                   href={`/product/${product.slug?.current}`}
                   onClick={onSelect}
-                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-ushop_light_bg transition-colors group"
+                  className={`flex items-center gap-3 p-2.5 rounded-xl hover:bg-ushop_light_bg transition-colors group ${index === activeIndex ? "bg-ushop_light_bg ring-2 ring-ushop-purple/40" : ""}`}
                 >
                   {/* Product Image Thumbnail */}
                   <div className="w-12 h-12 rounded-xl bg-gray-50 overflow-hidden shrink-0 relative border border-gray-100 flex items-center justify-center p-1">
                     {imageSrc ? (
                       <Image
                         src={imageSrc}
-                        alt={product.name || "Product"}
+                        alt=""
                         fill
+                        sizes="48px"
                         className="object-contain p-1 group-hover:scale-105 transition-transform"
                       />
                     ) : (

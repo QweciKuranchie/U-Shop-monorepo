@@ -83,7 +83,7 @@ export function CartItemActions({
           +
         </Button>
       </div>
-      <Button
+      <Button aria-label="Remove item from cart"
         variant="ghost"
         size="sm"
         onClick={handleRemove}

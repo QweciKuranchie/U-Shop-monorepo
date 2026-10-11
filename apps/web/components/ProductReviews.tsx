@@ -10,7 +10,10 @@ import {
   Loader2,
 } from "lucide-react";
 import {  Button  } from "@repo/ui";
-import ReviewSidebar from "@/components/ReviewSidebar";
+import dynamic from "next/dynamic";
+
+// Only needed once the user opens the review form, so keep it out of the initial bundle.
+const ReviewSidebar = dynamic(() => import("@/components/ReviewSidebar"));
 import {
   getProductReviewsAPI,
   markReviewHelpfulAPI,
@@ -53,6 +56,11 @@ const ProductReviews = React.memo(
     const [stats, setStats] = useState<ProductReviewsData | null>(null);
     const [helpfulRatings, setHelpfulRatings] = useState<Record<string, number>>({});
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    // Mount the (lazy) form only after the first open; it stays mounted so closing animates.
+    const [sidebarLoaded, setSidebarLoaded] = useState(false);
+    useEffect(() => {
+      if (isSidebarOpen) setSidebarLoaded(true);
+    }, [isSidebarOpen]);
     const [isLoading, setIsLoading] = useState(false);
     const [visibleCount, setVisibleCount] = useState(5);
 
@@ -357,6 +365,7 @@ const ProductReviews = React.memo(
         </div>
 
         {/* Review Submission Sidebar */}
+        {sidebarLoaded && (
         <ReviewSidebar
           productId={productId}
           productName={productName}
@@ -366,6 +375,7 @@ const ProductReviews = React.memo(
             loadReviews();
           }}
         />
+        )}
       </div>
     );
   }

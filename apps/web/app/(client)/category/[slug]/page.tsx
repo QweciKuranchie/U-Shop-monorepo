@@ -120,6 +120,7 @@ export default async function CategoryPage({ params }: Props) {
                   src={urlFor(currentCategory.image).url()}
                   alt={categoryTitle}
                   fill
+                  sizes="96px"
                   className="object-contain p-2"
                   priority
                 />
@@ -211,6 +212,7 @@ export default async function CategoryPage({ params }: Props) {
                           src={img}
                           alt={category.title || "Category"}
                           fill
+                          sizes="48px"
                           className="object-contain p-1.5 group-hover:scale-105 transition-transform"
                         />
                       ) : (

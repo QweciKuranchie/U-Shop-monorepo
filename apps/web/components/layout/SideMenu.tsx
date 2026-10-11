@@ -135,7 +135,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200/80">
           <Logo className="text-black" />
-          <button
+          <button aria-label="Close menu"
             onClick={onClose}
             className="text-zinc-500 hover:text-ushop-pink hoverEffect p-2 rounded-lg hover:bg-ushop-pink/10"
           >
