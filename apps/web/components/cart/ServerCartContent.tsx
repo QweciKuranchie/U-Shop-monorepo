@@ -9,7 +9,7 @@ import EmptyCart from "@/components/EmptyCart";
 import PriceFormatter from "@/components/PriceFormatter";
 import Link from "next/link";
 import Image from "next/image";
-import { urlFor } from "@repo/sanity";
+import { productImageUrl } from "@repo/sanity";
 import { CartItemControls } from "./CartItemControls";
 import { AddressSelector } from "./AddressSelector";
 import { CheckoutButton } from "./CheckoutButton";
@@ -173,7 +173,7 @@ export function ServerCartContent({
                 <Image
                   src={
                     item.product.images?.[0]
-                      ? urlFor(item.product.images[0]).url()
+                      ? productImageUrl(item.product.images[0]) ?? "/placeholder.svg"
                       : "/placeholder.jpg"
                   }
                   alt={item.product.name || "Product"}

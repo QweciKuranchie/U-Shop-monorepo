@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { MediaUploader, type MediaImage, type MediaVideo } from "./MediaUploader";
 import { Button, Input, Label, Textarea, Card, CardContent, CardHeader, CardTitle } from "@repo/ui";
 
 interface ListingFormProps {
@@ -12,6 +13,13 @@ interface ListingFormProps {
 export function ListingForm({ initialData }: ListingFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [images, setImages] = useState<MediaImage[]>(() =>
+    ((initialData?.images ?? []) as MediaImage[]).map((img) => ({
+      ...img,
+      _key: img._key || Math.random().toString(36).slice(2, 12),
+    }))
+  );
+  const [video, setVideo] = useState<MediaVideo | null>(initialData?.video?.url ? initialData.video : null);
   const [warrantyType, setWarrantyType] = useState<string>(initialData?.warrantyType || "no_warranty");
   const [error, setError] = useState("");
 
@@ -25,12 +33,19 @@ export function ListingForm({ initialData }: ListingFormProps) {
       stock: Number(formData.get("stock") || 1),
       description: formData.get("description"),
       condition: formData.get("condition") || "new",
+      images,
+      // null clears an existing video on edit; undefined leaves a new listing without one
+      video: video ?? (initialData?._id ? null : undefined),
       warrantyType,
       warrantyDuration: warrantyType === "no_warranty" ? undefined : Number(formData.get("warrantyDuration")),
       warrantyDescription: warrantyType === "no_warranty" ? undefined : formData.get("warrantyDescription"),
       freeTechSupport: formData.get("freeTechSupport") === "on",
     };
     setError("");
+    if (images.length === 0) {
+      setError("Add at least one product photo.");
+      return;
+    }
 
     startTransition(async () => {
       const url = initialData?._id ? `/api/seller/listings/${initialData._id}` : "/api/seller/listings";
@@ -89,6 +104,7 @@ export function ListingForm({ initialData }: ListingFormProps) {
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" name="description" defaultValue={initialData?.description} rows={4} />
           </div>
+          <MediaUploader images={images} onImagesChange={setImages} video={video} onVideoChange={setVideo} />
           <fieldset className="space-y-3 rounded-md border p-4">
             <legend className="px-1 text-sm font-medium">Warranty & support</legend>
             <div className="space-y-2">

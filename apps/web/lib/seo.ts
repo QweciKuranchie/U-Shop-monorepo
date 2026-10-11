@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Product, Category } from "@repo/sanity";
-import { urlFor } from "@repo/sanity";
+import { parseProductVideo, productImageUrl, urlFor } from "@repo/sanity";
 
 const BASE_URL = "https://ushopgh.com";
 
@@ -21,7 +21,7 @@ export function generateProductMetadata(product: PopulatedProduct): Metadata {
       product.price ? `Price: GH₵${product.price}` : ""
     }`;
   const imageUrl = product.images?.[0]
-    ? urlFor(product.images[0]).url()
+    ? (productImageUrl(product.images[0]) ?? "/og-image.jpg")
     : "/og-image.jpg";
   const url = `${BASE_URL}/product/${product.slug?.current}`;
 
@@ -128,7 +128,12 @@ export function generateCategoryMetadata(
  * Generate Product Schema (JSON-LD) for rich snippets
  */
 export function generateProductSchema(product: PopulatedProduct) {
-  const imageUrl = product.images?.[0] ? urlFor(product.images[0]).url() : "";
+  // All photos (angles + lifestyle), not just the first, so search can show them.
+  const imageUrls = (product.images ?? [])
+    .map((img) => productImageUrl(img))
+    .filter((u): u is string => Boolean(u));
+  const video = (product as unknown as { video?: { url?: string | null; thumbnailUrl?: string | null } }).video;
+  const parsedVideo = parseProductVideo(video?.url);
 
   // Extract brand name if it's populated
   const brandName = Array.isArray(product.brand)
@@ -142,7 +147,18 @@ export function generateProductSchema(product: PopulatedProduct) {
     "@type": "Product",
     name: product.name,
     description: product.description,
-    image: imageUrl,
+    image: imageUrls.length ? imageUrls : undefined,
+    ...(parsedVideo && imageUrls[0] && {
+      subjectOf: {
+        "@type": "VideoObject",
+        name: `${product.name} video`,
+        description: product.description || product.name,
+        thumbnailUrl: video?.thumbnailUrl || imageUrls[0],
+        contentUrl: parsedVideo.kind === "file" ? parsedVideo.url : undefined,
+        embedUrl: parsedVideo.kind === "file" ? undefined : parsedVideo.embedUrl,
+        uploadDate: (product as unknown as { _updatedAt?: string })._updatedAt,
+      },
+    }),
     sku: product._id,
     brand: {
       "@type": "Brand",

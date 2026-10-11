@@ -6,7 +6,7 @@ import PriceFormatter from "./PriceFormatter";
 import AddToCartBtn from "./AddToCartBtn";
 import Image from "next/image";
 import Link from "next/link";
-import { Product, urlFor } from "@repo/sanity";
+import { Product, productImageUrl } from "@repo/sanity";
 import Container from "./Container";
 import { Heart, X, Trash2, AlertTriangle, ShoppingBag, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
@@ -135,7 +135,7 @@ const WishlistProducts = () => {
                     <Image
                       src={
                         product?.images && product.images[0]
-                          ? urlFor(product.images[0]).url()
+                          ? productImageUrl(product.images[0]) ?? "/placeholder.svg"
                           : "/placeholder.jpg"
                       }
                       alt={product?.name ?? "Product"}

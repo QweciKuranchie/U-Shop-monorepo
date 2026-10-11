@@ -3,6 +3,7 @@ import { client, writeClient } from "@repo/sanity";
 import { SELLER_STORE_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { omitProtectedFields } from "@repo/utils";
+import { parseMedia } from "@/lib/media";
 import { parseWarranty } from "@/lib/warranty";
 
 // Fields a seller must not set on their own listing: ownership, merchandising
@@ -40,9 +41,18 @@ export async function PATCH(
   if (!updates || Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "No permitted fields to update" }, { status: 400 });
   }
+  const unset: string[] = [];
+  // Images/video are validated and normalised (ImageKit URLs only, max 8 photos).
+  if ("images" in updates || "video" in updates) {
+    const media = parseMedia(updates as Record<string, unknown>);
+    if ("error" in media) return NextResponse.json({ error: media.error }, { status: 400 });
+    delete (updates as Record<string, unknown>).images;
+    delete (updates as Record<string, unknown>).video;
+    Object.assign(updates, media.data);
+    unset.push(...media.unset);
+  }
   // Warranty fields are validated and stored as one block, and cleared when
   // the seller switches to "no warranty".
-  const unset: string[] = [];
   if ("warrantyType" in updates || "warrantyDuration" in updates || "freeTechSupport" in updates) {
     const warranty = parseWarranty(updates as Record<string, unknown>);
     if ("error" in warranty) return NextResponse.json({ error: warranty.error }, { status: 400 });
