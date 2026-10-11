@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { serializeJsonLd } from "@repo/utils/json-ld";
 import Container from "@/components/Container";
 import HomeBanner from "@/components/HomeBanner";
 import ProductGrid from "@/components/ProductGrid";
+import { ProductGridSkeleton } from "@/components/ProductSkeletons";
 import HomeCategories from "@/components/HomeCategories";
 import FlashSaleSection from "@/components/FlashSaleSection";
 import PopularProductSection from "@/components/PopularProductSection";
@@ -71,7 +72,9 @@ const Home = async () => {
           <NewArrivalsSection products={newArrivals} />
         )}
         <div className="pb-16 pt-4">
-          <ProductGrid />
+          <Suspense fallback={<ProductGridSkeleton />}>
+            <ProductGrid />
+          </Suspense>
         </div>
         <ScrollToTop />
       </div>

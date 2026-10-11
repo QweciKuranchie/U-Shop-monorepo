@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import AuthModal from "@/components/auth/AuthModal";
 import ScrollToTop from "@/components/ScrollToTop";
 import MotionProvider from "@/components/MotionProvider";
+import { getNavCategories } from "@repo/sanity/queries";
 
 export const metadata: Metadata = {
   title: "U-Shop",
@@ -28,11 +29,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navCategories = await getNavCategories();
   return (
     <UserDataProvider>
       <MotionProvider>
@@ -43,7 +45,7 @@ export default function RootLayout({
         Skip to main content
       </a>
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <Header navCategories={navCategories} />
         <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </main>

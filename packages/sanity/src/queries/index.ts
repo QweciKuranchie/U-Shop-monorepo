@@ -31,6 +31,8 @@ import { ADDRESS_QUERY,
   FEATURE_PRODUCTS,
   POPULAR_PRODUCTS,
   NEW_ARRIVALS,
+  HOMEPAGE_GRID_QUERY,
+  HOMEPAGE_GRID_FALLBACK_QUERY,
   FEATURED_CATEGORY_QUERY,
   PRODUCT_BY_SLUG_QUERY,
   RELATED_PRODUCTS_QUERY,
@@ -248,6 +250,63 @@ const getFeaturedProducts = unstable_cache(
   },
   ["featured-products"],
   { revalidate: 600, tags: ["products", "featured", "homepage"] }
+);
+
+/**
+ * Products for the homepage grid - cached for 10 minutes.
+ * Featured products when any exist, otherwise the newest products. Tab
+ * filtering and sorting happen in the browser on this one list.
+ */
+const getHomepageGridProducts = unstable_cache(
+  async () => {
+    try {
+      const { data } = (await sanityFetch({ query: HOMEPAGE_GRID_QUERY })) as {
+        data: Product[];
+      };
+      if (data && data.length > 0) return data;
+      const fallback = (await sanityFetch({ query: HOMEPAGE_GRID_FALLBACK_QUERY })) as {
+        data: Product[];
+      };
+      return fallback.data ?? [];
+    } catch (error) {
+      console.error("Error fetching homepage grid products:", error);
+      return [];
+    }
+  },
+  ["homepage-grid-products"],
+  { revalidate: 600, tags: ["products", "featured", "homepage"] }
+);
+
+/**
+ * Lightweight category list for the header mega menu - cached for 1 hour.
+ */
+const getNavCategories = unstable_cache(
+  async () => {
+    try {
+      const { data } = (await sanityFetch({
+        query: `*[_type == "category" && defined(slug.current)] | order(title asc)[0...80]{
+          _id, title, slug, level,
+          "parentId": parent._ref,
+          "group": productType->{ _id, title, slug }
+        }`,
+      })) as {
+        data: Array<{
+          _id: string;
+          title: string;
+          slug: { current: string };
+          level?: number;
+          parentId?: string;
+          group?: { _id: string; title: string; slug?: { current: string } } | null;
+        }>;
+      };
+      return data ?? [];
+    } catch (error) {
+      console.error("Error fetching nav categories:", error);
+      return [];
+    }
+  },
+  ["nav-categories"],
+  { revalidate: 3600, tags: ["categories", "navigation"] }
 );
 
 /**
@@ -657,6 +716,8 @@ export {getBanner,
   getPopularProducts,
   getNewArrivalProducts,
   getFeaturedProducts,
+  getHomepageGridProducts,
+  getNavCategories,
   getAllBrands,
   getBrandsWithCount,
   getSingleBrandBySlug,

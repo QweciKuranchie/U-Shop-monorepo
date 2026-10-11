@@ -18,8 +18,9 @@ import {
   SignedOut,
 } from "@clerk/nextjs";
 import UserDropdown from "./UserDropdown";
+import type { NavCategory } from "./layout/CategoriesMegaMenu";
 
-const Header = () => {
+const Header = ({ navCategories = [] }: { navCategories?: NavCategory[] }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const Header = () => {
       </div>
 
       {/* ── Row 3: Navigation bar (Desktop only) ── */}
-      <HeaderNavBar />
+      <HeaderNavBar categories={navCategories} />
     </>
   );
 };

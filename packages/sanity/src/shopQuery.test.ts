@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { evaluate, parse } from "groq-js";
-import { buildShopParams, buildShopQuery, type ShopFilters } from "./shopQuery";
+import { buildShopParams, buildShopQuery, parseShopSort, type ShopFilters } from "./shopQuery";
 
 /** The query exactly as Shop.tsx ran it before this change (parity oracle). */
 const LEGACY_QUERY = `
@@ -124,5 +124,24 @@ describe("buildShopParams", () => {
     assert.equal(p.minPrice, 100);
     assert.equal(p.maxPrice, 500);
     assert.equal(p.searchPattern, "*tv*");
+  });
+});
+
+describe("shop sort", () => {
+  it("defaults to the original name ordering", () => {
+    assert.equal(buildShopQuery(false), buildShopQuery(false, "name-asc"));
+    assert.ok(buildShopQuery(false).includes("order(name asc)"));
+  });
+
+  it("maps each sort to a fixed order clause", () => {
+    assert.ok(buildShopQuery(false, "price-asc").includes("order(price asc, name asc)"));
+    assert.ok(buildShopQuery(false, "price-desc").includes("order(price desc, name asc)"));
+    assert.ok(buildShopQuery(false, "newest").includes("order(_createdAt desc)"));
+  });
+
+  it("never lets an unknown value reach the query", () => {
+    assert.equal(parseShopSort("price asc) | bad"), "name-asc");
+    assert.equal(parseShopSort(null), "name-asc");
+    assert.equal(parseShopSort("newest"), "newest");
   });
 });
