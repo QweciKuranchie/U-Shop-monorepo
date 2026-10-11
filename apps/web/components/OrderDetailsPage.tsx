@@ -487,6 +487,7 @@ const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ order }) => {
                             src={urlFor(item.product.image).url()}
                             alt={item.product.name}
                             fill
+                            sizes="64px"
                             className="object-cover rounded-md"
                           />
                         </div>

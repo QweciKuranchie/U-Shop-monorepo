@@ -101,6 +101,7 @@ const SingleStorePage = async ({ params }: Props) => {
               src={bannerUrl}
               alt={storeName}
               fill
+              sizes="100vw"
               priority
               unoptimized
               className="object-cover opacity-90"
@@ -119,6 +120,7 @@ const SingleStorePage = async ({ params }: Props) => {
                       src={logoUrl}
                       alt={storeName}
                       fill
+                      sizes="112px"
                       unoptimized
                       className="object-cover"
                     />

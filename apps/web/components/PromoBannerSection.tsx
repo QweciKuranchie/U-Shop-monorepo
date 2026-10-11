@@ -20,6 +20,16 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
   const sideBanners = side.slice(0, 2);
   const bottomTechCards = bottom.slice(0, 4);
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Pause autoplay on hover/focus and when the OS asks for reduced motion (WCAG 2.2.2).
+  const [hoverOrFocus, setHoverOrFocus] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % Math.max(sliderBanners.length, 1));
@@ -33,10 +43,10 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
   }, [sliderBanners.length]);
 
   useEffect(() => {
-    if (sliderBanners.length < 2) return;
+    if (sliderBanners.length < 2 || hoverOrFocus || reducedMotion) return;
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
-  }, [nextSlide, sliderBanners.length]);
+  }, [nextSlide, sliderBanners.length, hoverOrFocus, reducedMotion]);
 
   const activeSlide = currentSlide < sliderBanners.length ? currentSlide : 0;
 
@@ -45,14 +55,27 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
       {/* ─── TIER 1: MAIN SLIDER + 2 SIDE CARDS ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         {/* Left: Main Slider (approx 68% width on large screens) */}
-        <div className="lg:col-span-8 relative overflow-hidden rounded-2xl shadow-sm group">
+        <section
+          className="lg:col-span-8 relative overflow-hidden rounded-2xl shadow-sm group"
+          aria-roledescription="carousel"
+          aria-label="Promotions"
+          onMouseEnter={() => setHoverOrFocus(true)}
+          onMouseLeave={() => setHoverOrFocus(false)}
+          onFocus={() => setHoverOrFocus(true)}
+          onBlur={() => setHoverOrFocus(false)}
+        >
           <div
             className="flex transition-transform duration-700 ease-in-out h-full"
             style={{ transform: `translateX(-${activeSlide * 100}%)` }}
           >
-            {sliderBanners.map((slide) => (
+            {sliderBanners.map((slide, slideIndex) => (
               <div
                 key={slide._id}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${slideIndex + 1} of ${sliderBanners.length}`}
+                aria-hidden={slideIndex !== activeSlide}
+                inert={slideIndex !== activeSlide}
                 className={`min-w-full bg-gradient-to-r ${promoGradient(slide.style)} p-6 sm:p-10 md:p-12 flex flex-col md:flex-row items-center justify-between relative min-h-[360px] md:min-h-[420px] select-none`}
               >
                 {/* Left Content */}
@@ -98,7 +121,6 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                         fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-contain drop-shadow-xl"
-                        priority={slide._id === sliderBanners[0]?._id}
                       />
                     )}
                   </div>
@@ -132,6 +154,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                 key={idx}
                 onClick={() => setCurrentSlide(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
+                aria-current={activeSlide === idx}
                 className={`transition-all rounded-full ${
                   activeSlide === idx
                     ? "w-4 h-2 bg-[#FF4F5A]"
@@ -140,7 +163,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
               />
             ))}
           </div>}
-        </div>
+        </section>
 
         {/* Right: Two Stacked Side Cards (approx 32% width on large screens) */}
         <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-5 justify-between">

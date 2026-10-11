@@ -240,7 +240,7 @@ export default function WalletDashboard() {
               <Wallet className="w-6 h-6 text-primary" />
               <CardTitle>Wallet Balance</CardTitle>
             </div>
-            <Button onClick={loadWalletData} variant="outline" size="icon">
+            <Button aria-label="Refresh wallet balance" onClick={loadWalletData} variant="outline" size="icon">
               <RefreshCw className="w-4 h-4" />
             </Button>
           </div>

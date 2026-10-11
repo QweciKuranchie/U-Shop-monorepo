@@ -10,7 +10,10 @@ import Image from "next/image";
 import { urlFor } from "@repo/sanity";
 import PriceFormatter from "./PriceFormatter";
 import { MY_ORDERS_QUERYResult } from "@repo/sanity";
-import DirectPaymentModal from "./DirectPaymentModal";
+import dynamic from "next/dynamic";
+
+// Payment UI is only needed after "Pay now" is clicked.
+const DirectPaymentModal = dynamic(() => import("./DirectPaymentModal"));
 
 const ResponsiveOrdersComponent = ({
   orders,
