@@ -24,6 +24,30 @@ const ALL_PRODUCTS_QUERY = defineQuery(
     "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
   }`
 );
+const HOMEPAGE_GRID_QUERY = defineQuery(
+  `*[_type == "product" && (featured == true || isFeatured == true)] | order(_createdAt desc)[0...60]{
+    ...,
+    "categories": categories[]->title,
+    "category": category->{ _id, title, slug },
+    "brand": brand->{ _id, name, slug },
+    "productClassification": productClassification->{ _id, title, slug },
+    "store": store->{ _id, name, slug },
+    "averageRating": coalesce(math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating), averageRating, 0),
+    "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
+  }`
+);
+const HOMEPAGE_GRID_FALLBACK_QUERY = defineQuery(
+  `*[_type == "product"] | order(_createdAt desc)[0...60]{
+    ...,
+    "categories": categories[]->title,
+    "category": category->{ _id, title, slug },
+    "brand": brand->{ _id, name, slug },
+    "productClassification": productClassification->{ _id, title, slug },
+    "store": store->{ _id, name, slug },
+    "averageRating": coalesce(math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating), averageRating, 0),
+    "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
+  }`
+);
 const DEAL_PRODUCTS = defineQuery(
   `*[_type == 'product' && (isFlashSale == true || isStudentDeal == true || isClearance == true || isBlackFriday == true || isSpecialOffer == true || status == 'hot' || discount > 0)] | order(_createdAt desc){
     ...,
@@ -429,6 +453,8 @@ export {
   POPULAR_PRODUCTS as FEATURE_PRODUCTS,
   POPULAR_PRODUCTS,
   NEW_ARRIVALS,
+  HOMEPAGE_GRID_QUERY,
+  HOMEPAGE_GRID_FALLBACK_QUERY,
   BRANDS_QUERY,
   ADDRESS_QUERY,
   ALLCATEGORIES_QUERY,
