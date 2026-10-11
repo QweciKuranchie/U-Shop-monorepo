@@ -20,6 +20,7 @@ export function ListingForm({ initialData }: ListingFormProps) {
     }))
   );
   const [video, setVideo] = useState<MediaVideo | null>(initialData?.video?.url ? initialData.video : null);
+  const [warrantyType, setWarrantyType] = useState<string>(initialData?.warrantyType || "no_warranty");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +36,10 @@ export function ListingForm({ initialData }: ListingFormProps) {
       images,
       // null clears an existing video on edit; undefined leaves a new listing without one
       video: video ?? (initialData?._id ? null : undefined),
+      warrantyType,
+      warrantyDuration: warrantyType === "no_warranty" ? undefined : Number(formData.get("warrantyDuration")),
+      warrantyDescription: warrantyType === "no_warranty" ? undefined : formData.get("warrantyDescription"),
+      freeTechSupport: formData.get("freeTechSupport") === "on",
     };
     setError("");
     if (images.length === 0) {
@@ -100,6 +105,40 @@ export function ListingForm({ initialData }: ListingFormProps) {
             <Textarea id="description" name="description" defaultValue={initialData?.description} rows={4} />
           </div>
           <MediaUploader images={images} onImagesChange={setImages} video={video} onVideoChange={setVideo} />
+          <fieldset className="space-y-3 rounded-md border p-4">
+            <legend className="px-1 text-sm font-medium">Warranty & support</legend>
+            <div className="space-y-2">
+              <Label htmlFor="warrantyType">Warranty</Label>
+              <select
+                id="warrantyType"
+                value={warrantyType}
+                onChange={(e) => setWarrantyType(e.target.value)}
+                className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+              >
+                <option value="no_warranty">No warranty</option>
+                <option value="seller_warranty">Seller warranty</option>
+                <option value="manufacturer_warranty">Manufacturer warranty</option>
+              </select>
+            </div>
+            {warrantyType !== "no_warranty" && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="warrantyDuration">Duration (months) *</Label>
+                  <Input id="warrantyDuration" name="warrantyDuration" type="number" min={1} max={120} step={1}
+                    defaultValue={initialData?.warrantyDuration} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="warrantyDescription">What&apos;s covered (optional)</Label>
+                  <Textarea id="warrantyDescription" name="warrantyDescription" maxLength={500} rows={3}
+                    defaultValue={initialData?.warrantyDescription} />
+                </div>
+              </>
+            )}
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name="freeTechSupport" defaultChecked={Boolean(initialData?.freeTechSupport)} />
+              I offer free tech support to buyers of this product
+            </label>
+          </fieldset>
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
           <Button type="submit" disabled={isPending} className="w-full">
             {isPending ? "Saving..." : initialData?._id ? "Update Listing" : "Publish Listing"}

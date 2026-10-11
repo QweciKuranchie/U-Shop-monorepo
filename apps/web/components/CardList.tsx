@@ -89,6 +89,7 @@ const CardList = async ({ title }: { title: string }) => {
                         src={imgSrc}
                         alt={item.name}
                         fill
+                        sizes="40px"
                         className="object-cover"
                       />
                     ) : (
