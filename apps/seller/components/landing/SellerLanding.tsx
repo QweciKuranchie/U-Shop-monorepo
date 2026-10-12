@@ -72,17 +72,19 @@ function Action({ href, children, light = false }: { href: string; children: Rea
 }
 
 function Header({ startHref }: { startHref: string }) {
-  return <>
-    <div className={styles.announcement}>Your tech store starts here. <a href="#how-it-works">See how it works <ArrowRight size={12} aria-hidden="true" /></a></div>
-    <header className={styles.header}><div className={styles.headerInner}>
-      <Brand />
-      <nav className={styles.desktopNav} aria-label="Main navigation">
-        <a href="#why-ushop">Why U-Shop</a><a href="#how-it-works">How it works</a><a href="#what-to-sell">What to sell</a><a href="#faqs">FAQs</a>
-      </nav>
-      <div className={styles.headerActions}><Link href="/sign-in" className={styles.signIn}>Sign in</Link><Action href={startHref}>Start selling</Action></div>
-      <MobileMenu startHref={startHref} />
-    </div></header>
-  </>;
+  return (
+    <div className={styles.headerWrapper}>
+      <div className={styles.announcement}>Your tech store starts here. <a href="#how-it-works">See how it works <ArrowRight size={12} aria-hidden="true" /></a></div>
+      <header className={styles.header}><div className={styles.headerInner}>
+        <Brand />
+        <nav className={styles.desktopNav} aria-label="Main navigation">
+          <a href="#why-ushop">Why U-Shop</a><a href="#how-it-works">How it works</a><a href="#what-to-sell">What to sell</a><a href="#faqs">FAQs</a>
+        </nav>
+        <div className={styles.headerActions}><Link href="/sign-in" className={styles.signIn}>Sign in</Link><Action href={startHref}>Start selling</Action></div>
+        <MobileMenu startHref={startHref} />
+      </div></header>
+    </div>
+  );
 }
 
 function Benefits() {
@@ -138,7 +140,22 @@ function FinalCTA({ startHref }: { startHref: string }) {
 }
 
 function Footer({ startHref }: { startHref: string }) {
-  return <footer className={styles.footer}><div className={styles.footerTop}><div><Brand footer /><span>Seller Center · Ghana</span></div><nav aria-label="Footer navigation"><a href="#why-ushop">Why U-Shop</a><a href="#how-it-works">How it works</a><a href="#what-to-sell">What to sell</a><a href="#faqs">FAQs</a><Link href="/sign-in">Sign in</Link><Link href={startHref}>Start selling</Link></nav></div><div className={styles.footerBottom}><span>© {new Date().getFullYear()} U-Shop. All rights reserved.</span><span>Technology marketplace · Seller Center</span></div></footer>;
+  return (
+    <footer className={styles.footer}>
+      <div className={styles.footerInner}>
+        <div className={styles.footerTop}>
+          <div><Brand footer /><span>Seller Center · Ghana</span></div>
+          <nav aria-label="Footer navigation">
+            <a href="#why-ushop">Why U-Shop</a><a href="#how-it-works">How it works</a><a href="#what-to-sell">What to sell</a><a href="#faqs">FAQs</a><Link href="/sign-in">Sign in</Link><Link href={startHref}>Start selling</Link>
+          </nav>
+        </div>
+        <div className={styles.footerBottom}>
+          <span>© {new Date().getFullYear()} U-Shop. All rights reserved.</span>
+          <span>Technology marketplace · Seller Center</span>
+        </div>
+      </div>
+    </footer>
+  );
 }
 
 export default function SellerLanding({ startHref, dashboardHref }: { startHref: string; dashboardHref: string }) {
