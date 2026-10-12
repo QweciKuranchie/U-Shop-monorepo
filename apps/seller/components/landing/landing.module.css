@@ -33,9 +33,10 @@
   top: 0;
   z-index: 100;
   width: 100%;
+  isolation: isolate;
 }
 
-/* ── Announcement Bar ────────────────────────────────────────── */
+/* ── Announcement Bar (Liquid Tint Glass) ────────────────────── */
 .announcement {
   min-height: 34px;
   padding: 6px 16px;
@@ -43,12 +44,16 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background: var(--purple);
+  background: linear-gradient(90deg, rgba(107, 31, 168, 0.82) 0%, rgba(82, 15, 133, 0.86) 50%, rgba(107, 31, 168, 0.82) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 .announcement a {
   display: inline-flex;
@@ -59,19 +64,40 @@
   text-underline-offset: 2px;
 }
 
-/* ── Header ─────────────────────────────────────────────────── */
+/* ── Liquid Glass Header ─────────────────────────────────────── */
 .header {
   height: 80px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.68) 0%, rgba(255, 255, 255, 0.44) 50%, rgba(255, 255, 255, 0.60) 100%);
+  backdrop-filter: blur(20px) saturate(190%) contrast(102%) brightness(104%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%) contrast(102%) brightness(104%);
   position: relative;
   z-index: 25;
-  border-bottom: 1px solid #f0e9f5;
-  box-shadow: 0 4px 20px rgba(32, 24, 39, 0.05);
-  transition: box-shadow 0.2s ease, background 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 
+    0 12px 36px -4px rgba(31, 14, 40, 0.08),
+    0 2px 6px 0 rgba(31, 14, 40, 0.03),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 0 rgba(107, 31, 168, 0.04),
+    inset 0 0 18px 0 rgba(255, 255, 255, 0.3);
+  transition: box-shadow 0.25s ease, background 0.25s ease;
+}
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    108deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.24) 72%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 .headerInner {
+  position: relative;
+  z-index: 1;
   max-width: 1260px;
   height: 100%;
   margin: 0 auto;
@@ -115,26 +141,52 @@
 .desktopNav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 8px;
   margin-left: auto;
 }
-.desktopNav a,
-.signIn,
+.desktopNav a {
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #2b2233;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.desktopNav a:hover {
+  color: var(--purple);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(107, 31, 168, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+}
+.signIn {
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #2b2233;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.signIn:hover {
+  color: var(--purple);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(107, 31, 168, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
 .footer nav a {
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
   color: #393140;
 }
-.desktopNav a:hover,
-.signIn:hover,
 .footer nav a:hover {
   color: var(--purple);
 }
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 .action {
   min-height: 46px;
@@ -165,6 +217,7 @@
 .headerActions .action {
   min-height: 40px;
   padding: 0 18px;
+  box-shadow: 0 4px 14px rgba(232, 0, 11, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.35);
 }
 .actionLight {
   background: #fff;
@@ -1656,13 +1709,24 @@
     position: relative;
   }
   .mobileMenu summary {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     display: grid;
     place-items: center;
     list-style: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 8px rgba(32, 14, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    color: var(--purple);
+    transition: all 0.2s ease;
+  }
+  .mobileMenu summary:hover {
+    background: rgba(255, 255, 255, 0.85);
+    transform: scale(1.03);
   }
   .mobileMenu summary::-webkit-details-marker {
     display: none;
@@ -1677,29 +1741,32 @@
   .mobileMenu nav {
     position: absolute;
     right: 0;
-    top: 48px;
+    top: 50px;
     width: min(280px, 85vw);
-    padding: 16px;
-    background: #fff;
-    box-shadow: 0 16px 40px rgba(36, 21, 43, 0.18);
-    border-radius: 14px;
-    border: 1px solid #f0e6f5;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    box-shadow: 0 20px 48px -6px rgba(36, 21, 43, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.85);
     display: flex;
     flex-direction: column;
     gap: 4px;
     z-index: 100;
   }
   .mobileMenu nav a {
-    padding: 10px 12px;
+    padding: 10px 14px;
     color: var(--ink);
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 10px;
+    transition: all 0.15s ease;
   }
   .mobileMenu nav a:hover {
     color: var(--purple);
-    background: #f7f0fc;
+    background: rgba(107, 31, 168, 0.08);
   }
   .heroInner {
     min-height: auto;
