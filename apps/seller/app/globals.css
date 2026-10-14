@@ -168,6 +168,12 @@
     @apply transition-all duration-300 ease-in-out;
   }
 
+  html,
+  body {
+    overflow-x: clip;
+    overscroll-behavior-y: none;
+  }
+
   html {
     @apply font-sans;
   }
