@@ -21,11 +21,11 @@ const ShopByBrands = async () => {
       {/* Header Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-3 mb-3 sm:mb-4">
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-ushop-pink to-ushop-purple rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-pink rounded-full"></div>
           <Title className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark-color">
             Shop By Brands
           </Title>
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-l from-ushop-pink to-ushop-purple rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-pink rounded-full"></div>
         </div>
         <p className="text-light-color text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-4">
           Discover products from your favorite trusted brands
@@ -68,7 +68,7 @@ const ShopByBrands = async () => {
                 <Link
                   key={`${brand?._id}-${index}`}
                   href={`/brands/${brand?.slug?.current}`}
-                  className="group bg-white rounded-2xl p-4 md:p-5 flex items-center justify-center aspect-square hover:shadow-lg shadow-2xs border border-gray-200/80 hover:border-ushop-pink/40 hoverEffect transform hover:-translate-y-1 w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-2.5 sm:mx-3 flex-shrink-0"
+                  className="group bg-white rounded-2xl p-4 md:p-5 flex items-center justify-center aspect-square hover:shadow-lg shadow-2xs border border-gray-200/80 hover:border-ushop-pink/40 hoverEffect transform w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-2.5 sm:mx-3 flex-shrink-0"
                 >
                   {brandImg ? (
                     <div className="relative w-full h-full flex items-center justify-center p-1">
@@ -77,7 +77,7 @@ const ShopByBrands = async () => {
                         alt={`${brand?.name || "Brand"} logo`}
                         fill
                         sizes="(max-width: 768px) 120px, 160px"
-                        className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
+                        className="object-contain p-1 transition-transform duration-300"
                       />
                     </div>
                   ) : (
@@ -85,7 +85,7 @@ const ShopByBrands = async () => {
                       <div className="w-8 h-8 rounded-full bg-ushop-pink/10 text-ushop-pink font-extrabold flex items-center justify-center text-xs mb-1 group-hover:bg-ushop-pink group-hover:text-white transition-colors shadow-2xs">
                         {brand?.name?.charAt(0) || "B"}
                       </div>
-                      <span className="text-[11px] font-bold text-gray-800 group-hover:text-ushop-pink transition-colors line-clamp-2 leading-tight">
+                      <span className="text-xs font-bold text-gray-800 group-hover:text-ushop-pink transition-colors line-clamp-2 leading-tight">
                         {brand?.name}
                       </span>
                     </div>

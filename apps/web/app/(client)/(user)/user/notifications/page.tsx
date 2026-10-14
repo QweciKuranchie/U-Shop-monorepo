@@ -437,7 +437,7 @@ export default function UserNotificationsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center py-12">
-                <Bell className="mx-auto h-12 w-12 text-gray-400" />
+                <Bell className="mx-auto h-12 w-12 text-gray-500" />
                 <h3 className="mt-2 text-sm font-medium text-gray-900">
                   No notifications
                 </h3>
@@ -557,7 +557,7 @@ export default function UserNotificationsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => deleteNotification(notification.id)}
-                          className="text-gray-400 hover:text-red-600 h-8 w-8 p-0"
+                          className="text-gray-500 hover:text-red-600 h-8 w-8 p-0"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

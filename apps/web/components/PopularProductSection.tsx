@@ -36,11 +36,11 @@ const PopularProductSection: React.FC<PopularProductSectionProps> = ({
       {/* Header Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-3 mb-3 sm:mb-4">
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-ushop-purple to-ushop-pink rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-purple rounded-full"></div>
           <Title className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark-color flex items-center gap-2">
             Popular Products
           </Title>
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-l from-ushop-purple to-ushop-pink rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-purple rounded-full"></div>
         </div>
         <p className="text-light-color text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-4">
           Customer favorites and top trending picks loved by students and shoppers
@@ -78,7 +78,7 @@ const PopularProductSection: React.FC<PopularProductSectionProps> = ({
               <h3 className="text-sm sm:text-base font-bold text-gray-900">
                 Top Rated & Trending
               </h3>
-              <p className="text-[11px] sm:text-xs text-light-color">
+              <p className="text-xs sm:text-xs text-light-color">
                 Handpicked based on reviews and customer demand
               </p>
             </div>
@@ -113,7 +113,7 @@ const PopularProductSection: React.FC<PopularProductSectionProps> = ({
           {products.map((product, index) => (
             <div
               key={product._id}
-              className="w-[165px] sm:w-[220px] md:w-[250px] shrink-0 snap-start hoverEffect transform hover:-translate-y-1"
+              className="w-[165px] sm:w-[220px] md:w-[250px] shrink-0 snap-start hoverEffect transform"
             >
               <ProductCard
                 product={product}

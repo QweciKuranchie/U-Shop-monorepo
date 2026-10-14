@@ -129,7 +129,7 @@ const CardList = async ({ title }: { title: string }) => {
                         ? "default"
                         : "secondary"
                     }
-                    className="text-[10px] px-1.5 py-0 capitalize"
+                    className="text-xs px-1.5 py-0 capitalize"
                   >
                     {item.status}
                   </Badge>

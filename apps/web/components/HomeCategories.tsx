@@ -35,11 +35,11 @@ const HomeCategories = ({ categories }: Props) => {
       {/* Header Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-3 mb-3 sm:mb-4">
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-ushop-pink to-ushop-purple rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-pink rounded-full"></div>
           <Title className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark-color">
             Popular Categories
           </Title>
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-l from-ushop-pink to-ushop-purple rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-pink rounded-full"></div>
         </div>
         <p className="text-light-color text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-4">
           Explore our most popular product categories and find what you need
@@ -72,19 +72,19 @@ const HomeCategories = ({ categories }: Props) => {
             <Link
               key={category?._id}
               href={`/category/${category?.slug?.current}`}
-              className="group bg-white rounded-2xl p-5 sm:p-6 shadow-xs hover:shadow-lg border border-gray-200/80 hover:border-ushop-pink/40 hoverEffect transform hover:-translate-y-1 cursor-pointer block min-w-[240px] sm:min-w-0 flex-shrink-0 snap-start"
+              className="group bg-white rounded-2xl p-5 sm:p-6 shadow-xs hover:shadow-lg border border-gray-200/80 hover:border-ushop-pink/40 hoverEffect transform cursor-pointer block min-w-[240px] sm:min-w-0 flex-shrink-0 snap-start"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Image Container */}
               <div className="flex justify-center mb-4">
                 {category?.image && (
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-ushop-pink/10 to-ushop_light_bg p-2.5 sm:p-3 group-hover:scale-105 hoverEffect">
+                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-ushop-pink/10 p-2.5 sm:p-3 hoverEffect">
                     <Image
                       src={urlFor(category?.image).url()}
                       alt={`${category?.title} category`}
                       width={80}
                       height={80}
-                      className="w-full h-full object-contain group-hover:scale-110 hoverEffect"
+                      className="w-full h-full object-contain hoverEffect"
                     />
                   </div>
                 )}
@@ -107,7 +107,7 @@ const HomeCategories = ({ categories }: Props) => {
                 </div>
 
                 {/* Shop Now Button */}
-                <div className="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 bg-gray-50 group-hover:bg-gradient-to-r group-hover:from-ushop-purple group-hover:to-ushop-purple-dark text-gray-700 group-hover:text-white font-semibold rounded-full text-xs hoverEffect transition-all border border-gray-100">
+                <div className="inline-flex items-center gap-1.5 mt-3 px-3.5 py-1.5 bg-gray-50 group-hover:bg-ushop-purple text-gray-700 group-hover:text-white font-semibold rounded-full text-xs hoverEffect transition-all border border-gray-100">
                   <span>Shop Now</span>
                   <svg
                     className="w-3 h-3 hoverEffect group-hover:translate-x-0.5"

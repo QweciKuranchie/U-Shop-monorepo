@@ -113,7 +113,7 @@ export default function UniversitiesClient({
           >
             <div className="absolute -inset-0.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-red-600/40 via-purple-600/30 to-red-600/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity" />
 
-            <div className="relative flex items-center bg-slate-900/65 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
+            <div className="relative flex items-center bg-slate-900/65 border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
               <button
                 type="submit"
                 className="text-gray-300 hover:text-white shrink-0 mr-3 transition-colors cursor-pointer"
@@ -197,14 +197,14 @@ export default function UniversitiesClient({
                       src={imageUrl}
                       alt={uni.name || "University Campus"}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover transition-transform duration-500"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
                     {/* City Tag on Image */}
                     {uni.city && (
-                      <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-xs text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs">
+                      <div className="absolute top-3 right-3 bg-white text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-xs">
                         <MapPin className="w-3 h-3 text-ushop-pink" />
                         {uni.city}
                       </div>

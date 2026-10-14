@@ -36,10 +36,6 @@ export default function PaymentInfoPage() {
 
         {/* Header Hero */}
         <div className="text-center max-w-2xl mx-auto my-8 sm:my-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ushop-pink/10 text-ushop-pink text-xs font-bold uppercase tracking-wider mb-3 border border-ushop-pink/20">
-            <CreditCard className="w-4 h-4 text-ushop-pink" />
-            <span>UShop Payments Guide</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
             Payments Information
@@ -56,28 +52,28 @@ export default function PaymentInfoPage() {
             href="#payment-methods"
             className="p-3 sm:p-4 rounded-2xl bg-white border border-gray-200/80 hover:border-ushop-pink/40 hover:shadow-md transition-all text-center group"
           >
-            <CreditCard className="w-5 h-5 text-ushop-pink mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+            <CreditCard className="w-5 h-5 text-ushop-pink mx-auto mb-1.5 transition-transform" />
             <span className="text-xs font-bold text-gray-800 block">1. Payment Methods</span>
           </a>
           <a
             href="#change-payment"
             className="p-3 sm:p-4 rounded-2xl bg-white border border-gray-200/80 hover:border-ushop-pink/40 hover:shadow-md transition-all text-center group"
           >
-            <RefreshCw className="w-5 h-5 text-ushop-purple mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+            <RefreshCw className="w-5 h-5 text-ushop-purple mx-auto mb-1.5 transition-transform" />
             <span className="text-xs font-bold text-gray-800 block">2. Managing Cards</span>
           </a>
           <a
             href="#vouchers"
             className="p-3 sm:p-4 rounded-2xl bg-white border border-gray-200/80 hover:border-ushop-pink/40 hover:shadow-md transition-all text-center group"
           >
-            <Gift className="w-5 h-5 text-emerald-600 mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+            <Gift className="w-5 h-5 text-emerald-600 mx-auto mb-1.5 transition-transform" />
             <span className="text-xs font-bold text-gray-800 block">3. Vouchers & Codes</span>
           </a>
           <a
             href="#promotions"
             className="p-3 sm:p-4 rounded-2xl bg-white border border-gray-200/80 hover:border-ushop-pink/40 hover:shadow-md transition-all text-center group"
           >
-            <Tag className="w-5 h-5 text-amber-500 mx-auto mb-1.5 group-hover:scale-110 transition-transform" />
+            <Tag className="w-5 h-5 text-amber-500 mx-auto mb-1.5 transition-transform" />
             <span className="text-xs font-bold text-gray-800 block">4. Promotions</span>
           </a>
         </div>

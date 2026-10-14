@@ -49,7 +49,7 @@ const BuyNowBtn = ({ product, className }: Props) => {
       aria-label={isOutOfStock ? "Out of Stock" : "Buy Now"}
       title={isOutOfStock ? "Out of Stock" : "Buy Now"}
       className={cn(
-        "bg-gradient-to-r from-ushop-pink to-pink-600 hover:from-pink-600 hover:to-ushop-pink text-white font-semibold tracking-wide shadow-xs hover:shadow-md hoverEffect flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-none",
+        "bg-ushop-pink hover:bg-pink-600 text-white font-semibold tracking-wide shadow-xs hover:shadow-md hoverEffect flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed border-none",
         className
       )}
     >

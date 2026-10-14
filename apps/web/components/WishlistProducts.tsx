@@ -88,7 +88,7 @@ const WishlistProducts = () => {
             <div className="flex flex-wrap items-center gap-3">
               <Button
                 onClick={handleAddAllToCart}
-                className="bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-pink-dark text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+                className="bg-ushop-purple hover:bg-ushop-purple-dark text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4" />
                 <span>Add All to Cart</span>
@@ -119,7 +119,7 @@ const WishlistProducts = () => {
                       removeFromFavorite(product._id);
                       toast.success("Product removed from wishlist");
                     }}
-                    className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all shadow-xs cursor-pointer"
+                    className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all shadow-xs cursor-pointer"
                     aria-label="Remove from wishlist"
                   >
                     <X size={16} />
@@ -141,7 +141,7 @@ const WishlistProducts = () => {
                       alt={product?.name ?? "Product"}
                       width={200}
                       height={200}
-                      className={`w-full h-48 object-contain group-hover:scale-105 transition-transform duration-200 ${
+                      className={`w-full h-48 object-contain transition-transform duration-200 ${
                         product?.stock && product.stock === 0
                           ? "opacity-50"
                           : ""
@@ -162,7 +162,7 @@ const WishlistProducts = () => {
                     </Link>
 
                     {product?.categories && product?.categories.length > 0 && (
-                      <span className="text-[11px] text-ushop-purple font-semibold uppercase tracking-wider">
+                      <span className="text-xs text-ushop-purple font-semibold uppercase tracking-wider">
                         {product.categories
                           .slice(0, 2)
                           .map((cat) => (typeof cat === "string" ? cat : null))
@@ -235,41 +235,16 @@ const WishlistProducts = () => {
             </div>
           </div>
           <div className="space-y-2 max-w-md">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-ushop-purple-dark tracking-tight">
-              Your Wishlist is Empty
+            <h2 className="text-2xl font-semibold text-gray-900">
+              No saved items yet
             </h2>
             <p className="text-sm text-gray-500 leading-relaxed font-medium">
-              Save your favorite smartphones, laptops, and tech accessories to view or purchase them anytime.
+              Tap the heart on any product to save it here. Saved items stay on this list until you remove them.
             </p>
           </div>
 
-          {/* Feature highlights */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mt-4 w-full">
-            <div className="flex flex-col items-center space-y-1.5 p-4 rounded-2xl bg-gray-50/80 border border-gray-100">
-              <Heart className="h-6 w-6 text-ushop-pink" />
-              <h3 className="font-bold text-xs text-gray-900">Save Favorites</h3>
-              <p className="text-[11px] text-gray-500 text-center">
-                Keep track of items you love
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-1.5 p-4 rounded-2xl bg-gray-50/80 border border-gray-100">
-              <ShoppingBag className="w-6 h-6 text-ushop-purple" />
-              <h3 className="font-bold text-xs text-gray-900">Quick Shopping</h3>
-              <p className="text-[11px] text-gray-500 text-center">
-                Move items to cart in one click
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-1.5 p-4 rounded-2xl bg-gray-50/80 border border-gray-100">
-              <span className="text-xl">🔥</span>
-              <h3 className="font-bold text-xs text-gray-900">Track Deals</h3>
-              <p className="text-[11px] text-gray-500 text-center">
-                Never miss price drops or offers
-              </p>
-            </div>
-          </div>
-
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
-            <Button asChild size="lg" className="bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-pink-dark text-white font-bold px-8 rounded-xl shadow-md">
+            <Button asChild size="lg" className="bg-ushop-purple hover:bg-ushop-purple-dark text-white font-bold px-8 rounded-xl shadow-md">
               <Link href="/shop" className="flex items-center gap-2">
                 <span>Browse Products</span>
                 <ArrowRight className="w-4 h-4" />

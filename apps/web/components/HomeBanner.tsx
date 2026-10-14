@@ -79,9 +79,7 @@ function HomeBanner({ slides }: HomeBannerProps) {
             {/* Left content */}
             <div className="flex-1 space-y-5 z-10 max-w-lg mt-8 md:mt-0">
               {slide.badge && (
-                <div className="inline-flex items-center gap-2 bg-ushop-pink text-white text-xs font-semibold px-3.5 py-1.5 rounded-full uppercase tracking-widest w-max">
-                  {slide.badge}
-                </div>
+                <p className="text-sm font-semibold text-white/90">{slide.badge}</p>
               )}
 
               <h1 className="max-w-lg md:text-[40px] md:leading-[48px] text-2xl font-semibold text-white">

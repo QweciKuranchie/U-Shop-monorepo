@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const NotFoundPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ushop_light_bg via-white to-ushop-pink/10 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-ushop_light_bg flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="max-w-lg w-full space-y-8 relative z-10">
         {/* Logo */}
         <div className="flex justify-center">
@@ -20,7 +20,7 @@ const NotFoundPage = () => {
         {/* 404 Display */}
         <div className="text-center">
           <div className="relative inline-block">
-            <h1 className="text-7xl sm:text-9xl font-black leading-none bg-gradient-to-br from-ushop-purple via-ushop-pink to-ushop-purple bg-clip-text text-transparent select-none">
+            <h1 className="text-7xl sm:text-9xl font-black leading-none text-ushop-purple select-none">
               404
             </h1>
           </div>
@@ -38,7 +38,7 @@ const NotFoundPage = () => {
         <div className="space-y-3 pt-4">
           <Link
             href="/"
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-2xl text-white bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple/90 hover:to-ushop-pink/90 shadow-lg shadow-ushop-purple/20 hover:shadow-xl hover:shadow-ushop-purple/30 hoverEffect transform hover:-translate-y-0.5"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-2xl text-white bg-ushop-purple hover:bg-ushop-purple/90 shadow-lg shadow-ushop-purple/20 hover:shadow-xl hover:shadow-ushop-purple/30 hoverEffect transform"
           >
             <Home className="w-4 h-4" />
             Back to Homepage

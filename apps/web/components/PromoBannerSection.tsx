@@ -76,7 +76,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                 aria-label={`${slideIndex + 1} of ${sliderBanners.length}`}
                 aria-hidden={slideIndex !== activeSlide}
                 inert={slideIndex !== activeSlide}
-                className={`min-w-full bg-gradient-to-r ${promoGradient(slide.style)} p-6 sm:p-10 md:p-12 flex flex-col md:flex-row items-center justify-between relative min-h-[360px] md:min-h-[420px] select-none`}
+                className={`min-w-full ${promoGradient(slide.style)} p-6 sm:p-10 md:p-12 flex flex-col md:flex-row items-center justify-between relative min-h-[360px] md:min-h-[420px] select-none`}
               >
                 {/* Left Content */}
                 <div className="flex-1 space-y-3 sm:space-y-4 z-10 max-w-md">
@@ -104,7 +104,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                   <div className="pt-3">
                     <Link
                       href={safeHref(slide.link)}
-                      className="inline-block px-7 py-2.5 sm:py-3 bg-[#FF4F5A] hover:bg-ushop-red text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-sm hover:shadow-md hoverEffect transform hover:-translate-y-0.5"
+                      className="inline-block px-7 py-2.5 sm:py-3 bg-[#FF4F5A] hover:bg-ushop-red text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-sm hover:shadow-md hoverEffect transform"
                     >
                       Shop Now
                     </Link>
@@ -134,14 +134,14 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
           <button
             onClick={prevSlide}
             aria-label="Previous Slide"
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 shadow-md border border-gray-200/80 text-gray-700 hover:text-ushop-red hover:bg-white flex items-center justify-center transition-all hover:scale-105 z-20"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 shadow-md border border-gray-200/80 text-gray-700 hover:text-ushop-red hover:bg-white flex items-center justify-center transition-all z-20"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next Slide"
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 shadow-md border border-gray-200/80 text-gray-700 hover:text-ushop-red hover:bg-white flex items-center justify-center transition-all hover:scale-105 z-20"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 shadow-md border border-gray-200/80 text-gray-700 hover:text-ushop-red hover:bg-white flex items-center justify-center transition-all z-20"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -170,7 +170,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
           {sideBanners.map((banner) => (
             <div
               key={banner._id}
-              className={`flex-1 bg-gradient-to-r ${promoGradient(banner.style)} rounded-2xl p-5 sm:p-6 flex items-center justify-between gap-3 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group`}
+              className={`flex-1 ${promoGradient(banner.style)} rounded-2xl p-5 sm:p-6 flex items-center justify-between gap-3 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group`}
             >
               <div className="space-y-2 z-10 max-w-[62%]">
                 <h3 className="text-sm sm:text-base font-bold text-gray-800 leading-snug line-clamp-2">
@@ -196,7 +196,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                     alt={banner.title}
                     fill
                     sizes="130px"
-                    className="object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                    className="object-contain transition-transform duration-300 drop-shadow-md"
                   />
                 )}
               </div>
@@ -223,7 +223,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
 
         <Link
           href="/shop"
-          className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-[#FF4F5A] hover:bg-ushop-red text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-xs hover:shadow-md hoverEffect transform hover:-translate-y-0.5 shrink-0"
+          className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-[#FF4F5A] hover:bg-ushop-red text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg shadow-xs hover:shadow-md hoverEffect transform shrink-0"
         >
           Shop Now
         </Link>
@@ -234,7 +234,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
         {bottomTechCards.map((card) => (
           <div
             key={card._id}
-            className={`bg-gradient-to-r ${promoGradient(card.style)} rounded-2xl p-5 flex items-center justify-between gap-3 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group`}
+            className={`${promoGradient(card.style)} rounded-2xl p-5 flex items-center justify-between gap-3 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden group`}
           >
             <div className="space-y-1.5 z-10 max-w-[62%]">
               <h4 className="text-xs sm:text-sm font-bold text-gray-800 leading-snug line-clamp-2">
@@ -247,7 +247,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
               )}
               <Link
                 href={safeHref(card.link)}
-                className="inline-block text-[11px] font-bold text-gray-900 hover:text-ushop-red uppercase tracking-wider underline underline-offset-4 hoverEffect pt-1"
+                className="inline-block text-xs font-bold text-gray-900 hover:text-ushop-red uppercase tracking-wider underline underline-offset-4 hoverEffect pt-1"
               >
                 Shop Now
               </Link>
@@ -260,7 +260,7 @@ const PromoBannerSection: React.FC<PromoBannerSectionProps> = ({ slider, side, b
                   alt={card.title}
                   fill
                   sizes="100px"
-                  className="object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                  className="object-contain transition-transform duration-300 drop-shadow-md"
                 />
               )}
             </div>

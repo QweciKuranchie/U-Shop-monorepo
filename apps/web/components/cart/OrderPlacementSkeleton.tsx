@@ -23,7 +23,7 @@ export function OrderPlacementSkeleton({
       completed: "text-green-600 font-medium",
       active:
         "text-green-600 font-medium flex items-center justify-center gap-2",
-      pending: "text-gray-400",
+      pending: "text-gray-500",
     }[status];
   };
 
@@ -165,7 +165,7 @@ export function OrderPlacementSkeleton({
         </div>
 
         {/* Order Summary Skeleton */}
-        <div className="bg-gradient-to-r from-purple-50/60 to-pink-50/60 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4 border border-purple-100/60 mx-2 sm:mx-0">
+        <div className="bg-purple-50/60 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4 border border-purple-100/60 mx-2 sm:mx-0">
           <div className="text-base font-semibold text-gray-800 mb-4 text-center">
             Order Summary
           </div>
@@ -194,7 +194,7 @@ export function OrderPlacementSkeleton({
         {/* Footer Message */}
         <div className="text-xs sm:text-sm text-gray-600 space-y-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4 mx-2 sm:mx-0">
           <p className="flex items-center justify-center gap-2 font-medium">
-            🔒 <span>Secure Processing</span>
+            <span>Secure Processing</span>
           </p>
           <p className="text-xs text-center text-gray-500">
             Please keep this window open until the process completes
@@ -211,7 +211,7 @@ export function OrderPlacementOverlay({
 }: OrderPlacementSkeletonProps) {
   return (
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 md:p-8"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 sm:p-6 md:p-8"
       style={{ zIndex: 9999 }}
     >
       <div className="w-full max-w-md max-h-[90vh] sm:max-w-lg animate-in fade-in-0 zoom-in-95 duration-300 overflow-y-auto">

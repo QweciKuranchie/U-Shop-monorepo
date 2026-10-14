@@ -126,7 +126,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                 <TableCell>
                   <PriceFormatter
                     amount={product?.product?.price as number}
-                    className="text-black font-medium"
+                    className="text-gray-900 font-medium"
                   />
                 </TableCell>
               </TableRow>
@@ -141,7 +141,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                 <strong>Discount: </strong>
                 <PriceFormatter
                   amount={order?.amountDiscount}
-                  className="text-black font-bold"
+                  className="text-gray-900 font-bold"
                 />
               </div>
             )}
@@ -153,7 +153,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
                     (order?.totalPrice as number) +
                     (order?.amountDiscount as number)
                   }
-                  className="text-black font-bold"
+                  className="text-gray-900 font-bold"
                 />
               </div>
             )}
@@ -161,7 +161,7 @@ const OrderDetailsDialog: FC<OrderDetailsDialogProps> = ({
               <strong>Total: </strong>
               <PriceFormatter
                 amount={order?.totalPrice}
-                className="text-black font-bold"
+                className="text-gray-900 font-bold"
               />
             </div>
           </div>

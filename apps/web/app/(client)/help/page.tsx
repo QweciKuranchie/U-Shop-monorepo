@@ -6,7 +6,6 @@ import Link from "next/link";
 import { contactConfig } from "@/config/contact";
 import {
   Search,
-  BookOpen,
   ShoppingBag,
   Truck,
   RotateCcw,
@@ -122,10 +121,6 @@ const HelpPage = () => {
       <Container>
         {/* Hero / Search Section */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ushop-purple/10 text-ushop-purple text-xs font-bold uppercase tracking-wider mb-3">
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Help Center & Knowledge Base</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
             How can we help you today?
@@ -138,7 +133,7 @@ const HelpPage = () => {
           {/* Search Input Bar */}
           <div className="mt-8 relative max-w-xl mx-auto">
             <div className="relative flex items-center">
-              <Search className="w-5 h-5 text-gray-400 absolute left-4.5 pointer-events-none" />
+              <Search className="w-5 h-5 text-gray-500 absolute left-4.5 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
@@ -150,7 +145,7 @@ const HelpPage = () => {
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 text-xs font-bold text-gray-400 hover:text-gray-600 cursor-pointer"
+                  className="absolute right-4 text-xs font-bold text-gray-500 hover:text-gray-600 cursor-pointer"
                 >
                   Clear
                 </button>
@@ -189,7 +184,7 @@ const HelpPage = () => {
                           className="text-xs font-semibold text-gray-700 hover:text-ushop-purple flex items-center justify-between group/link transition-colors"
                         >
                           <span>{art.title}</span>
-                          <ExternalLink className="w-3 h-3 text-gray-400 group-hover/link:text-ushop-purple shrink-0 ml-2" />
+                          <ExternalLink className="w-3 h-3 text-gray-500 group-hover/link:text-ushop-purple shrink-0 ml-2" />
                         </a>
                       ) : (
                         <Link
@@ -197,7 +192,7 @@ const HelpPage = () => {
                           className="text-xs font-semibold text-gray-700 hover:text-ushop-purple flex items-center justify-between group/link transition-colors"
                         >
                           <span>{art.title}</span>
-                          <ArrowRight className="w-3 h-3 text-gray-400 group-hover/link:translate-x-1 group-hover/link:text-ushop-purple shrink-0 ml-2 transition-transform" />
+                          <ArrowRight className="w-3 h-3 text-gray-500 group-hover/link:translate-x-1 group-hover/link:text-ushop-purple shrink-0 ml-2 transition-transform" />
                         </Link>
                       )}
                     </li>
@@ -211,7 +206,7 @@ const HelpPage = () => {
         {/* Quick Help Bottom Action Strip */}
         <div className="mt-14 sm:mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {/* FAQ Quick Card */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-ushop-purple/10 via-white to-ushop-pink/10 border border-ushop-purple/20 flex flex-col justify-between shadow-xs">
+          <div className="p-6 sm:p-8 rounded-3xl bg-ushop-purple/10 border border-ushop-purple/20 flex flex-col justify-between shadow-xs">
             <div>
               <div className="w-10 h-10 rounded-xl bg-ushop-purple text-white flex items-center justify-center mb-4">
                 <HelpCircle className="w-5 h-5" />

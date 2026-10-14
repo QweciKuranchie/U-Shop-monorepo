@@ -36,14 +36,14 @@ const CategoryPageClient = ({
   return (
     <>
       {/* Category Header Section */}
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 lg:p-8 shadow-md border border-gray-100/50 mb-8">
+      <div className="bg-white rounded-xl p-6 lg:p-8 shadow-md border border-gray-100/50 mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           {/* Left Side - Category Info */}
           <div className="flex-1">
             <div className="flex items-start gap-4 mb-4">
               {/* Category Image */}
               {currentCategory?.image && (
-                <div className="flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-ushop_light_pink to-ushop_light_bg rounded-xl overflow-hidden">
+                <div className="flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 bg-ushop_light_pink rounded-xl overflow-hidden">
                   <Image
                     src={urlFor(currentCategory.image).url()}
                     alt={categoryTitle}
@@ -99,7 +99,7 @@ const CategoryPageClient = ({
 
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2 bg-ushop-purple hover:bg-ushop-purple-dark text-white px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
+                className="inline-flex items-center gap-2 bg-ushop-purple hover:bg-ushop-purple-dark text-white px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 shadow-md hover:shadow-lg transform"
               >
                 <Grid3X3 className="w-4 h-4" />
                 View All Products
@@ -155,7 +155,7 @@ const CategoryPageClient = ({
                 className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100 hover:border-ushop-purple p-4 text-center"
               >
                 {/* Category Image */}
-                <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-ushop_light_pink to-ushop_light_bg rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 mx-auto mb-3 bg-ushop_light_pink rounded-lg flex items-center justify-center">
                   {category.image ? (
                     <Image
                       src={urlFor(category.image).url()}
@@ -180,7 +180,7 @@ const CategoryPageClient = ({
       )}
 
       {/* Call to Action Section */}
-      <div className="mt-12 bg-gradient-to-r from-ushop-purple/10 via-ushop-red/5 to-ushop-purple/10 rounded-xl p-6 lg:p-8 border border-ushop-purple/20 text-center">
+      <div className="mt-12 bg-ushop-purple/10 rounded-xl p-6 lg:p-8 border border-ushop-purple/20 text-center">
         <div className="max-w-2xl mx-auto">
           <h3 className="text-xl lg:text-2xl font-bold text-ushop-purple-dark mb-3">
             Discover More Amazing Products
@@ -192,7 +192,7 @@ const CategoryPageClient = ({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center gap-2 bg-ushop-purple-dark hover:bg-ushop-purple text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center gap-2 bg-ushop-purple-dark hover:bg-ushop-purple text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform"
             >
               <Grid3X3 className="w-5 h-5" />
               Browse All Products

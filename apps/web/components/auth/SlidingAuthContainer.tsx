@@ -561,7 +561,7 @@ export default function SlidingAuthContainer({ initialMode = "sign-in", isModal 
               <button
                 type="submit"
                 disabled={isSignUpLoading}
-                className="mt-6 w-full max-w-xs h-11 rounded-full text-white text-sm font-bold bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-pink/90 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-6 w-full max-w-xs h-11 rounded-full text-white text-sm font-bold bg-ushop-purple hover:bg-ushop-purple-dark transition-all shadow-md hover:shadow-lg transform cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSignUpLoading ? "Verifying Email..." : "Verify Email"}
               </button>
@@ -897,7 +897,7 @@ export default function SlidingAuthContainer({ initialMode = "sign-in", isModal 
                 </button>
               </div>
 
-              <p className="text-[11px] text-center text-slate-500 leading-relaxed pt-2 mt-1">
+              <p className="text-xs text-center text-slate-500 leading-relaxed pt-2 mt-1">
                 By continuing, you agree to U-Shop&apos;s{" "}
                 <Link className="text-ushop-purple underline hover:text-ushop-pink transition-colors font-semibold" href="/terms" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                   Terms of Service
@@ -946,9 +946,9 @@ export default function SlidingAuthContainer({ initialMode = "sign-in", isModal 
               {/* Foreground Content */}
               <div className="relative z-10 flex flex-col items-center justify-center text-center w-full px-5 lg:px-8 gap-4">
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 bg-black/40 border border-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full">
+                <div className="inline-flex items-center gap-2 bg-black/40 border border-white/20 px-4 py-1.5 rounded-full">
                   <Tag className="w-3 h-3 text-[#D4009B]" />
-                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-white/90">Exclusive</span>
+                  <span className="text-xs font-bold tracking-[0.15em] uppercase text-white/90">Exclusive</span>
                 </div>
 
                 {/* Heading */}
@@ -959,27 +959,27 @@ export default function SlidingAuthContainer({ initialMode = "sign-in", isModal 
                 </h1>
 
                 {/* Description */}
-                <p className="text-[11px] lg:text-xs text-white/90 leading-relaxed max-w-[240px] drop-shadow-sm font-medium">
+                <p className="text-xs lg:text-xs text-white/90 leading-relaxed max-w-[240px] drop-shadow-sm font-medium">
                   Join thousands getting the best deals on laptops, smartphones, and tech from trusted sellers across Ghana.
                 </p>
 
                 {/* Feature Cards */}
                 <div className="grid grid-cols-2 gap-2.5 w-full max-w-[280px]">
-                  <div className="flex flex-col items-center gap-1.5 bg-black/45 border border-white/20 rounded-xl px-3 py-3 backdrop-blur-xs">
+                  <div className="flex flex-col items-center gap-1.5 bg-black/45 border border-white/20 rounded-xl px-3 py-3">
                     <ShieldCheck className="w-5 h-5 text-[#D4009B]" />
-                    <p className="font-bold text-[11px] text-white leading-tight">Verified Sellers</p>
-                    <p className="text-[9px] text-white/75 leading-tight">Shop with confidence</p>
+                    <p className="font-bold text-xs text-white leading-tight">Verified Sellers</p>
+                    <p className="text-xs text-white/75 leading-tight">Shop with confidence</p>
                   </div>
-                  <div className="flex flex-col items-center gap-1.5 bg-black/45 border border-white/20 rounded-xl px-3 py-3 backdrop-blur-xs">
+                  <div className="flex flex-col items-center gap-1.5 bg-black/45 border border-white/20 rounded-xl px-3 py-3">
                     <Truck className="w-5 h-5 text-[#D4009B]" />
-                    <p className="font-bold text-[11px] text-white leading-tight">Nationwide Delivery</p>
-                    <p className="text-[9px] text-white/75 leading-tight">Straight to your doorstep</p>
+                    <p className="font-bold text-xs text-white leading-tight">Nationwide Delivery</p>
+                    <p className="text-xs text-white/75 leading-tight">Straight to your doorstep</p>
                   </div>
                 </div>
 
                 {/* Switch to Login */}
                 <div className="flex items-center gap-2.5 mt-1">
-                  <span className="text-[11px] text-white/70 font-medium">Already have an account?</span>
+                  <span className="text-xs text-white/70 font-medium">Already have an account?</span>
                   <button className="auth-ghost-overlay" onClick={handleSwitchToSignIn}>
                     Login
                   </button>
@@ -1011,7 +1011,7 @@ export default function SlidingAuthContainer({ initialMode = "sign-in", isModal 
                 {/* Heading */}
                 <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-snug">
                   Buy, Sell, and Upgrade{" "}
-                  <span className="bg-gradient-to-r from-purple-200 via-pink-200 to-white bg-clip-text text-transparent block mt-0.5">
+                  <span className="text-purple-200 block mt-0.5">
                     Your Tech.
                   </span>
                 </h1>

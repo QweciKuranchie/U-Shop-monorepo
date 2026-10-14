@@ -126,7 +126,7 @@ const SingleUniversityPage = async ({ params }: Props) => {
                   <GraduationCap className="w-3.5 h-3.5" /> Campus Hub
                 </span>
                 {university.city && (
-                  <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-xs text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                  <span className="inline-flex items-center gap-1 bg-white/20 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
                     <MapPin className="w-3 h-3" /> {university.city}
                   </span>
                 )}
@@ -144,7 +144,7 @@ const SingleUniversityPage = async ({ params }: Props) => {
             </div>
 
             {/* Campus Items & Stores Counter */}
-            <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3 w-fit">
+            <div className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-5 py-3 w-fit">
               <Building2 className="w-6 h-6 text-ushop-pink" />
               <div className="text-left">
                 <div className="text-lg font-extrabold text-white">{displayProducts.length}</div>

@@ -205,7 +205,7 @@ export function ServerCartContent({
                               <Badge
                                 key={idx}
                                 variant="outline"
-                                className="text-[10px] sm:text-xs bg-ushop_light_pink text-ushop-purple-dark border-ushop-pink/20 font-medium"
+                                className="text-xs sm:text-xs bg-ushop_light_pink text-ushop-purple-dark border-ushop-pink/20 font-medium"
                               >
                                 {label}
                               </Badge>
@@ -312,9 +312,9 @@ export function ServerCartContent({
       </div>
 
       {/* Mobile Sticky Checkout Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] shadow-xl lg:hidden flex items-center justify-between gap-3">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] shadow-xl lg:hidden flex items-center justify-between gap-3">
         <div className="flex flex-col">
-          <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wide">
+          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
             Total ({cart.length} {cart.length === 1 ? "item" : "items"})
           </span>
           <PriceFormatter amount={finalTotal} className="text-base font-bold text-ushop-purple-dark" />

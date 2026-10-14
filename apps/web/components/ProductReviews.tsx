@@ -219,7 +219,7 @@ const ProductReviews = React.memo(
 
         {/* Rating Breakdown / Summary Card */}
         {totalReviews > 0 && (
-          <div className="bg-gradient-to-br from-gray-50 to-purple-50/20 border border-gray-100 rounded-2xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          <div className="bg-gray-50 border border-gray-100 rounded-2xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             {/* Overall Rating */}
             <div className="text-center md:text-left flex flex-col items-center md:items-start justify-center">
               <div className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
@@ -286,7 +286,7 @@ const ProductReviews = React.memo(
         {/* Review List */}
         <div className="space-y-4">
           {isLoading && reviews.length === 0 ? (
-            <div className="flex items-center justify-center py-12 text-gray-400">
+            <div className="flex items-center justify-center py-12 text-gray-500">
               <Loader2 className="w-6 h-6 animate-spin text-ushop-purple" />
             </div>
           ) : reviews.length === 0 ? (
@@ -340,7 +340,7 @@ const ProductReviews = React.memo(
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ushop-purple/10 to-ushop-pink/10 flex items-center justify-center font-bold text-ushop-purple-dark uppercase text-sm border border-ushop-purple/10">
+                      <div className="w-10 h-10 rounded-full bg-ushop-purple/10 flex items-center justify-center font-bold text-ushop-purple-dark uppercase text-sm border border-ushop-purple/10">
                         {review.user?.firstName ? review.user.firstName[0] : "U"}
                         {review.user?.lastName ? review.user.lastName[0] : ""}
                       </div>
@@ -349,7 +349,7 @@ const ProductReviews = React.memo(
                           {review.user?.firstName || "Anonymous"}{" "}
                           {review.user?.lastName || ""}
                         </h4>
-                        <p className="text-[11px] text-gray-400">
+                        <p className="text-xs text-gray-500">
                           {new Date(review.createdAt).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -413,7 +413,7 @@ const ProductReviews = React.memo(
                       <p className="text-xs font-bold text-ushop-purple-dark flex items-center gap-1.5">
                         <Store size={13} aria-hidden="true" /> Response from the seller
                         {review.sellerReply.repliedAt && (
-                          <span className="font-normal text-gray-400">
+                          <span className="font-normal text-gray-500">
                             · {new Date(review.sellerReply.repliedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </span>
                         )}

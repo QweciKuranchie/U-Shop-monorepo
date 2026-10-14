@@ -75,7 +75,7 @@ const BrandsPage = async () => {
                           sizes="(max-width: 768px) 100vw, 25vw"
                         />
                       ) : (
-                        <div className="text-2xl font-bold text-gray-400 group-hover:text-ushop-pink transition-colors">
+                        <div className="text-2xl font-bold text-gray-500 group-hover:text-ushop-pink transition-colors">
                           {brand.name?.charAt(0) || "B"}
                         </div>
                       )}

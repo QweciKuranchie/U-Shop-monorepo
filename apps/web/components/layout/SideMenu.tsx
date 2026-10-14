@@ -121,7 +121,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className={`fixed inset-y-0 left-0 z-[60] w-full bg-black/45 backdrop-blur-xs transform ${
+      className={`fixed inset-y-0 left-0 z-[60] w-full bg-black/45 transform ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform ease-in-out duration-300`}
     >
@@ -134,7 +134,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200/80">
-          <Logo className="text-black" />
+          <Logo className="text-gray-900" />
           <button aria-label="Close menu"
             onClick={onClose}
             className="text-zinc-500 hover:text-ushop-pink hoverEffect p-2 rounded-lg hover:bg-ushop-pink/10"
@@ -199,7 +199,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
             <Link
               onClick={onClose}
               href="/cart"
-              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:-translate-y-0.5 hover:shadow-xs transition-all duration-300 text-center relative group"
+              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:shadow-xs transition-all duration-300 text-center relative group"
             >
               <ShoppingCart size={20} className="text-ushop-pink" />
               <span className="text-xs font-medium text-zinc-600 group-hover:text-ushop-pink transition-colors duration-200">Cart</span>
@@ -214,7 +214,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
             <Link
               onClick={onClose}
               href="/wishlist"
-              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:-translate-y-0.5 hover:shadow-xs transition-all duration-300 text-center relative group"
+              className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:shadow-xs transition-all duration-300 text-center relative group"
             >
               <Heart size={20} className="text-ushop-pink" />
               <span className="text-xs font-medium text-zinc-600 group-hover:text-ushop-pink transition-colors duration-200">
@@ -233,7 +233,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Link
                   onClick={onClose}
                   href="/user/orders"
-                  className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:-translate-y-0.5 hover:shadow-xs transition-all duration-300 text-center group"
+                  className="flex flex-col items-center gap-2 p-3 rounded-xl bg-ushop-purple/10 hover:bg-ushop-pink/10 hover:text-ushop-pink hover:shadow-xs transition-all duration-300 text-center group"
                 >
                   <Logs size={20} className="text-ushop-pink" />
                   <span className="text-xs font-medium text-zinc-600 group-hover:text-ushop-pink transition-colors duration-200">
@@ -304,7 +304,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 <Flame size={18} className="text-ushop-red fill-ushop-red animate-pulse" />
                 <span>Deals & Offers</span>
               </div>
-              <span className="px-1.5 py-0.5 bg-ushop-red text-white text-[9px] font-black rounded-md uppercase">
+              <span className="px-1.5 py-0.5 bg-ushop-red text-white text-xs font-black rounded-md uppercase">
                 HOT
               </span>
             </Link>
@@ -419,7 +419,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="border-t border-ushop-purple/20 my-2"></div>
 
         {/* Promotional Banner */}
-        <div className="bg-gradient-to-r from-ushop-purple-dark to-ushop-purple rounded-lg p-4 text-center">
+        <div className="bg-ushop-purple-dark rounded-lg p-4 text-center">
           <h4 className="text-sm font-bold text-white mb-1">
             Special Offer!
           </h4>

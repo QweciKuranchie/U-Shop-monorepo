@@ -217,7 +217,7 @@ const ProductCatalog = ({ items, total, params, maxPrice, categories, brands }: 
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-4 h-4" />
             <Input
               placeholder="Search products..."
               value={searchQuery}
@@ -601,13 +601,13 @@ const ProductCatalog = ({ items, total, params, maxPrice, categories, brands }: 
                   <ChevronLeft className="h-4 w-4" /> Previous
                 </Link>
               ) : (
-                <span aria-disabled="true" className="inline-flex h-9 items-center gap-1 rounded-md border bg-gray-50 px-3 text-sm text-gray-400">
+                <span aria-disabled="true" className="inline-flex h-9 items-center gap-1 rounded-md border bg-gray-50 px-3 text-sm text-gray-500">
                   <ChevronLeft className="h-4 w-4" /> Previous
                 </span>
               )}
               {paginationWindow(page, pages).map((n, i) =>
                 n === "…" ? (
-                  <span key={`gap-${i}`} aria-hidden="true" className="px-2 text-gray-400">…</span>
+                  <span key={`gap-${i}`} aria-hidden="true" className="px-2 text-gray-500">…</span>
                 ) : (
                   <Link
                     key={n}
@@ -628,7 +628,7 @@ const ProductCatalog = ({ items, total, params, maxPrice, categories, brands }: 
                   Next <ChevronRight className="h-4 w-4" />
                 </Link>
               ) : (
-                <span aria-disabled="true" className="inline-flex h-9 items-center gap-1 rounded-md border bg-gray-50 px-3 text-sm text-gray-400">
+                <span aria-disabled="true" className="inline-flex h-9 items-center gap-1 rounded-md border bg-gray-50 px-3 text-sm text-gray-500">
                   Next <ChevronRight className="h-4 w-4" />
                 </span>
               )}

@@ -12,7 +12,7 @@ const Loading: React.FC<LoadingProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center bg-gradient-to-br from-ushop_light_bg via-white to-ushop-pink/5 p-6 ${
+      className={`flex flex-col items-center justify-center bg-ushop_light_bg p-6 ${
         fullScreen
           ? "fixed inset-0 z-[200] w-screen h-screen"
           : "w-full min-h-[400px]"
@@ -41,7 +41,7 @@ const Loading: React.FC<LoadingProps> = ({
         {/* Loading Message */}
         <div className="mt-6 flex flex-col items-center gap-1 text-center">
           <h2 className="text-lg font-extrabold text-gray-900 tracking-tight">
-            <span className="bg-gradient-to-r from-ushop-purple to-ushop-pink bg-clip-text text-transparent">
+            <span className="text-ushop-purple">
               UShop
             </span>
           </h2>
