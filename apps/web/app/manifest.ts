@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "U-Shop — Ghana's Tech E-Commerce Platform",
+    name: "U-Shop: Ghana's tech marketplace",
     short_name: "U-Shop",
     description:
       "Ghana's trusted tech e-commerce platform. Buy and sell phones, laptops, and gadgets.",

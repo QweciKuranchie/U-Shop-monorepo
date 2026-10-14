@@ -247,7 +247,7 @@ const OrderTimeline: React.FC<OrderTimelineProps> = ({ order }) => {
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-linear-to-r from-ushop_light_pink to-white">
+      <CardHeader className="bg-ushop_light_pink">
         <CardTitle className="flex items-center gap-2 text-ushop-purple">
           <Clock className="w-5 h-5" />
           Order Timeline
@@ -299,7 +299,7 @@ const OrderTimeline: React.FC<OrderTimelineProps> = ({ order }) => {
                     event.status === "current" &&
                       "bg-ushop-red text-white ring-4 ring-ushop-red/20 animate-pulse-slow scale-110",
                     event.status === "pending" &&
-                      "bg-gray-100 text-gray-400 scale-95",
+                      "bg-gray-100 text-gray-500 scale-95",
                     index < visibleItems && "scale-100"
                   )}
                   style={{
@@ -345,7 +345,7 @@ const OrderTimeline: React.FC<OrderTimelineProps> = ({ order }) => {
                             event.status === "completed" && "text-gray-700",
                             event.status === "current" &&
                               "text-gray-800 font-medium",
-                            event.status === "pending" && "text-gray-400"
+                            event.status === "pending" && "text-gray-500"
                           )}
                         >
                           {event.description}
@@ -416,7 +416,7 @@ const OrderTimeline: React.FC<OrderTimelineProps> = ({ order }) => {
           </div>
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-linear-to-r from-ushop-purple-dark to-ushop-purple transition-all duration-1000 ease-out rounded-full"
+              className="h-full bg-ushop-purple-dark transition-all duration-1000 ease-out rounded-full"
               style={{
                 width: `${
                   (events.filter((e) => e.status === "completed").length /

@@ -280,7 +280,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
         <div className="border-t border-shop_dark_green my-2"></div>
 
         {/* Promotional Banner */}
-        <div className="bg-gradient-to-r from-shop_dark_green to-shop_btn_dark_green rounded-lg p-4 text-center">
+        <div className="bg-shop_dark_green rounded-lg p-4 text-center">
           <h4 className="text-sm font-bold text-shop_light_green mb-1">
             Special Offer!
           </h4>

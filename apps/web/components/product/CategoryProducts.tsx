@@ -65,7 +65,7 @@ export default function CategoryProducts({ categories, slug, initialProducts }: 
   return (
     <div className="space-y-6">
       {/* Filters and Sorting bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-gray-100/50 shadow-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-100/50 shadow-sm">
         <div className="flex items-center gap-2 text-zinc-600 flex-wrap">
           <LayoutGrid size={18} className="text-ushop-pink" />
           <span className="text-sm font-medium mr-2">
@@ -88,7 +88,7 @@ export default function CategoryProducts({ categories, slug, initialProducts }: 
                   key={cond}
                   variant={isSel ? "default" : "outline"}
                   onClick={() => setSelectedCondition(isSel ? null : cond)}
-                  className={`cursor-pointer text-[11px] py-0.5 px-2 rounded-full ${
+                  className={`cursor-pointer text-xs py-0.5 px-2 rounded-full ${
                     isSel
                       ? "bg-ushop-purple text-white border-ushop-purple"
                       : "border-gray-200 text-gray-600 hover:border-ushop-purple"

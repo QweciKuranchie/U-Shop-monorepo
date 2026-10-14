@@ -27,7 +27,7 @@ const dealsCategories = [
     description: "Limited-time lightning deals with massive price drops.",
     href: "/deals/flash",
     icon: Zap,
-    color: "from-ushop-red to-red-600",
+    color: "bg-ushop-red",
   },
   {
     title: "Student Deals",
@@ -35,7 +35,7 @@ const dealsCategories = [
     description: "Verified campus pricing on laptops, accessories & tech.",
     href: "/deals/students",
     icon: GraduationCap,
-    color: "from-emerald-600 to-teal-600",
+    color: "bg-emerald-600",
   },
   {
     title: "Clearance",
@@ -43,7 +43,7 @@ const dealsCategories = [
     description: "Final markdowns and last-chance inventory discounts.",
     href: "/deals/clearance",
     icon: Tag,
-    color: "from-amber-600 to-orange-600",
+    color: "bg-amber-600",
   },
   {
     title: "Black Friday",
@@ -51,7 +51,7 @@ const dealsCategories = [
     description: "The biggest savings event of the year on UShop.",
     href: "/deals/black-friday",
     icon: ShoppingBag,
-    color: "from-gray-900 to-gray-800",
+    color: "bg-gray-900",
   },
   {
     title: "Special Offers",
@@ -59,7 +59,7 @@ const dealsCategories = [
     description: "Curated seller promotions & seasonal bundle discounts.",
     href: "/deals/special-offers",
     icon: Flame,
-    color: "from-ushop-purple to-ushop-pink",
+    color: "bg-ushop-purple",
   },
 ];
 
@@ -83,10 +83,10 @@ const MainDealsPage = async () => {
         <DynamicBreadcrumb customItems={[{ label: "Deals & Offers", href: "/deals" }]} />
 
         {/* Hero Banner Card */}
-        <div className="my-6 bg-gradient-to-r from-ushop-red via-red-600 to-amber-600 text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative">
+        <div className="my-6 bg-ushop-red text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full mb-4">
+              <div className="inline-flex items-center gap-2 bg-white/20 px-3.5 py-1.5 rounded-full mb-4">
                 <Flame className="w-4 h-4 fill-white text-white animate-pulse" />
                 <span className="text-xs font-black uppercase tracking-wider">
                   DEALS & OFFERS HUB
@@ -105,11 +105,11 @@ const MainDealsPage = async () => {
 
               {/* Deal Metrics */}
               <div className="grid grid-cols-2 gap-4 max-w-sm">
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/20">
+                <div className="bg-white/10 rounded-2xl p-3.5 border border-white/20">
                   <div className="text-xs text-white/80 font-medium">Active Deals</div>
                   <div className="text-2xl font-black">{totalProducts} Items</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/20">
+                <div className="bg-white/10 rounded-2xl p-3.5 border border-white/20">
                   <div className="text-xs text-white/80 font-medium">Average Savings</div>
                   <div className="text-2xl font-black">{avgDiscount.toFixed(0)}% OFF</div>
                 </div>
@@ -142,7 +142,7 @@ const MainDealsPage = async () => {
                 >
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${cat.color} text-white flex items-center justify-center shadow-md`}>
+                      <div className={`w-10 h-10 rounded-xl ${cat.color} text-white flex items-center justify-center shadow-md`}>
                         <IconComp className="w-5 h-5" />
                       </div>
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-50 text-ushop-red border border-red-100">

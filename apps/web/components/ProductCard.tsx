@@ -106,7 +106,7 @@ const ProductCard = ({
               href="/deals/flash"
               aria-label="Flash Sale Deal"
               title="Flash Sale Deal"
-              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-red-100 hover:scale-110 transition-transform duration-200"
+              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-red-100 transition-transform duration-200"
             >
               <Flame
                 size={14}
@@ -121,7 +121,7 @@ const ProductCard = ({
               href="/deals/students"
               aria-label="Student Deal"
               title="Student Deal"
-              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-emerald-100 hover:scale-110 transition-transform duration-200"
+              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-emerald-100 transition-transform duration-200"
             >
               <GraduationCap
                 size={14}
@@ -136,7 +136,7 @@ const ProductCard = ({
               href="/deals/clearance"
               aria-label="Clearance Sale"
               title="Clearance Sale"
-              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-amber-100 hover:scale-110 transition-transform duration-200"
+              className="p-1 sm:p-1.5 rounded-full bg-white/95 shadow-md border border-amber-100 transition-transform duration-200"
             >
               <Tag
                 size={14}
@@ -150,14 +150,14 @@ const ProductCard = ({
         <div className="absolute top-2 left-2 z-10 flex flex-col items-start gap-1">
           {!product?.isFlashSale && product?.status && STATUS_CONFIG[product.status] && (
             <span
-              className={`text-[9px] sm:text-[10px] uppercase font-bold border px-2 py-0.5 rounded-full tracking-wider shadow-2xs ${STATUS_CONFIG[product.status].className}`}
+              className={`text-xs sm:text-xs uppercase font-bold border px-2 py-0.5 rounded-full tracking-wider shadow-2xs ${STATUS_CONFIG[product.status].className}`}
             >
               {STATUS_CONFIG[product.status].label}
             </span>
           )}
 
           {typeof product?.discount === "number" && product.discount > 0 ? (
-            <span className="bg-[#FF4F5A] text-white text-[9px] sm:text-[10px] font-extrabold px-1.5 py-0.5 rounded-md shadow-xs">
+            <span className="bg-[#FF4F5A] text-white text-xs sm:text-xs font-extrabold px-1.5 py-0.5 rounded-md shadow-xs">
               -{product.discount}%
             </span>
           ) : null}
@@ -194,7 +194,7 @@ const ProductCard = ({
             if (!categoryLabel) return null;
 
             return (
-              <p className="uppercase line-clamp-1 text-[10px] text-ushop-light-text font-semibold tracking-wider">
+              <p className="uppercase line-clamp-1 text-xs text-ushop-light-text font-semibold tracking-wider">
                 {categoryLabel}
               </p>
             );
@@ -226,7 +226,7 @@ const ProductCard = ({
                     />
                   ))}
                 </div>
-                <span className="text-[10px] text-gray-400 font-medium">
+                <span className="text-xs text-gray-500 font-medium">
                   {reviewCount > 0 ? (
                     <>
                       {avgRating > 0 ? avgRating.toFixed(1) : null} ({reviewCount})
@@ -247,7 +247,7 @@ const ProductCard = ({
               discount={product?.discount}
               className="text-xs sm:text-sm font-extrabold"
             />
-            <span className={`text-[10px] font-bold ${product?.stock === 0 ? "text-ushop-red" : "text-emerald-600"}`}>
+            <span className={`text-xs font-bold ${product?.stock === 0 ? "text-ushop-red" : "text-emerald-600"}`}>
               {(product?.stock as number) > 0 ? "In Stock" : "Out of Stock"}
             </span>
           </div>

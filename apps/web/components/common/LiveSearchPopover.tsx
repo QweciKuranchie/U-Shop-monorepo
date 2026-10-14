@@ -61,10 +61,10 @@ export function LiveSearchPopover({
       ) : results.length > 0 ? (
         <div className="space-y-1">
           <div className="px-3 py-1.5 border-b border-gray-100 flex items-center justify-between">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-gray-400">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-gray-500">
               Matching Products
             </span>
-            <span className="text-[11px] font-semibold text-ushop-pink" role="status">
+            <span className="text-xs font-semibold text-ushop-pink" role="status">
               {results.length} found
             </span>
           </div>
@@ -92,7 +92,7 @@ export function LiveSearchPopover({
                         alt=""
                         fill
                         sizes="48px"
-                        className="object-contain p-1 group-hover:scale-105 transition-transform"
+                        className="object-contain p-1 transition-transform"
                       />
                     ) : (
                       <Package className="w-5 h-5 text-gray-300" />
@@ -109,7 +109,7 @@ export function LiveSearchPopover({
                         className="text-xs font-extrabold text-ushop-purple-dark"
                       />
                       {typeof product.discount === "number" && product.discount > 0 && (
-                        <span className="text-[10px] font-bold text-ushop-pink bg-ushop-pink/10 px-1.5 py-0.2 rounded-md">
+                        <span className="text-xs font-bold text-ushop-pink bg-ushop-pink/10 px-1.5 py-0.2 rounded-md">
                           -{product.discount}%
                         </span>
                       )}

@@ -307,7 +307,7 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
                 <p className="text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
                   {clerk.firstName || "Not provided"}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   From Clerk (Read-only)
                 </p>
               </div>
@@ -319,7 +319,7 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
                 <p className="text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
                   {clerk.lastName || "Not provided"}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   From Clerk (Read-only)
                 </p>
               </div>
@@ -331,7 +331,7 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
                 <p className="text-gray-900 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
                   {displayEmail}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-gray-500 mt-1">
                   From Clerk (Read-only)
                 </p>
               </div>

@@ -221,7 +221,7 @@ const ProductContent = ({
               {/* Discount Information */}
               {typeof product?.discount === "number" && product.discount > 0 ? (
                 <div className="bg-ushop-pink/10 text-ushop-pink border border-ushop-pink/20 px-3 py-2 rounded-lg text-sm font-semibold">
-                  💰 Save {product.discount}% on this item!
+                  Save {product.discount}% on this item!
                 </div>
               ) : null}
             </div>
@@ -277,7 +277,7 @@ const ProductContent = ({
                   }
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-ushop-purple hover:bg-ushop-purple-dark text-white text-xs font-semibold rounded-xl transition-colors shrink-0 shadow-xs group"
                 >
-                  <Store className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <Store className="w-4 h-4 transition-transform" />
                   <span>Visit Store</span>
                   <ExternalLink className="w-3.5 h-3.5 opacity-80" />
                 </Link>
@@ -286,26 +286,29 @@ const ProductContent = ({
 
             {/* Action Buttons: Add to Cart, Buy Now & Wishlist on same line */}
             <ProductActionWrapper delay={0.3}>
-              <div className="flex items-center gap-2 sm:gap-3 w-full">
+              {/* On phones the buy buttons dock to the bottom edge, inside thumb reach. */}
+              <div className="flex items-center gap-2 sm:gap-3 w-full max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t max-lg:border-gray-200 max-lg:bg-white max-lg:px-4 max-lg:py-3 max-lg:pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
                 <div className="flex-1 min-w-0">
                   <AddToCartBtn
                     product={product}
-                    className="w-full py-2.5 sm:py-3 text-xs sm:text-sm font-bold rounded-xl h-11 sm:h-12"
+                    className="w-full py-2.5 sm:py-3 text-sm font-bold rounded-xl h-12"
                   />
                 </div>
                 <div className="flex-1 min-w-0">
                   <BuyNowBtn
                     product={product}
-                    className="w-full py-2.5 sm:py-3 text-xs sm:text-sm font-bold rounded-xl h-11 sm:h-12"
+                    className="w-full py-2.5 sm:py-3 text-sm font-bold rounded-xl h-12"
                   />
                 </div>
                 <div className="shrink-0">
                   <AddToWishlistBtn
                     product={product}
-                    className="!relative !top-0 !right-0 !z-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center border border-zinc-200 hover:border-ushop-pink"
+                    className="!relative !top-0 !right-0 !z-0 w-12 h-12 rounded-xl flex items-center justify-center border border-zinc-200 hover:border-ushop-pink"
                   />
                 </div>
               </div>
+              {/* Keeps the last section clear of the docked buttons on phones. */}
+              <div className="h-20 lg:hidden" aria-hidden="true" />
             </ProductActionWrapper>
 
             {/* Product Characteristics */}

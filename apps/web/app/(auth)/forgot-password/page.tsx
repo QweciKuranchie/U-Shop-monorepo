@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
         <div className="mb-4 flex justify-center">
           <Logo imageClassName="h-9 w-auto" />
         </div>
-        <div className="mx-auto w-12 h-12 rounded-2xl bg-gradient-to-br from-ushop-purple to-ushop-pink flex items-center justify-center shadow-lg shadow-purple-900/20 mb-3">
+        <div className="mx-auto w-12 h-12 rounded-2xl bg-ushop-purple flex items-center justify-center shadow-lg shadow-purple-900/20 mb-3">
           <KeyRound className="w-6 h-6 text-white" />
         </div>
         <h1 className="text-2xl font-extrabold text-ushop-purple-dark">
@@ -149,7 +149,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={isLoading || !email.trim()}
-            className="w-full py-3 bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-purple text-white font-bold text-sm rounded-xl shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-3 bg-ushop-purple hover:bg-ushop-purple-dark text-white font-bold text-sm rounded-xl shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? "Sending Code..." : "Send Reset Code"}
           </button>
@@ -196,7 +196,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={isLoading || !code.trim() || !newPassword}
-            className="w-full py-3 bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-purple text-white font-bold text-sm rounded-xl shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-3 bg-ushop-purple hover:bg-ushop-purple-dark text-white font-bold text-sm rounded-xl shadow-lg shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? "Resetting Password..." : "Reset Password & Sign In"}
           </button>

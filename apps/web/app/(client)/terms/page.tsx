@@ -43,10 +43,6 @@ const TermsPage = () => {
 
         {/* Header Hero */}
         <div className="text-center max-w-2xl mx-auto my-8 sm:my-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ushop-purple/10 text-ushop-purple text-xs font-bold uppercase tracking-wider mb-3 border border-ushop-purple/20">
-            <Scale className="w-4 h-4 text-ushop-purple" />
-            <span>Marketplace Terms of Service</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
             Terms of Service & Operating Conditions
@@ -67,7 +63,7 @@ const TermsPage = () => {
                 download
                 className="text-ushop-pink font-bold hover:underline"
               >
-                📥 Download U-Shop Terms of Service (PDF)
+                Download U-Shop Terms of Service (PDF)
               </a>
             </div>
           </div>
@@ -75,7 +71,7 @@ const TermsPage = () => {
 
         {/* Metadata Control Box */}
         <div className="mb-10 bg-white rounded-3xl border border-gray-200/80 p-6 shadow-xs overflow-hidden">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-2">
             <Info className="w-4 h-4 text-ushop-purple" />
             Document Control Metadata
           </h3>
@@ -552,7 +548,7 @@ const TermsPage = () => {
 
               {/* Enforcement Escalation Flow */}
               <div className="my-3 p-4 bg-red-50/60 border border-red-100 rounded-2xl text-xs space-y-2">
-                <p className="font-bold text-red-900 uppercase tracking-wider text-[11px]">Enforcement Escalation Matrix</p>
+                <p className="font-bold text-red-900 uppercase tracking-wider text-xs">Enforcement Escalation Matrix</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div className="p-2.5 bg-white border border-red-100 rounded-xl">
                     <strong className="text-amber-700 block">[Minor Offense]</strong>
@@ -701,11 +697,11 @@ const TermsPage = () => {
               {/* Approval Box */}
               <div className="p-4 bg-slate-900 text-white rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 text-xs mt-4">
                 <div>
-                  <span className="text-gray-400 font-medium block">Approved By</span>
+                  <span className="text-gray-500 font-medium block">Approved By</span>
                   <span className="font-bold text-white">Head of Legal & Regulatory Compliance - U-Shop E-Commerce Group</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-gray-400 font-medium block">Effective Date</span>
+                  <span className="text-gray-500 font-medium block">Effective Date</span>
                   <span className="font-bold text-ushop-pink">1st September, 2026</span>
                 </div>
               </div>

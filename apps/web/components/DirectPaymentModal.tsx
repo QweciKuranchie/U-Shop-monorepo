@@ -82,7 +82,7 @@ const DirectPaymentModal: React.FC<Props> = ({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogPortal>
-        <DialogOverlay className="bg-black/60 backdrop-blur-sm" />
+        <DialogOverlay className="bg-black/60" />
         <DialogPrimitive.Content
           className={cn(
             "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 sm:gap-6 border-2 border-ushop-purple/20 bg-white p-4 sm:p-8 shadow-2xl duration-300 max-h-[90vh] overflow-y-auto",
@@ -98,7 +98,7 @@ const DirectPaymentModal: React.FC<Props> = ({
 
           {/* Header with Icon */}
           <div className="text-center space-y-4">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-ushop-purple-dark to-ushop-pink shadow-lg ring-4 ring-ushop-purple/10 animate-scale-in">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-ushop-purple-dark shadow-lg ring-4 ring-ushop-purple/10 animate-scale-in">
               <Lock className="h-10 w-10 text-white" />
             </div>
             <div className="space-y-2">
@@ -112,7 +112,7 @@ const DirectPaymentModal: React.FC<Props> = ({
           </div>
 
           {/* Order Summary Card */}
-          <div className="relative p-6 bg-gradient-to-br from-ushop-purple/5 to-white rounded-xl border-2 border-ushop-purple/10 shadow-md animate-fade-in">
+          <div className="relative p-6 bg-ushop-purple/5 rounded-xl border-2 border-ushop-purple/10 shadow-md animate-fade-in">
             <div className="absolute -top-3 -right-3">
               <div className="flex items-center gap-1 bg-ushop-pink text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
                 <ShieldCheck className="w-3.5 h-3.5" />
@@ -190,7 +190,7 @@ const DirectPaymentModal: React.FC<Props> = ({
             <Button
               onClick={handlePayNow}
               disabled={isProcessing}
-              className="flex-1 h-12 bg-gradient-to-r from-ushop-purple-dark to-ushop-pink hover:from-ushop-purple-dark/90 hover:to-ushop-pink/90 text-white font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+              className="flex-1 h-12 bg-ushop-purple-dark hover:bg-ushop-purple-dark/90 text-white font-bold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
             >
               {isProcessing ? (
                 <div className="flex items-center justify-center gap-2">
@@ -207,7 +207,7 @@ const DirectPaymentModal: React.FC<Props> = ({
           </div>
 
           {/* Trust Indicators */}
-          <div className="flex items-center justify-center gap-6 text-xs text-gray-400 border-t border-gray-100 pt-4 animate-fade-in">
+          <div className="flex items-center justify-center gap-6 text-xs text-gray-500 border-t border-gray-100 pt-4 animate-fade-in">
             <div className="flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-ushop-pink" />
               <span>SSL Secured</span>

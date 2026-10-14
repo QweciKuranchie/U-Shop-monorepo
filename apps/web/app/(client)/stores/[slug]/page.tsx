@@ -96,7 +96,7 @@ const SingleStorePage = async ({ params }: Props) => {
         {/* Store Banner & Hero Card */}
         <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-xs mb-10">
           {/* Cover Header */}
-          <div className="relative h-44 sm:h-64 w-full bg-gradient-to-r from-ushop-purple via-ushop-pink to-amber-500 overflow-hidden">
+          <div className="relative h-44 sm:h-64 w-full bg-ushop-purple overflow-hidden">
             <Image
               src={bannerUrl}
               alt={storeName}

@@ -95,7 +95,7 @@ const UserDropdown = () => {
 
         <div className="p-2">
           {walletBalance > 0 && (
-            <div className="mb-2 mx-2 p-3 rounded-lg bg-linear-to-r from-ushop-purple/10 to-ushop-purple-dark/10 border border-ushop-purple/20">
+            <div className="mb-2 mx-2 p-3 rounded-lg bg-ushop-purple/10 border border-ushop-purple/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Wallet className="w-4 h-4 text-ushop-purple" />

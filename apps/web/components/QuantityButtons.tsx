@@ -61,7 +61,7 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
         size="icon"
         title="Decrease quantity"
         aria-label="Decrease quantity"
-        className="w-7 h-7 sm:w-6 sm:h-6 border-0 hover:bg-shop_dark_green/20 touch-manipulation cursor-pointer"
+        className="w-10 h-10 sm:w-8 sm:h-8 border-0 hover:bg-shop_dark_green/20 touch-manipulation cursor-pointer"
         onClick={handleRemoveProduct}
         disabled={itemCount === 0 || isOutOfStock}
       >
@@ -75,7 +75,7 @@ const QuantityButtons = ({ product, className, borderStyle }: Props) => {
         size="icon"
         title="Increase quantity"
         aria-label="Increase quantity"
-        className="w-7 h-7 sm:w-6 sm:h-6 border-0 hover:bg-shop_dark_green/20 touch-manipulation cursor-pointer"
+        className="w-10 h-10 sm:w-8 sm:h-8 border-0 hover:bg-shop_dark_green/20 touch-manipulation cursor-pointer"
         onClick={handleAddToCart}
         disabled={isOutOfStock}
       >

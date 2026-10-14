@@ -160,7 +160,7 @@ export default function UserDashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <Card className="bg-gradient-to-br from-ushop-purple to-ushop-purple-dark text-white border-0 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="bg-ushop-purple text-white border-0 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
             <Package className="h-5 w-5" />
@@ -171,7 +171,7 @@ export default function UserDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-ushop-pink to-pink-600 text-white border-0 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="bg-ushop-pink text-white border-0 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-medium">Notifications</CardTitle>
             <Bell className="h-5 w-5" />
@@ -186,7 +186,7 @@ export default function UserDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-800 to-gray-900 text-white border-0 shadow-md hover:shadow-lg transition-shadow">
+        <Card className="bg-gray-800 text-white border-0 shadow-md hover:shadow-lg transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
             <CardTitle className="text-sm font-medium">Wishlist</CardTitle>
             <Heart className="h-5 w-5" />
@@ -238,7 +238,7 @@ export default function UserDashboardPage() {
                         <p className="text-sm text-gray-500 mt-1">
                           {activity.description}
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-gray-500 mt-1">
                           {formatTimeAgo(activity.timestamp)}
                         </p>
                       </div>

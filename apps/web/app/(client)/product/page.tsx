@@ -49,9 +49,9 @@ const ProductPage = async ({ searchParams }: { searchParams: Promise<SearchParam
   const catalogTotal = isUnfiltered ? pageData.total : (await getProductsPage(DEFAULT_CATALOG_PARAMS)).total;
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-ushop-purple to-ushop-pink">
+      <div className="bg-ushop-purple">
         <Container>
           <div className="py-16 text-white">
             <div className="mb-6">

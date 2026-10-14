@@ -109,7 +109,7 @@ export default function NewsletterForm({
             </button>
           </div>
 
-          <p className="text-[11px] text-gray-400">
+          <p className="text-xs text-gray-500">
             No spam. Unsubscribe anytime. See our{" "}
             <a href="/privacy" className="underline hover:text-white">privacy policy</a>.
           </p>

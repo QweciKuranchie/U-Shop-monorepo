@@ -9,7 +9,6 @@ import {
   Truck,
   Users,
   GraduationCap,
-  Flame,
   PhoneCall,
   Mail,
   ArrowRight,
@@ -19,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about U-Shop — Ghana's trusted tech e-commerce platform for buyers and Personal, Business, and Student sellers.",
+    "Learn about U-Shop, a marketplace where Ghanaians buy and sell phones, laptops and gadgets.",
 };
 
 const AboutPage = () => {
@@ -28,7 +27,7 @@ const AboutPage = () => {
       icon: <GraduationCap className="w-6 h-6 text-ushop-pink" />,
       title: "Three-Tier Seller Model",
       description:
-        "Built for Ghana's tech buyers and sellers — individuals, registered businesses, and verified university students — with dedicated hubs for student sellers across major tertiary institutions.",
+        "Built for Ghana's tech buyers and sellers: individuals, registered businesses and verified university students, with campus hubs for student sellers.",
     },
     {
       icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
@@ -55,10 +54,6 @@ const AboutPage = () => {
       <Container>
         {/* Header Hero */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ushop-pink/10 text-ushop-pink text-xs font-bold uppercase tracking-wider mb-3">
-            <Flame className="w-3.5 h-3.5" />
-            <span>Our Mission & Vision</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
             Ghana&apos;s Trusted Tech E-Commerce Platform
@@ -137,12 +132,12 @@ const AboutPage = () => {
         </div>
 
         {/* CTA Bar */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-ushop-purple to-ushop-pink text-white text-center shadow-xl">
+        <div className="p-8 sm:p-10 rounded-3xl bg-ushop-purple text-white text-center shadow-xl">
           <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">
             Ready to Explore Deals?
           </h2>
           <p className="text-xs sm:text-sm text-white/90 max-w-lg mx-auto mb-6">
-            Discover deals, browse verified stores, or start selling today — as an individual, a business, or a verified student.
+            Browse deals, shop from verified stores, or start selling as an individual, a business or a verified student.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link

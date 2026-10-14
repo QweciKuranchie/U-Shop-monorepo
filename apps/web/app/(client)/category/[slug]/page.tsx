@@ -213,7 +213,7 @@ export default async function CategoryPage({ params }: Props) {
                           alt={category.title || "Category"}
                           fill
                           sizes="48px"
-                          className="object-contain p-1.5 group-hover:scale-105 transition-transform"
+                          className="object-contain p-1.5 transition-transform"
                         />
                       ) : (
                         <Package className="w-5 h-5 text-ushop-pink" />
@@ -224,12 +224,12 @@ export default async function CategoryPage({ params }: Props) {
                       <h4 className="text-sm font-bold text-gray-900 group-hover:text-ushop-pink transition-colors truncate">
                         {category.title}
                       </h4>
-                      <p className="text-xs text-gray-400 capitalize truncate mt-0.5">
+                      <p className="text-xs text-gray-500 capitalize truncate mt-0.5">
                         {catSlug.replace(/-/g, " ")}
                       </p>
                     </div>
 
-                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-ushop-pink group-hover:translate-x-1 transition-all shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-ushop-pink group-hover:translate-x-1 transition-all shrink-0" />
                   </Link>
                 );
               })}

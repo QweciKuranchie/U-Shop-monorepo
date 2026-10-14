@@ -154,14 +154,14 @@ function SearchBar({ onSearch, className }: SearchBarProps) {
             if (query.trim().length >= 2) setIsOpen(true);
           }}
           placeholder="Search for products, categories..."
-          className="flex-1 px-5 py-2.5 text-sm bg-transparent outline-none placeholder:text-gray-400"
+          className="flex-1 px-5 py-2.5 text-sm bg-transparent outline-none placeholder:text-gray-500"
         />
 
         {query && (
           <button
             type="button"
             onClick={handleClear}
-            className="p-1 text-gray-400 hover:text-gray-600 transition-colors mr-1"
+            className="p-1 text-gray-500 hover:text-gray-600 transition-colors mr-1"
             aria-label="Clear search"
           >
             <X className="w-4 h-4" />

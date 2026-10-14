@@ -50,7 +50,7 @@ export default function AuthModal() {
         {/* Prominent High-Contrast Close Button */}
         <button
           onClick={closeAuthModal}
-          className="absolute -top-3 right-0 sm:-top-11 sm:right-0 z-[200] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-purple-950 font-extrabold text-xs shadow-xl border border-purple-100 hover:bg-white hover:text-ushop-pink hover:scale-105 transition-all cursor-pointer min-w-[36px] min-h-[36px] justify-center"
+          className="absolute -top-3 right-0 sm:-top-11 sm:right-0 z-[200] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 text-purple-950 font-extrabold text-xs shadow-xl border border-purple-100 hover:bg-white hover:text-ushop-pink transition-all cursor-pointer min-w-[36px] min-h-[36px] justify-center"
           aria-label="Close authentication modal"
         >
           <X className="w-4 h-4 text-ushop-pink stroke-[2.5]" />

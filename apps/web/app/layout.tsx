@@ -1,11 +1,12 @@
 ﻿import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Figtree, Bricolage_Grotesque } from "next/font/google";
 import { cn } from "@repo/utils";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display" });
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://ushopgh.com";
 
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     default: "UShop | Ghana's Tech E-Commerce Platform",
   },
   description:
-    "UShop — Ghana's trusted tech e-commerce platform. Buy and sell phones, laptops, tablets, and gadgets from Personal, Business, and Student sellers across Ghana.",
+    "UShop, Ghana's tech marketplace. Buy and sell phones, laptops, tablets and gadgets from verified personal, business and student sellers.",
   applicationName: "UShop",
   authors: [{ name: "UShop Team" }],
   generator: "Next.js",
@@ -111,7 +112,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       signInFallbackRedirectUrl="/"
       signUpFallbackRedirectUrl="/"
     >
-      <html lang="en" className={cn("font-sans", inter.variable)}>
+      <html lang="en" className={cn("font-sans", figtree.variable, bricolage.variable)}>
         <head>
           <meta name="mobile-web-app-capable" content="yes" />
           <link rel="mask-icon" href="/assets/logos/favicon/favicon-32x32.png" color="#6B1FA8" />

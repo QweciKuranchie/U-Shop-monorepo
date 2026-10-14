@@ -119,7 +119,7 @@ const Footer = () => {
         {/* Bottom bar — legal + payment logos */}
         <div className="border-t border-gray-800">
           <div className="py-4">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
               <p>© 2026 U-Shop. All rights reserved.</p>
 
               <div className="flex flex-wrap items-center justify-center gap-4">
@@ -145,7 +145,7 @@ const Footer = () => {
 
               {/* Payment logos from /assets/icons/footer/ */}
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <span className="text-xs text-gray-400 font-medium mr-1">
+                <span className="text-xs text-gray-500 font-medium mr-1">
                   Accepted payments:
                 </span>
                 <div className="flex flex-wrap items-center gap-2">

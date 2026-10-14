@@ -23,7 +23,7 @@ const FeaturedCategory = async () => {
                   alt="categoryImage"
                   width={100}
                   height={100}
-                  className="w-24 h-24 object-cover group-hover:scale-110 hoverEffect"
+                  className="w-24 h-24 object-cover hoverEffect"
                 />
               )}
             </div>

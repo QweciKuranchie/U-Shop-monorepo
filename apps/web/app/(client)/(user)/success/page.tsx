@@ -49,7 +49,7 @@ const SuccessContent = () => {
   }, [userId, query]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-green-50 to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-green-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Success Header */}
         <motion.div

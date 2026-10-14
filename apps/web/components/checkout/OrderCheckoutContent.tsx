@@ -257,7 +257,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
         </Button>
 
         <div className="text-center text-xs text-muted-foreground">
-          <p>🔒 Secure payment</p>
+          <p>Secure payment</p>
           <p>Your payment information is encrypted and secure</p>
         </div>
       </div>

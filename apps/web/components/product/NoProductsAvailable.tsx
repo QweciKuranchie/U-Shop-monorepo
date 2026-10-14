@@ -15,7 +15,7 @@ const NoProductsAvailable = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center py-16 min-h-80 space-y-8 text-center bg-gradient-to-br from-gray-50/50 to-white rounded-xl border border-gray-200/50 w-full",
+        "flex flex-col items-center justify-center py-16 min-h-80 space-y-8 text-center bg-gray-50/50 rounded-xl border border-gray-200/50 w-full",
         className
       )}
     >
@@ -26,11 +26,11 @@ const NoProductsAvailable = ({
         transition={{ delay: 0.1, duration: 0.5 }}
         className="relative"
       >
-        <div className="w-20 h-20 bg-gradient-to-br from-ushop-purple/10 to-ushop-purple/20 rounded-full flex items-center justify-center">
+        <div className="w-20 h-20 bg-ushop-purple/10 rounded-full flex items-center justify-center">
           <Package className="w-10 h-10 text-ushop-pink/60" />
         </div>
         <div className="absolute -top-2 -right-2 w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
-          <Search className="w-3 h-3 text-gray-400" />
+          <Search className="w-3 h-3 text-gray-500" />
         </div>
       </motion.div>
 
@@ -79,7 +79,7 @@ const NoProductsAvailable = ({
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/shop"
-            className="inline-flex items-center justify-center gap-2 bg-ushop-pink hover:bg-ushop-pink/90 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105"
+            className="inline-flex items-center justify-center gap-2 bg-ushop-pink hover:bg-ushop-pink/90 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md transform"
           >
             <Grid3X3 className="w-4 h-4" />
             Browse All Products
@@ -96,7 +96,7 @@ const NoProductsAvailable = ({
         </div>
 
         <div className="pt-2 border-t border-gray-100">
-          <p className="text-xs text-gray-400 flex items-center justify-center gap-2">
+          <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
             <Search className="w-3 h-3" />
             Try exploring our other product categories
           </p>

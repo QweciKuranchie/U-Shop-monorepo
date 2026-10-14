@@ -4,19 +4,19 @@ import {  Skeleton  } from "@repo/ui";
 
 const DealPageSkeleton = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-50 to-orange-50">
+    <div className="min-h-screen bg-red-50">
       {/* Breadcrumb Skeleton */}
       <Container className="pt-6">
         <div className="flex items-center space-x-2">
           <Skeleton className="h-4 w-12" />
-          <span className="text-gray-400">/</span>
+          <span className="text-gray-500">/</span>
           <Skeleton className="h-4 w-20" />
         </div>
       </Container>
 
       {/* Hero Section Skeleton */}
       <Container className="py-8 sm:py-12">
-        <Card className="bg-gradient-to-r from-gray-300 to-gray-400 border-0 shadow-xl">
+        <Card className="bg-gray-300 border-0 shadow-xl">
           <CardContent className="p-6 sm:p-8 lg:p-12">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
               <div className="flex-1 space-y-4 sm:space-y-6">
@@ -38,7 +38,7 @@ const DealPageSkeleton = () => {
                   {[1, 2, 3].map((item, index) => (
                     <div
                       key={item}
-                      className={`bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 ${
+                      className={`bg-white/10 rounded-lg p-3 sm:p-4 ${
                         index === 2 ? "col-span-2 sm:col-span-1" : ""
                       }`}
                     >
@@ -54,7 +54,7 @@ const DealPageSkeleton = () => {
 
               {/* Countdown Timer Skeleton */}
               <div className="lg:flex-shrink-0">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/20">
+                <div className="bg-white/10 rounded-xl p-4 sm:p-6 border border-white/20">
                   <div className="flex items-center gap-2 sm:gap-4">
                     <div className="flex items-center gap-1 sm:gap-2">
                       <Skeleton className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -152,7 +152,7 @@ const DealPageSkeleton = () => {
 
       {/* Call to Action Skeleton */}
       <Container className="py-8 sm:py-12">
-        <Card className="bg-gradient-to-r from-gray-300 to-gray-400">
+        <Card className="bg-gray-300">
           <CardContent className="p-6 sm:p-8 lg:p-12 text-center">
             <Skeleton className="h-8 sm:h-10 w-80 mx-auto mb-4" />
             <Skeleton className="h-4 w-full max-w-2xl mx-auto mb-2" />

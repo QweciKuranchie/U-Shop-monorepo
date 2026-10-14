@@ -126,7 +126,7 @@ const HeaderNavBar = ({ categories = [] }: { categories?: NavCategory[] }) => {
               }`}
             >
               <div className="px-3 py-2 border-b border-gray-100 mb-1">
-                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
                   Featured Sales & Offers
                 </p>
               </div>
@@ -148,7 +148,7 @@ const HeaderNavBar = ({ categories = [] }: { categories?: NavCategory[] }) => {
                       </span>
                     </div>
 
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-red-50 text-ushop-red border border-red-100 shrink-0">
+                    <span className="text-xs font-extrabold px-2 py-0.5 rounded-full bg-red-50 text-ushop-red border border-red-100 shrink-0">
                       {deal.badge}
                     </span>
                   </Link>

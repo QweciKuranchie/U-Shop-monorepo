@@ -31,7 +31,7 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
       <div>
         {/* Store Header Info */}
         <div className="flex items-start gap-3.5 mb-3">
-          <div className="relative w-12 h-12 rounded-2xl bg-ushop-pink/10 border border-ushop-pink/20 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+          <div className="relative w-12 h-12 rounded-2xl bg-ushop-pink/10 border border-ushop-pink/20 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs transition-transform">
             {logoUrl ? (
               <Image
                 src={logoUrl}
@@ -52,7 +52,7 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
               </h3>
               {store.verifiedStudent && (
                 <span
-                  className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-200/80 rounded-md font-semibold text-[10px] shrink-0"
+                  className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-emerald-50 text-emerald-600 border border-emerald-200/80 rounded-md font-semibold text-xs shrink-0"
                   title="Verified Student Seller"
                 >
                   <GraduationCap className="w-3 h-3 text-emerald-600" />
@@ -68,7 +68,7 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
             </div>
 
             {store.ownerName && (
-              <p className="text-[11px] text-gray-500 truncate mb-1">
+              <p className="text-xs text-gray-500 truncate mb-1">
                 Owner:{" "}
                 <span className="font-medium text-gray-700">
                   {store.ownerName}
@@ -78,8 +78,8 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
 
             {/* Location Tag */}
             {store.location?.name && (
-              <div className="flex flex-wrap gap-1 text-[11px]">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md font-medium text-[11px]">
+              <div className="flex flex-wrap gap-1 text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md font-medium text-xs">
                   <MapPin className="w-3 h-3 text-ushop-pink" />
                   {store.location.name}
                 </span>
@@ -97,12 +97,12 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
       {/* Footer Metrics & Action */}
       <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5 text-xs text-gray-500">
-          <span className="flex items-center gap-1 font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded text-[11px]">
+          <span className="flex items-center gap-1 font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded text-xs">
             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
             {store.rating || 5.0}
           </span>
 
-          <span className="flex items-center gap-1 text-gray-600 text-[11px]">
+          <span className="flex items-center gap-1 text-gray-600 text-xs">
             <Package className="w-3 h-3 text-zinc-400" />
             {store.productCount || 0} products
           </span>

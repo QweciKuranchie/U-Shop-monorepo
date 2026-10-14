@@ -150,7 +150,7 @@ export default function DealsCatalogClient({ initialProducts }: DealsCatalogClie
             size="lg"
             onClick={handleLoadMore}
             disabled={isLoadingMore}
-            className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
+            className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform transition-all inline-flex items-center gap-2 cursor-pointer"
           >
             {isLoadingMore ? (
               <>

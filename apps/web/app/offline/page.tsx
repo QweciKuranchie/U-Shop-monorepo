@@ -6,7 +6,7 @@ import { Home, RefreshCw, WifiOff, Lightbulb } from "lucide-react";
 
 const OfflinePage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ushop_light_bg via-white to-ushop-pink/10 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-ushop_light_bg flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="max-w-lg w-full space-y-8 relative z-10">
         {/* Logo */}
         <div className="flex justify-center">
@@ -16,7 +16,7 @@ const OfflinePage = () => {
         {/* Offline Icon */}
         <div className="text-center">
           <div className="relative inline-flex items-center justify-center">
-            <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-ushop-purple/10 to-ushop-pink/10 animate-pulse" />
+            <div className="absolute inset-0 w-32 h-32 mx-auto rounded-full bg-ushop-purple/10 animate-pulse" />
             <WifiOff className="relative w-20 h-20 text-ushop-purple/70" strokeWidth={1.5} />
           </div>
 
@@ -33,7 +33,7 @@ const OfflinePage = () => {
         <div className="space-y-3 pt-4">
           <button
             onClick={() => window.location.reload()}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-2xl text-white bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple/90 hover:to-ushop-pink/90 shadow-lg shadow-ushop-purple/20 hover:shadow-xl hover:shadow-ushop-purple/30 hoverEffect transform hover:-translate-y-0.5 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-2xl text-white bg-ushop-purple hover:bg-ushop-purple/90 shadow-lg shadow-ushop-purple/20 hover:shadow-xl hover:shadow-ushop-purple/30 hoverEffect transform cursor-pointer"
           >
             <RefreshCw className="w-4 h-4" />
             Try Again

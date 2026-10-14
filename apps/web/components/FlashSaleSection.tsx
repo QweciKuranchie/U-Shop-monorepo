@@ -69,7 +69,7 @@ const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({ products }) => {
               </h2>
             </div>
             <p className="text-xs text-gray-600 mt-1">
-              Unbeatable discounts updated daily. Grab yours before stock runs out!
+              Prices drop while stock lasts. Sales end when the timer does.
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ const FlashSaleSection: React.FC<FlashSaleSectionProps> = ({ products }) => {
         {/* Live Timer & View All & Navigation Buttons */}
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
           {/* Countdown Clock */}
-          <div className="flex items-center gap-2 bg-white/90 backdrop-blur-xs border border-ushop-red/30 px-3.5 py-2 rounded-2xl shadow-xs">
+          <div className="flex items-center gap-2 bg-white border border-ushop-red/30 px-3.5 py-2 rounded-2xl shadow-xs">
             <Clock className="w-4 h-4 text-ushop-red shrink-0" />
             <span className="text-xs font-semibold text-gray-700">Ends In:</span>
             <div className="flex items-center gap-1 font-mono text-xs font-bold text-gray-900">
