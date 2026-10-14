@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { Category, Brand, Product, Location } from "../types";
 import { sanityFetch } from "../live";
+import { FIRST_PRODUCTS_QUERY } from "../fallbackQuery";
 import {
   buildCatalogQuery,
   catalogCacheKey,
@@ -18,7 +19,6 @@ export * from "./query";
 export * from "./sellerQueries";
 
 import { ADDRESS_QUERY,
-  ALL_PRODUCTS_QUERY,
   ADMIN_CATEGORIES_QUERY,
   BANNER_QUERY,
   HOMEPAGE_BANNERS_QUERY,
@@ -99,27 +99,6 @@ const getFeaturedCategory = unstable_cache(
 );
 
 /**
- * Get all products - cached for 10 minutes
- * Product list updates moderately often
- */
-const getAllProducts = unstable_cache(
-  async () => {
-    try {
-      const { data } = (await sanityFetch({ query: ALL_PRODUCTS_QUERY })) as {
-        data: Product[];
-      };
-      return data ?? [];
-    } catch (error) {
-      console.error("Error fetching all products:", error);
-      return [];
-    }
-  },
-  ["all-products"],
-  { revalidate: 600, tags: ["products"] }
-);
-
-
-/**
  * One page of the product catalogue, filtered/sorted/paginated by Sanity.
  * Replaces loading EVERY product and filtering in the browser.
  *
@@ -193,11 +172,13 @@ const getPopularProducts = unstable_cache(
       if (data && data.length > 0) {
         return data.slice(0, quantity);
       }
-      // Fallback to all products if no explicit popular products
-      const fallback = (await sanityFetch({ query: ALL_PRODUCTS_QUERY })) as {
-        data: Product[];
-      };
-      return (fallback.data ?? []).slice(0, quantity);
+      // Nothing qualifies as popular yet: show the first products by name. Same result as
+      // loading the whole catalogue and slicing, but only `quantity` documents are fetched.
+      const fallback = (await sanityFetch({
+        query: FIRST_PRODUCTS_QUERY,
+        params: { limit: quantity },
+      })) as { data: Product[] };
+      return fallback.data ?? [];
     } catch (error) {
       console.error("Error fetching popular products:", error);
       return [];
@@ -216,13 +197,10 @@ const getNewArrivalProducts = unstable_cache(
       const { data } = (await sanityFetch({ query: NEW_ARRIVALS })) as {
         data: Product[];
       };
-      if (data && data.length > 0) {
-        return data.slice(0, quantity);
-      }
-      const fallback = (await sanityFetch({ query: ALL_PRODUCTS_QUERY })) as {
-        data: Product[];
-      };
-      return (fallback.data ?? []).slice(0, quantity);
+      // NEW_ARRIVALS selects the newest products regardless of flags, so it is empty only
+      // when there are no products at all. The old "fall back to every product" branch
+      // therefore could never return anything, and is gone.
+      return (data ?? []).slice(0, quantity);
     } catch (error) {
       console.error("Error fetching new arrivals:", error);
       return [];
@@ -709,7 +687,6 @@ const getProductsByStoreSlug = unstable_cache(
 export {getBanner,
   getHomepageBanners,
   getFeaturedCategory,
-  getAllProducts,
   getProductsPage,
   getCatalogPriceMax,
   getDealProducts,

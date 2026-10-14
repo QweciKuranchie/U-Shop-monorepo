@@ -1,37 +1,159 @@
 # UShop
-U-Shop (`ushopgh.com`) is a tech e-commerce platform for Ghana, distinguished by its three-tier seller model — Personal, Business, and Student.
 
-## Getting Started
+[UShop](https://ushopgh.com) is a tech e-commerce platform for Ghana, built around a three-tier seller model: **Personal**, **Business** and **Student** sellers.
 
-First, run the development server:
+This repository is an **Nx + pnpm monorepo** of three Next.js apps that share packages. It is not a set of independently deployed microservices.
+
+## Repository layout
+
+| Path | What it is | Dev port |
+|---|---|---|
+| `apps/web` | Storefront: catalogue, cart, checkout, wallet, user area, Paystack webhook | 3000 |
+| `apps/admin` | Admin dashboard: orders, users, products, seller KYC review | 3001 |
+| `apps/seller` | Seller Center: onboarding, KYC, store and listings | 3002 |
+| `studio` | Sanity Studio (content schema) | 3333 |
+| `packages/sanity` | Sanity clients, GROQ queries, catalogue and shop query builders, schemas, migrations | |
+| `packages/utils` | Pricing, order-status rules, safe PATCH helpers, JSON-LD, rate limiter, formatters | |
+| `packages/auth` | The single admin-access check (`verifyIsAdmin`, `requireAdmin`) | |
+| `packages/ui` | Shared shadcn/Radix UI components | |
+| `packages/media` | ImageKit integration | |
+| `packages/supabase` | Supabase clients (seller KYC, stores, storage) | |
+| `packages/config` | Shared tooling config | |
+
+### Services
+
+| Service | Used for |
+|---|---|
+| **Clerk** | Authentication. `apps/web` is the primary app; `admin` and `seller` are satellite domains |
+| **Sanity** | The main data store: products, orders, users, wallet, reviews, content |
+| **Supabase** | Seller Center auth, database and storage (seller KYC and stores) |
+| **Paystack** | Card and Mobile Money payments |
+| **ImageKit** | Image hosting and transforms |
+| **Resend** | Transactional email |
+| **Firebase** | Push notifications (the web app **needs the `NEXT_PUBLIC_FIREBASE_*` variables at build time**) |
+| **Upstash Redis** | Rate limiting (optional, see below) |
+
+## Getting started
+
+**Prerequisites**
+
+- **Node.js 20.9 or newer** (Next.js 16 requirement).
+- **pnpm 12.9.1**, pinned by `packageManager` in `package.json`. Enable it with `corepack enable`. Older pnpm versions cannot read `pnpm-lock.yaml` (it uses pnpm 12's two-document format and fails with `expected a single document in the stream`).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env.local     # then fill it in; see "Environment variables"
+pnpm dev                       # runs web, seller, admin (and studio) through Nx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run one app at a time with `pnpm dev:web`, `pnpm dev:admin`, `pnpm dev:seller` or `pnpm dev:studio`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Each app reads its own `.env.local` (`apps/web/.env.local`, and so on); `.env.example` marks which variables belong where.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment variables
 
-## Learn More
+`.env.example` is the reference, with every variable the code reads. In short:
 
-To learn more about Next.js, take a look at the following resources:
+| Group | Variables | Notes |
+|---|---|---|
+| Sanity | `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_SANITY_API_VERSION`, `SANITY_API_READ_TOKEN`, `SANITY_API_WRITE_TOKEN` | The write token is server-only |
+| Clerk | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, sign-in/up URLs | Admin and seller also need the satellite settings |
+| Supabase | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | |
+| Payments | `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`, `PAYSTACK_SECRET_KEY` | |
+| Firebase | `NEXT_PUBLIC_FIREBASE_*` | Required to **build** the web app |
+| Email / media | `RESEND_API_KEY`, `SENDER_EMAIL_ADDRESS`, `NEXT_PUBLIC_IMAGEKIT_*`, `IMAGEKIT_PRIVATE_KEY` | |
+| Admin access | `ADMIN_EMAILS` | Comma-separated. Only **verified** Clerk emails in this list count as admins. Never use a `NEXT_PUBLIC_` variable for this |
+| Cache | `SANITY_REVALIDATE_SECRET` | Shared secret for the Sanity webhook (see below) |
+| Rate limiting | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `TRUSTED_PROXY_HOPS` | Without Upstash, an in-memory limiter is used, which is **per server instance** and not effective across serverless instances |
+| Optional | storefront branding and links, loyalty and reward points | All have defaults; see the last section of `.env.example` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Does |
+|---|---|
+| `pnpm dev` / `pnpm build` | Run or build every app through Nx |
+| `pnpm type-check` | `tsc --noEmit` for every project that has the target |
+| `pnpm lint` | ESLint for every project |
+| `pnpm -r --if-present test` | All unit tests (`@repo/utils`, `@repo/sanity`, `@repo/web`) |
+| `pnpm typegen` | Regenerate Sanity types |
+| `pnpm db:seed` / `pnpm db:nuke` | Seed or wipe data (see the note on `scripts/` below) |
 
-## Deploy on Vercel
+> **First `type-check` on a fresh clone:** `next-env.d.ts` is generated by Next and gitignored. Until you have run `pnpm dev` or `pnpm build` once, `apps/web` reports two errors about `.png` imports in `images/index.ts`. They are not real.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## How the important parts work
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Orders and payments are server-authoritative
+The browser never decides what a customer pays.
+- `POST /api/orders` re-prices every line from Sanity, checks stock and address ownership, validates promo codes and recomputes shipping with the **same function the UI uses** (`@repo/utils/pricing`). It returns `409 PRICE_CHANGED` if the shopper's total is stale, and is idempotent when the client sends an idempotency key.
+- `POST /api/checkout/paystack` charges the **stored order total**, after checking the order belongs to the caller.
+- The Paystack **webhook** (`/api/webhook`) and **callback** (`/api/checkout/paystack/callback`) both verify amount and currency (`lib/payments/chargeVerification.ts`) and then call one atomic transition, `markOrderPaid`, so confirmation email and push run exactly once.
+- Wallet money moves only through `lib/wallet/walletService.ts` (optimistic locking, idempotent refunds, atomic debit-and-pay). It is deliberately **not** in a `"use server"` file, because every export of such a file is a public endpoint.
+
+### Catalogue
+- `/product` is **server-paginated** (24 per page). Filters, sort and page live in the URL and are validated by `parseCatalogParams` in `packages/sanity/src/catalogQuery.ts`. User input is only ever passed to GROQ as parameters, never interpolated.
+- `/shop` keeps its richer filters; its query is `packages/sanity/src/shopQuery.ts`.
+- Pages that need "something to show" when their own list is empty use `getFallbackProducts()` (one bounded page) instead of loading the whole catalogue.
+- Browse pages are cached under the `products` tag. Free-text searches are intentionally **not** cached (unbounded key space).
+
+### Cache invalidation (set this up once per Sanity project)
+Create a Sanity webhook (API, Webhooks):
+`URL https://<your-domain>/api/revalidate`, trigger on create, update and delete, projection `{_type}`, and a secret equal to `SANITY_REVALIDATE_SECRET`. Without it, prices and stock can stay stale for the cache lifetime.
+
+### Order status
+Orders have a **single** status field, `orderStatus`. Older code also wrote `status`. To migrate existing orders (safe to re-run; it defaults to a dry run):
+
+```bash
+cd packages/sanity
+RUN="node --env-file=PATH/TO/your.env --import tsx migrations/backfill-order-status.mts"
+$RUN                          # dry run: read the summary and CSV
+$RUN --apply --keep-legacy    # before deploying the release that reads only orderStatus
+$RUN --apply                  # after deploying: removes the legacy field
+```
+
+The env file needs `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` and `SANITY_API_WRITE_TOKEN`.
+
+### Admin access
+`packages/auth` is the only place that decides who is an admin: Clerk metadata, a **verified** email in `ADMIN_EMAILS`, or an `isAdmin`/`role` flag on the Sanity user. Do not reintroduce checks based on a user-editable field such as the stored email.
+
+### Rate limiting
+`@repo/utils/rate-limit` uses an Upstash sliding window when configured, and falls back to in-memory (also on a Redis error or timeout) so an outage degrades protection instead of breaking checkout. It is **server only**: never import it from client code or the `@repo/utils` barrel.
+
+## Testing
+
+Unit tests use Node's built-in runner with `tsx`: `pnpm -r --if-present test`.
+
+GROQ is tested **by executing it** against in-memory data with `groq-js` (see `packages/sanity/src/*.test.ts`), not by string matching, so paging, filters, sorting and equivalence with older queries are verified by result.
+
+### Building without network access
+`next build` fetches Google Fonts. To build offline (for example in a sandbox or CI without egress), mock the font response:
+
+```bash
+cat > /tmp/fonts-mock.js <<'JS'
+module.exports = {
+  "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap":
+    "@font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;src:url(https://fonts.gstatic.com/s/inter/mock.woff2) format('woff2');unicode-range:U+0000-00FF;}",
+};
+JS
+NEXT_FONT_GOOGLE_MOCKED_RESPONSES=/tmp/fonts-mock.js pnpm --filter @repo/web build
+```
+You still need dummy values for the Clerk, Sanity and **Firebase** variables. Such a build proves compilation, type-checking and static generation, not behaviour against live services.
+
+## Conventions
+
+- **Never trust the client for money or privilege.** Prices, totals, stock, ownership and admin status are decided on the server.
+- Route files (`route.ts`) may only export HTTP handlers. Put helpers in `lib/`.
+- Never `patch(...).set(body)` from a request body. Use `omitProtectedFields` or `pickAllowedFields` from `@repo/utils`.
+- Embed JSON-LD with `serializeJsonLd`, never raw `JSON.stringify`, which can be broken out of a `<script>` tag.
+- Keep `pnpm-workspace.yaml` `overrides` (pinned patched transitive dependencies) scoped per major version. A blanket override can break older consumers.
+- `.gitignore` ignores any folder named `scripts/`. The `db:seed*` scripts referenced by `apps/web/package.json` live there locally and are **not in the repository**; put tracked scripts in another folder such as `migrations/`.
+- Agent and contributor notes for this Next.js version are in `AGENTS.md` and `CLAUDE.md`.
+
+## Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| `ERR_PNPM_BROKEN_LOCKFILE ... expected a single document` | You are on an older pnpm. Use 12.9.1 (`corepack enable`) |
+| Build fails with `Firebase: Error (auth/invalid-api-key)` | The `NEXT_PUBLIC_FIREBASE_*` variables are missing at build time |
+| `type-check` shows 2 errors about `.png` in `images/index.ts` | `next-env.d.ts` has not been generated yet; run `pnpm dev` or `pnpm build` once |
+| Prices or stock look stale on the storefront | The Sanity revalidation webhook is not configured, or `SANITY_REVALIDATE_SECRET` does not match |
+| Rate limits seem ineffective in production | Upstash variables are not set, so each instance has its own limiter |
