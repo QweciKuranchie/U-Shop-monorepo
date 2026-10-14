@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { PLATFORM_FEE_PERCENT, buyerPriceFromSellerPrice, sellerShareOfAmount } from "@repo/utils/platform-fee";
 import { useRouter } from "next/navigation";
 import { MediaUploader, type MediaImage, type MediaVideo } from "./MediaUploader";
 import { Button, Input, Label, Textarea, Card, CardContent, CardHeader, CardTitle } from "@repo/ui";
@@ -21,6 +22,11 @@ export function ListingForm({ initialData }: ListingFormProps) {
   );
   const [video, setVideo] = useState<MediaVideo | null>(initialData?.video?.url ? initialData.video : null);
   const [warrantyType, setWarrantyType] = useState<string>(initialData?.warrantyType || "no_warranty");
+  const [priceInput, setPriceInput] = useState<string>(() => {
+    const seller = initialData?.sellerPrice ?? (initialData?.price ? sellerShareOfAmount(initialData.price) : "");
+    return seller === "" ? "" : String(seller);
+  });
+  const buyerPrice = buyerPriceFromSellerPrice(Number(priceInput));
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,7 +34,7 @@ export function ListingForm({ initialData }: ListingFormProps) {
     const formData = new FormData(e.currentTarget);
     const body = {
       name: formData.get("name"),
-      price: Number(formData.get("price")),
+      price: Number(priceInput),
       discount: Number(formData.get("discount") || 0),
       stock: Number(formData.get("stock") || 1),
       description: formData.get("description"),
@@ -79,8 +85,23 @@ export function ListingForm({ initialData }: ListingFormProps) {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="price">Price (GH₵) *</Label>
-              <Input id="price" name="price" type="number" step="0.01" defaultValue={initialData?.price} required />
+              <Label htmlFor="price">Your price (GH₵) *</Label>
+              <Input
+                id="price"
+                name="price"
+                type="number"
+                step="0.01"
+                min="0.01"
+                value={priceInput}
+                onChange={(e) => setPriceInput(e.target.value)}
+                aria-describedby="price-help"
+                required
+              />
+              <p id="price-help" className="text-xs text-muted-foreground">
+                {buyerPrice > 0
+                  ? `Buyers pay GH₵ ${buyerPrice.toFixed(2)} (your price + ${PLATFORM_FEE_PERCENT}% platform fee).`
+                  : `We add a ${PLATFORM_FEE_PERCENT}% platform fee to the price buyers see.`}
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="discount">Discount (%)</Label>

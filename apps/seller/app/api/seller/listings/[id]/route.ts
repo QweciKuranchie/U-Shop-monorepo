@@ -4,11 +4,13 @@ import { SELLER_STORE_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { omitProtectedFields } from "@repo/utils";
 import { parseMedia } from "@/lib/media";
+import { buyerPriceFromSellerPrice } from "@repo/utils/platform-fee";
+import { roundMoney } from "@repo/utils/pricing";
 import { parseWarranty } from "@/lib/warranty";
 
 // Fields a seller must not set on their own listing: ownership, merchandising
 // controlled by U-Shop, and review-derived aggregates.
-const PROTECTED_PRODUCT_FIELDS = ["store", "featured", "averageRating", "totalReviews", "ratingDistribution"];
+const PROTECTED_PRODUCT_FIELDS = ["sellerPrice", "store", "featured", "averageRating", "totalReviews", "ratingDistribution"];
 
 export async function PATCH(
   request: NextRequest,
@@ -40,6 +42,14 @@ export async function PATCH(
   const updates = omitProtectedFields(await request.json().catch(() => null), PROTECTED_PRODUCT_FIELDS);
   if (!updates || Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "No permitted fields to update" }, { status: 400 });
+  }
+  // The seller sends their own price; the listing price adds the 8% platform fee.
+  if ("price" in updates) {
+    const sellerPrice = roundMoney(Number((updates as Record<string, unknown>).price));
+    if (!Number.isFinite(sellerPrice) || sellerPrice <= 0) {
+      return NextResponse.json({ error: "Enter a price greater than 0" }, { status: 400 });
+    }
+    Object.assign(updates, { sellerPrice, price: buyerPriceFromSellerPrice(sellerPrice) });
   }
   const unset: string[] = [];
   // Images/video are validated and normalised (ImageKit URLs only, max 8 photos).
