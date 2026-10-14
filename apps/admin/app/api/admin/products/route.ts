@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logAdminAction } from "@/lib/adminLog";
 import { client, writeClient } from "@repo/sanity";
 import { auth } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@repo/auth";
@@ -214,6 +215,7 @@ export async function POST(req: NextRequest) {
     };
 
     const createdProduct = await writeClient.create(newDoc);
+    await logAdminAction("info", "Product created", { productId: createdProduct._id, name: createdProduct.name }, userId);
 
     return NextResponse.json({
       success: true,

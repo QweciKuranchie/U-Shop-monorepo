@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@repo/auth";
+import { logAdminAction } from "@/lib/adminLog";
 
 export async function GET(
   req: NextRequest,
@@ -50,6 +51,7 @@ export async function DELETE(
     const { id } = await params;
     const client = await clerkClient();
     await client.users.deleteUser(id);
+    await logAdminAction("warn", "User deleted", { targetUserId: id }, userId);
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {

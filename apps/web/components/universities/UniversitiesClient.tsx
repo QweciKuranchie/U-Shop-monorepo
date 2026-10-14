@@ -72,9 +72,9 @@ export default function UniversitiesClient({
           src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1600&q=80"
           alt="University Campus Architecture"
           fill
+          sizes="100vw"
           className="object-cover object-center"
           priority
-          unoptimized
         />
 
         {/* Dark Vignette & Gradient Overlays */}

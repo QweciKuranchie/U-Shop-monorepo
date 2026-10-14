@@ -7,12 +7,15 @@ import ProductsDetails from "@/components/ProductsDetails";
 import DynamicBreadcrumb from "@/components/DynamicBreadcrumb";
 import ProductSpecs from "@/components/ProductSpecs";
 import ProductReviews from "@/components/ProductReviews";
+import ProductGallery from "@/components/product/ProductGallery";
 import AddToCartBtn from "@/components/AddToCartBtn";
 import BuyNowBtn from "@/components/BuyNowBtn";
 import AddToWishlistBtn from "@/components/AddToWishlistBtn";
 
 import { Product } from "@repo/sanity";
 import { urlFor } from "@repo/sanity";
+import { FREE_SHIPPING_THRESHOLD, MIN_SHIPPING_FEE } from "@repo/utils/pricing";
+import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -60,7 +63,21 @@ const ProductContent = ({
   const totalReviews = product?.totalReviews || 0;
 
   // Active image selector state
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product?.name || "UShop", url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard");
+      }
+    } catch (err) {
+      // The user dismissing the share sheet is not an error.
+      if ((err as Error)?.name !== "AbortError") toast.error("Couldn't share this product");
+    }
+  };
 
   // Build category hierarchy array from root ancestor down to leaf
   const buildCategoryHierarchy = (cat: { title?: string; slug?: { current?: string }; parent?: unknown }) => {
@@ -110,49 +127,10 @@ const ProductContent = ({
         />
 
         <div className="flex flex-col md:flex-row gap-10 pb-6">
-          {/* Product Image Gallery */}
-          {product?.images && product.images.length > 0 && (
-            <ProductImageWrapper>
-              <div className="space-y-4">
-                {/* Main Image */}
-                <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-ushop_light_bg border border-zinc-100 shadow-xs group">
-                  <Image
-                    src={urlFor(product.images[activeImageIndex]).url()}
-                    alt={product.name || "Product Image"}
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Thumbnails */}
-                {product.images.length > 1 && (
-                  <div className="flex overflow-x-auto gap-2.5 pb-2 scrollbar-none sm:flex-wrap">
-                    {product.images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveImageIndex(idx)}
-                        className={`relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 bg-ushop_light_bg hoverEffect ${
-                          idx === activeImageIndex
-                            ? "border-ushop-pink shadow-xs"
-                            : "border-zinc-200/60 hover:border-zinc-300"
-                        }`}
-                      >
-                        <Image
-                          src={urlFor(img).url()}
-                          alt={`Thumbnail ${idx + 1}`}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </ProductImageWrapper>
-          )}
+          {/* Product Image Gallery: angles, lifestyle shots, zoom and video */}
+          <ProductImageWrapper>
+            <ProductGallery product={product as unknown as React.ComponentProps<typeof ProductGallery>["product"]} />
+          </ProductImageWrapper>
 
           {/* Product Details */}
           <ProductDetailsWrapper>
@@ -174,14 +152,18 @@ const ProductContent = ({
 
               {/* Enhanced Rating Display */}
               {totalReviews > 0 ? (
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-0.5">
+                <a
+                  href="#reviews"
+                  className="flex items-center gap-3 w-fit hover:opacity-80"
+                  aria-label={`Rated ${averageRating.toFixed(1)} out of 5 from ${totalReviews} ${totalReviews === 1 ? "review" : "reviews"}. Jump to reviews`}
+                >
+                  <div className="flex items-center gap-0.5" aria-hidden="true">
                     {[...Array(5)].map((_, index) => (
                       <StarIcon
                         key={index}
                         size={16}
                         className={`${
-                          index < Math.floor(averageRating)
+                          index < Math.round(averageRating)
                             ? "text-yellow-400 fill-yellow-400"
                             : "text-zinc-300"
                         }`}
@@ -192,7 +174,7 @@ const ProductContent = ({
                     {averageRating.toFixed(1)} ({totalReviews}{" "}
                     {totalReviews === 1 ? "review" : "reviews"})
                   </span>
-                </div>
+                </a>
               ) : (
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-0.5">
@@ -333,15 +315,30 @@ const ProductContent = ({
 
             {/* Action Links */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 border-b border-zinc-100 py-4 sm:py-5">
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              <Link
+                href="/contact"
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <HelpCircle size={15} className="shrink-0" />
                 <span className="truncate">Ask question</span>
-              </button>
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              </Link>
+              <button
+                type="button"
+                onClick={() =>
+                  document
+                    .getElementById("delivery-info")
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" })
+                }
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <Truck size={15} className="shrink-0" />
                 <span className="truncate">Delivery & Return</span>
               </button>
-              <button className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-1">
+              <button
+                type="button"
+                onClick={handleShare}
+                className="flex items-center justify-center sm:justify-start gap-1.5 text-xs sm:text-sm text-zinc-700 hover:text-ushop-pink hoverEffect transition-colors py-2 min-h-11"
+              >
                 <Share2 size={15} className="shrink-0" />
                 <span className="truncate">Share</span>
               </button>
@@ -349,18 +346,16 @@ const ProductContent = ({
 
             {/* Delivery Information */}
             <ProductActionWrapper delay={0.5}>
-              <div className="flex flex-col border border-zinc-200/80 rounded-2xl overflow-hidden bg-white shadow-xs">
+              <div id="delivery-info" className="flex flex-col border border-zinc-200/80 rounded-2xl overflow-hidden bg-white shadow-xs scroll-mt-24">
                 <div className="p-4 flex items-start gap-3.5 border-b border-zinc-100">
                   <Truck size={24} className="text-ushop-pink mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-zinc-800">
-                      Free Delivery
+                      Delivery from GH₵{MIN_SHIPPING_FEE}
                     </p>
                     <p className="text-xs text-zinc-500 mt-0.5">
-                      Enter your Postal code for Delivery Availability.{" "}
-                      <button className="underline hover:text-ushop-pink transition-colors font-medium">
-                        Check now
-                      </button>
+                      Free on orders of GH₵{FREE_SHIPPING_THRESHOLD}+. The exact fee
+                      depends on your delivery location and is shown at checkout.
                     </p>
                   </div>
                 </div>
@@ -368,13 +363,13 @@ const ProductContent = ({
                   <CornerDownLeft size={24} className="text-ushop-pink mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-zinc-800">
-                      Return Delivery
+                      Returns
                     </p>
                     <p className="text-xs text-zinc-500 mt-0.5">
-                      Free 30 days Delivery Returns.{" "}
-                      <button className="underline hover:text-ushop-pink transition-colors font-medium">
+                      Defective or not-as-described items can be returned within 7 days of delivery.{" "}
+                      <Link href="/faqs" className="underline hover:text-ushop-pink transition-colors font-medium">
                         Details
-                      </button>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -397,7 +392,7 @@ const ProductContent = ({
                 Secure Payment
               </h3>
               <p className="text-xs text-zinc-500">
-                100% secure payment with SSL encryption
+                Pay by card or Mobile Money through Paystack, or on delivery
               </p>
             </Card>
 
@@ -407,7 +402,7 @@ const ProductContent = ({
                 Fast Delivery
               </h3>
               <p className="text-xs text-zinc-500">
-                Free shipping on orders over GH₵50
+                {`Free shipping on orders over GH₵${FREE_SHIPPING_THRESHOLD}`}
               </p>
             </Card>
 
@@ -417,7 +412,7 @@ const ProductContent = ({
                 Easy Returns
               </h3>
               <p className="text-xs text-zinc-500">
-                30-day hassle-free returns
+                7-day returns for defective items
               </p>
             </Card>
           </div>
@@ -430,6 +425,7 @@ const ProductContent = ({
 
         {/* Customer Reviews */}
         <ProductSectionWrapper delay={0.9}>
+          <div id="reviews" className="scroll-mt-24" />
           <ProductReviews
             productId={product._id}
             productName={product.name || "this product"}

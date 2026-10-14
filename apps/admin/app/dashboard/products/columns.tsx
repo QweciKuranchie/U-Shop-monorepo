@@ -2,19 +2,11 @@
 
 import { Button } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui";
 import { ProductType } from "@/types/admin";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, ExternalLink } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import ProductActionsCell from "@/components/ProductActionsCell";
 
 export const columns: ColumnDef<ProductType>[] = [
   {
@@ -161,46 +153,6 @@ export const columns: ColumnDef<ProductType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const product = row.original;
-      const slugValue =
-        typeof product.slug === "object" && product.slug !== null
-          ? product.slug.current
-          : product.slug;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(String(product.id || product._id))
-              }
-            >
-              Copy Product ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {slugValue && (
-              <DropdownMenuItem asChild>
-                <Link
-                  href={`/product/${slugValue}`}
-                  target="_blank"
-                  className="flex items-center justify-between"
-                >
-                  <span>View in Storefront</span>
-                  <ExternalLink className="h-3.5 w-3.5 ml-2" />
-                </Link>
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ProductActionsCell product={row.original} />,
   },
 ];

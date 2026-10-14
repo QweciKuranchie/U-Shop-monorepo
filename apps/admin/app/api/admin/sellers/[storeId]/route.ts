@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@/lib/adminAuth";
 import { backendClient } from "@repo/sanity";
 import { createAdminClient } from "@repo/supabase/admin";
+import { logAdminAction } from "@/lib/adminLog";
 
 export async function POST(
   request: NextRequest,
@@ -99,6 +100,7 @@ export async function POST(
         }
       }
 
+      await logAdminAction("info", "Seller KYC approved", { storeId, store: sanityStore.name }, userId);
       return NextResponse.json({
         success: true,
         message: `Store "${sanityStore.name}" approved successfully.`,
@@ -154,6 +156,7 @@ export async function POST(
         }
       }
 
+      await logAdminAction("warn", "Seller KYC rejected", { storeId, store: sanityStore.name, reason: rejectionReason }, userId);
       return NextResponse.json({
         success: true,
         message: `Store "${sanityStore.name}" KYC rejected.`,

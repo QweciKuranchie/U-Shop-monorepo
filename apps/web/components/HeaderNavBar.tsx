@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { Flame, ChevronDown, Zap, GraduationCap, Tag, ShoppingBag } from "lucide-react";
 import { headerData } from "@/Constants/data";
 import { usePathname } from "next/navigation";
+import CategoriesMegaMenu, { type NavCategory } from "./layout/CategoriesMegaMenu";
 
 const dealsDropdownItems = [
   {
@@ -44,7 +45,7 @@ const dealsDropdownItems = [
   },
 ];
 
-const HeaderNavBar = () => {
+const HeaderNavBar = ({ categories = [] }: { categories?: NavCategory[] }) => {
   const pathname = usePathname();
   const [isDealsOpen, setIsDealsOpen] = useState(false);
 
@@ -59,6 +60,15 @@ const HeaderNavBar = () => {
           <div className="flex flex-row items-center gap-6">
             {/* Navigation links — Only shown on desktop */}
             {headerData?.map((item) => {
+              if (item.href === "/category") {
+                return (
+                  <CategoriesMegaMenu
+                    key={item.title}
+                    categories={categories}
+                    isActive={pathname?.startsWith("/category") ?? false}
+                  />
+                );
+              }
               const IconComponent = item?.icon;
               const isActive = pathname === item?.href;
 
@@ -87,6 +97,13 @@ const HeaderNavBar = () => {
             className="relative group"
             onMouseEnter={() => setIsDealsOpen(true)}
             onMouseLeave={() => setIsDealsOpen(false)}
+            onFocus={() => setIsDealsOpen(true)}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setIsDealsOpen(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setIsDealsOpen(false);
+            }}
           >
             <Link
               href="/deals"

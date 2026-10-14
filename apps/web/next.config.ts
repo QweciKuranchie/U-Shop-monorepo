@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   typedRoutes: false,
   images: {
+    // AVIF first, WebP fallback: smaller downloads than the default WebP-only.
+    formats: ["image/avif", "image/webp"],
+    // Optimised images are cached for a day instead of the 4h default.
+    minimumCacheTTL: 60 * 60 * 24,
     remotePatterns: [
       {
         protocol: "https",

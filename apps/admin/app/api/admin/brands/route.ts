@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logAdminAction } from "@/lib/adminLog";
 import { client, writeClient } from "@repo/sanity";
 import { auth } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@repo/auth";
@@ -79,6 +80,7 @@ export async function POST(req: NextRequest) {
       description: description || "",
       featured: !!featured,
     });
+    await logAdminAction("info", "Brand created", { brandId: newBrand._id, name }, userId);
 
     return NextResponse.json({
       success: true,

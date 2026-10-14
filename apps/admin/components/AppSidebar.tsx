@@ -8,6 +8,13 @@ import {
   ShoppingBasket,
   LayoutDashboard,
   Store,
+  BarChart3,
+  FileText,
+  ScrollText,
+  Boxes,
+  Tags,
+  SlidersHorizontal,
+  Image as ImageIcon,
 } from "lucide-react";
 import { 
   Sidebar,
@@ -64,6 +71,41 @@ const items = [
     title: "Sellers & KYC",
     url: "/admin/sellers",
     icon: Store,
+  },
+  {
+    title: "Inventory",
+    url: "/admin/inventory",
+    icon: Boxes,
+  },
+  {
+    title: "Categories",
+    url: "/admin/categories",
+    icon: Tags,
+  },
+  {
+    title: "Attributes",
+    url: "/admin/attributes",
+    icon: SlidersHorizontal,
+  },
+  {
+    title: "Homepage",
+    url: "/admin/homepage",
+    icon: ImageIcon,
+  },
+  {
+    title: "Analytics",
+    url: "/admin/analytics",
+    icon: BarChart3,
+  },
+  {
+    title: "Reports",
+    url: "/admin/reports",
+    icon: FileText,
+  },
+  {
+    title: "Activity Logs",
+    url: "/admin/logs",
+    icon: ScrollText,
   },
 ];
 

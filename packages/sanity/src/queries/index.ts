@@ -10,6 +10,7 @@ import {
   type CatalogParams,
 } from "../catalogQuery";
 import { getOrderById } from "./userQueries";
+import type { HomepageBanner } from "../homepageBanners";
 
 export * from "./userQueries";
 export * from "./emailUserQueries";
@@ -20,6 +21,7 @@ import { ADDRESS_QUERY,
   ALL_PRODUCTS_QUERY,
   ADMIN_CATEGORIES_QUERY,
   BANNER_QUERY,
+  HOMEPAGE_BANNERS_QUERY,
   BRAND_QUERY,
   BRANDS_QUERY,
   BRANDS_WITH_PRODUCT_COUNT_QUERY,
@@ -29,6 +31,8 @@ import { ADDRESS_QUERY,
   FEATURE_PRODUCTS,
   POPULAR_PRODUCTS,
   NEW_ARRIVALS,
+  HOMEPAGE_GRID_QUERY,
+  HOMEPAGE_GRID_FALLBACK_QUERY,
   FEATURED_CATEGORY_QUERY,
   PRODUCT_BY_SLUG_QUERY,
   RELATED_PRODUCTS_QUERY,
@@ -39,6 +43,25 @@ import { ADDRESS_QUERY,
   UNIVERSITIES_QUERY,
   SINGLE_UNIVERSITY_BY_SLUG_QUERY,
   PRODUCTS_BY_UNIVERSITY_SLUG_QUERY,} from "./query";
+
+/**
+ * Active homepage banners managed from the admin panel. Returns [] on error so the
+ * storefront falls back to its built-in defaults (see resolveHomepageBanners).
+ * Schedule windows are evaluated when the cache entry is rebuilt (<= 5 min lag).
+ */
+const getHomepageBanners = unstable_cache(
+  async (): Promise<HomepageBanner[]> => {
+    try {
+      const { data } = await sanityFetch({ query: HOMEPAGE_BANNERS_QUERY });
+      return (data ?? []) as HomepageBanner[];
+    } catch (error) {
+      console.error("Error fetching homepage banners:", error);
+      return [];
+    }
+  },
+  ["homepage-banners"],
+  { revalidate: 300, tags: ["homepage", "banners"] }
+);
 
 const getBanner = unstable_cache(
   async () => {
@@ -227,6 +250,63 @@ const getFeaturedProducts = unstable_cache(
   },
   ["featured-products"],
   { revalidate: 600, tags: ["products", "featured", "homepage"] }
+);
+
+/**
+ * Products for the homepage grid - cached for 10 minutes.
+ * Featured products when any exist, otherwise the newest products. Tab
+ * filtering and sorting happen in the browser on this one list.
+ */
+const getHomepageGridProducts = unstable_cache(
+  async () => {
+    try {
+      const { data } = (await sanityFetch({ query: HOMEPAGE_GRID_QUERY })) as {
+        data: Product[];
+      };
+      if (data && data.length > 0) return data;
+      const fallback = (await sanityFetch({ query: HOMEPAGE_GRID_FALLBACK_QUERY })) as {
+        data: Product[];
+      };
+      return fallback.data ?? [];
+    } catch (error) {
+      console.error("Error fetching homepage grid products:", error);
+      return [];
+    }
+  },
+  ["homepage-grid-products"],
+  { revalidate: 600, tags: ["products", "featured", "homepage"] }
+);
+
+/**
+ * Lightweight category list for the header mega menu - cached for 1 hour.
+ */
+const getNavCategories = unstable_cache(
+  async () => {
+    try {
+      const { data } = (await sanityFetch({
+        query: `*[_type == "category" && defined(slug.current)] | order(title asc)[0...80]{
+          _id, title, slug, level,
+          "parentId": parent._ref,
+          "group": productType->{ _id, title, slug }
+        }`,
+      })) as {
+        data: Array<{
+          _id: string;
+          title: string;
+          slug: { current: string };
+          level?: number;
+          parentId?: string;
+          group?: { _id: string; title: string; slug?: { current: string } } | null;
+        }>;
+      };
+      return data ?? [];
+    } catch (error) {
+      console.error("Error fetching nav categories:", error);
+      return [];
+    }
+  },
+  ["nav-categories"],
+  { revalidate: 3600, tags: ["categories", "navigation"] }
 );
 
 /**
@@ -627,6 +707,7 @@ const getProductsByStoreSlug = unstable_cache(
 );
 
 export {getBanner,
+  getHomepageBanners,
   getFeaturedCategory,
   getAllProducts,
   getProductsPage,
@@ -635,6 +716,8 @@ export {getBanner,
   getPopularProducts,
   getNewArrivalProducts,
   getFeaturedProducts,
+  getHomepageGridProducts,
+  getNavCategories,
   getAllBrands,
   getBrandsWithCount,
   getSingleBrandBySlug,

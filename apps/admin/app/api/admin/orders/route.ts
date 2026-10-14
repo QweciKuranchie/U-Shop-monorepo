@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { logAdminAction } from "@/lib/adminLog";
 import { client, writeClient } from "@repo/sanity";
 import { auth } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@repo/auth";
@@ -111,6 +112,8 @@ export async function POST(req: NextRequest) {
       paymentStatus: (status === "delivered" || status === "success" || status === "paid") ? "paid" : "pending",
       orderDate: new Date().toISOString(),
     });
+
+    await logAdminAction("info", "Order created manually", { orderId: newOrder._id }, userId);
 
     return NextResponse.json({
       success: true,

@@ -2,20 +2,13 @@
 
 import { Button } from "@repo/ui";
 import { Checkbox } from "@repo/ui";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@repo/ui";
 import { cn } from "@repo/utils";
 import type { User } from "@clerk/nextjs/server";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+
+import UserActionsCell from "@/components/UserActionsCell";
 
 // export type User = {
 //   id: string;
@@ -109,31 +102,6 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const user = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
-            >
-              Copy user ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href={`/admin/users/${user.id}`}>View customer</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <UserActionsCell user={row.original} />,
   },
 ];

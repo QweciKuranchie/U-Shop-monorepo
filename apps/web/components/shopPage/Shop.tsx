@@ -1,7 +1,13 @@
 "use client";
 import { Brand, Category, Product } from "@repo/sanity";
 import { client } from "@repo/sanity";
-import { buildShopParams, buildShopQuery } from "@repo/sanity/shop";
+import {
+  buildShopParams,
+  buildShopQuery,
+  parseShopSort,
+  SHOP_SORT_OPTIONS,
+  type ShopSort,
+} from "@repo/sanity/shop";
 import React, { useEffect, useState, useTransition } from "react";
 import Container from "../Container";
 import Title from "../Title";
@@ -46,6 +52,7 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
   const queryParams = searchParams?.get("query") || searchParams?.get("q");
   const conditionParams = searchParams?.get("condition");
   const priceParams = searchParams?.get("price");
+  const sortParams = searchParams?.get("sort");
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, startTransition] = useTransition();
@@ -60,6 +67,7 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
   const [selectedWarranty, setSelectedWarranty] = useState<string | null>(null);
   const [dynamicAttrFilters, setDynamicAttrFilters] = useState<Record<string, string>>({});
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [sort, setSort] = useState<ShopSort>(parseShopSort(sortParams));
 
   // Cascading reset handler when Product Classification changes
   const handleClassificationChange = (classificationSlug: string | null) => {
@@ -120,7 +128,7 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
         // spec filter needs them.
         const needsSpecs = Object.keys(dynamicAttrFilters).length > 0;
         const data: ExtendedProduct[] = await client.fetch(
-          buildShopQuery(needsSpecs),
+          buildShopQuery(needsSpecs, sort),
           buildShopParams({
             searchQuery,
             classification: selectedClassification,
@@ -188,6 +196,7 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
     selectedCondition,
     selectedWarranty,
     dynamicAttrFilters,
+    sort,
     startTransition,
   ]);
 
@@ -461,8 +470,30 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
                         {products.length} Product
                         {products.length !== 1 ? "s" : ""} Found
                       </h2>
-                      <div className="text-sm text-gray-600">
-                        Showing filtered products
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <label htmlFor="shop-sort" className="whitespace-nowrap">
+                          Sort by
+                        </label>
+                        <select
+                          id="shop-sort"
+                          value={sort}
+                          onChange={(e) => {
+                            const next = parseShopSort(e.target.value);
+                            setSort(next);
+                            // Keep the choice shareable and across reloads without a navigation.
+                            const url = new URL(window.location.href);
+                            if (next === "name-asc") url.searchParams.delete("sort");
+                            else url.searchParams.set("sort", next);
+                            window.history.replaceState(null, "", url);
+                          }}
+                          className="h-10 rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900"
+                        >
+                          {SHOP_SORT_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     <PaginatedProductGrid products={products} initialLimit={12} incrementBy={12} />

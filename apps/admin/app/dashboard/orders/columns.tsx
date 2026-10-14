@@ -124,6 +124,9 @@ export const columns: ColumnDef<OrderType>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/orders/${order._id}`}>View details</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(order._id)}
             >

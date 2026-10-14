@@ -744,6 +744,14 @@ export const productType = defineType({
       hidden: ({ parent }) => parent?.warrantyType === "no_warranty",
       validation: (Rule) => Rule.max(500).error("Warranty description max length is 500 chars."),
     }),
+    defineField({
+      name: "freeTechSupport",
+      title: "Free Tech Support",
+      type: "boolean",
+      group: "inventory_warranty",
+      description: "Tick if you offer free technical support to buyers of this product.",
+      initialValue: false,
+    }),
 
     // ─── TAB 4: IMAGES ──────────────────────────────────────────
     defineField({
@@ -759,6 +767,24 @@ export const productType = defineType({
           options: {
             hotspot: true,
           },
+          fields: [
+            defineField({ name: "alt", title: "Alt text", type: "string", description: "Describe the image for screen readers and search engines (max 120 chars)", validation: (Rule) => Rule.max(120) }),
+            defineField({
+              name: "role",
+              title: "What does this photo show?",
+              type: "string",
+              description: "Helps shoppers: add several angles plus at least one lifestyle shot.",
+              options: { list: [
+          { title: "Front", value: "front" },
+          { title: "Back", value: "back" },
+          { title: "Side", value: "side" },
+          { title: "Top / bottom", value: "top" },
+          { title: "Close-up detail", value: "detail" },
+          { title: "What's in the box", value: "in_box" },
+          { title: "Lifestyle / in use", value: "lifestyle" },
+              ] },
+            }),
+          ],
         },
         {
           type: "object",
@@ -769,6 +795,22 @@ export const productType = defineType({
             defineField({ name: "fileId", title: "File ID", type: "string" }),
             defineField({ name: "filePath", title: "File Path", type: "string" }),
             defineField({ name: "thumbnailUrl", title: "Thumbnail URL", type: "url" }),
+            defineField({ name: "alt", title: "Alt text", type: "string", description: "Describe the image for screen readers and search engines (max 120 chars)", validation: (Rule) => Rule.max(120) }),
+            defineField({
+              name: "role",
+              title: "What does this photo show?",
+              type: "string",
+              description: "Helps shoppers: add several angles plus at least one lifestyle shot.",
+              options: { list: [
+          { title: "Front", value: "front" },
+          { title: "Back", value: "back" },
+          { title: "Side", value: "side" },
+          { title: "Top / bottom", value: "top" },
+          { title: "Close-up detail", value: "detail" },
+          { title: "What's in the box", value: "in_box" },
+          { title: "Lifestyle / in use", value: "lifestyle" },
+              ] },
+            }),
           ],
         },
       ],
@@ -777,6 +819,23 @@ export const productType = defineType({
           .min(1)
           .max(8)
           .error("Upload between 1 and 8 product images."),
+    }),
+    defineField({
+      name: "video",
+      title: "Product Video",
+      type: "object",
+      group: "images",
+      description: "Optional short demo video. Paste an https YouTube/Vimeo link, or upload to ImageKit from the seller app.",
+      fields: [
+        defineField({
+          name: "url",
+          title: "Video URL",
+          type: "url",
+          validation: (Rule) => Rule.uri({ scheme: ["https"] }),
+        }),
+        defineField({ name: "fileId", title: "ImageKit File ID", type: "string", hidden: true }),
+        defineField({ name: "thumbnailUrl", title: "Poster image URL", type: "url" }),
+      ],
     }),
 
     // ─── TAB 5: REVIEWS & RATINGS (SYSTEM METRICS) ─────────────

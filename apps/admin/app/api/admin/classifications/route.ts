@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
+import { logAdminAction } from "@/lib/adminLog";
 import { client, writeClient } from "@repo/sanity";
 import { auth } from "@clerk/nextjs/server";
 
@@ -57,6 +58,7 @@ export async function POST(req: NextRequest) {
       title,
       slug: { _type: "slug", current: classificationSlug },
     });
+    await logAdminAction("info", "Product classification created", { classificationId: newDoc._id, title }, userId);
 
     return NextResponse.json({
       success: true,

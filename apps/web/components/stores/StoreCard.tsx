@@ -37,6 +37,7 @@ export default function StoreCard({ store, className = "" }: StoreCardProps) {
                 src={logoUrl}
                 alt={store.name || "Store Logo"}
                 fill
+                sizes="48px"
                 className="object-cover"
               />
             ) : (

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { client, writeClient } from "@repo/sanity";
 import { auth } from "@clerk/nextjs/server";
 import { verifyIsAdmin } from "@repo/auth";
+import { logAdminAction } from "@/lib/adminLog";
 
 interface SanityCategory {
   _id: string;
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { title, name, slug, description, productClassificationId, level } = body;
+    const { title, name, slug, description, productClassificationId, level, parentId, attributes } = body;
     const categoryTitle = title || name;
 
     if (!categoryTitle || !slug) {
@@ -78,7 +79,19 @@ export async function POST(req: NextRequest) {
       ...(productClassificationId
         ? { productType: { _type: "reference", _ref: productClassificationId } }
         : {}),
+      ...(parentId ? { parent: { _type: "reference", _ref: parentId } } : {}),
+      ...(Array.isArray(attributes) && attributes.length
+        ? {
+            attributes: attributes.map((a: { attributeId: string; required?: boolean }) => ({
+              _key: a.attributeId,
+              _type: "categoryAttribute",
+              attribute: { _type: "reference", _ref: a.attributeId },
+              required: !!a.required,
+            })),
+          }
+        : {}),
     });
+    await logAdminAction("info", "Category created", { categoryId: newCategory._id, title: categoryTitle }, userId);
 
     return NextResponse.json({
       success: true,

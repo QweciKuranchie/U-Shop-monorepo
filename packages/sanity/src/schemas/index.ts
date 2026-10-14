@@ -16,6 +16,10 @@ import { userAccessRequestType } from "./userAccessRequestType";
 import { reviewType } from "./reviewType";
 import { subscriptionType } from "./subscriptionType";
 import { universityType } from "./universityType";
+import { adminLogType } from "./adminLogType";
+import { restockType } from "./restockType";
+import { stockMovementType } from "./stockMovementType";
+import { homepageBannerType } from "./homepageBannerType";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -36,5 +40,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     userAccessRequestType,
     reviewType,
     subscriptionType,
+    adminLogType,
+    restockType,
+    stockMovementType,
+    homepageBannerType,
   ],
 }
