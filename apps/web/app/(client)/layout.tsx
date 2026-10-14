@@ -9,6 +9,8 @@ import { SanityLive } from "@repo/sanity/live";
 import { Toaster } from "sonner";
 import AuthModal from "@/components/auth/AuthModal";
 import ScrollToTop from "@/components/ScrollToTop";
+import MotionProvider from "@/components/MotionProvider";
+import { getNavCategories } from "@repo/sanity/queries";
 
 export const metadata: Metadata = {
   title: "U-Shop",
@@ -27,20 +29,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navCategories = await getNavCategories();
   return (
     <UserDataProvider>
+      <MotionProvider>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ushop-purple-dark focus:shadow-lg focus:ring-2 focus:ring-ushop-purple"
+      >
+        Skip to main content
+      </a>
       <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">
+        <Header navCategories={navCategories} />
+        <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </main>
         <Footer />
       </div>
+      </MotionProvider>
       <SpeedInsights />
       <Analytics /> 
       <SanityLive />

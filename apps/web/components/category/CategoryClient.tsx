@@ -191,9 +191,9 @@ export default function CategoryClient({
           src="https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=1600&q=80"
           alt="Tech Marketplace Categories"
           fill
+          sizes="100vw"
           className="object-cover object-center"
           priority
-          unoptimized
         />
 
         {/* Dark Vignette & Gradient Overlays */}
@@ -300,6 +300,7 @@ export default function CategoryClient({
                       src={imageUrl}
                       alt={item.title}
                       fill
+                      sizes="144px"
                       className="object-contain"
                     />
                   </div>
@@ -375,6 +376,7 @@ export default function CategoryClient({
                         src={imageUrl}
                         alt={cat.title}
                         fill
+                        sizes="(max-width: 640px) 210px, 240px"
                         className="object-contain p-2"
                       />
                     ) : (
@@ -473,6 +475,7 @@ export default function CategoryClient({
                           src={imageUrl}
                           alt={category.title || "Category"}
                           fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           className="object-contain p-3"
                         />
                       ) : (

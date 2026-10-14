@@ -14,6 +14,7 @@ import {
   Boxes,
   Tags,
   SlidersHorizontal,
+  Image as ImageIcon,
 } from "lucide-react";
 import { 
   Sidebar,
@@ -85,6 +86,11 @@ const items = [
     title: "Attributes",
     url: "/admin/attributes",
     icon: SlidersHorizontal,
+  },
+  {
+    title: "Homepage",
+    url: "/admin/homepage",
+    icon: ImageIcon,
   },
   {
     title: "Analytics",

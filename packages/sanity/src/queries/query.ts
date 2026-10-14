@@ -3,8 +3,42 @@ import { defineQuery } from "next-sanity";
 const BANNER_QUERY = defineQuery(
   `*[_type == 'banner'] | order(publishedAt desc)`
 );
+/** Active homepage banners (inside their schedule window), in display order. */
+const HOMEPAGE_BANNERS_QUERY = defineQuery(
+  `*[_type == "homepageBanner" && isActive != false
+      && (!defined(startsAt) || startsAt <= now())
+      && (!defined(endsAt) || endsAt >= now())]
+    | order(placement asc, order asc, _createdAt asc){
+      _id, placement, title, badge, subtitle, price, buttonText, link, style, icon, order,
+      "imageUrl": coalesce(image.asset->url, imageUrl)
+    }`
+);
 const FEATURED_CATEGORY_QUERY = defineQuery(
   `*[_type == 'category' && featured == true] | order(name desc)`
+);
+const HOMEPAGE_GRID_QUERY = defineQuery(
+  `*[_type == "product" && (featured == true || isFeatured == true)] | order(_createdAt desc)[0...60]{
+    ...,
+    "categories": categories[]->title,
+    "category": category->{ _id, title, slug },
+    "brand": brand->{ _id, name, slug },
+    "productClassification": productClassification->{ _id, title, slug },
+    "store": store->{ _id, name, slug },
+    "averageRating": coalesce(math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating), averageRating, 0),
+    "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
+  }`
+);
+const HOMEPAGE_GRID_FALLBACK_QUERY = defineQuery(
+  `*[_type == "product"] | order(_createdAt desc)[0...60]{
+    ...,
+    "categories": categories[]->title,
+    "category": category->{ _id, title, slug },
+    "brand": brand->{ _id, name, slug },
+    "productClassification": productClassification->{ _id, title, slug },
+    "store": store->{ _id, name, slug },
+    "averageRating": coalesce(math::avg(*[_type == "review" && product._ref == ^._id && status == "approved"].rating), averageRating, 0),
+    "totalReviews": coalesce(count(*[_type == "review" && product._ref == ^._id && status == "approved"]), totalReviews, 0)
+  }`
 );
 const DEAL_PRODUCTS = defineQuery(
   `*[_type == 'product' && (isFlashSale == true || isStudentDeal == true || isClearance == true || isBlackFriday == true || isSpecialOffer == true || status == 'hot' || discount > 0)] | order(_createdAt desc){
@@ -118,6 +152,7 @@ const PRODUCT_BY_SLUG_QUERY = defineQuery(
       content,
       helpful,
       isVerifiedPurchase,
+      sellerReply,
       "createdAt": _createdAt,
       "user": coalesce(user->{ firstName, lastName }, { "firstName": coalesce(userName, "Customer"), "lastName": "" })
     }
@@ -403,11 +438,14 @@ const PRODUCTS_BY_STORE_SLUG_QUERY = defineQuery(
 
 export {
   BANNER_QUERY,
+  HOMEPAGE_BANNERS_QUERY,
   FEATURED_CATEGORY_QUERY,
   DEAL_PRODUCTS,
   POPULAR_PRODUCTS as FEATURE_PRODUCTS,
   POPULAR_PRODUCTS,
   NEW_ARRIVALS,
+  HOMEPAGE_GRID_QUERY,
+  HOMEPAGE_GRID_FALLBACK_QUERY,
   BRANDS_QUERY,
   ADDRESS_QUERY,
   ALLCATEGORIES_QUERY,

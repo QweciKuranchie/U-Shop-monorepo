@@ -2,6 +2,8 @@ import { createServerClient } from "@repo/supabase/server";
 import { client, writeClient } from "@repo/sanity";
 import { SELLER_STORE_QUERY, SELLER_LISTINGS_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
+import { parseMedia } from "@/lib/media";
+import { parseWarranty } from "@/lib/warranty";
 
 export async function GET() {
   const supabase = await createServerClient();
@@ -31,6 +33,11 @@ export async function POST(request: NextRequest) {
   if (!store) return NextResponse.json({ error: "Store not found" }, { status: 404 });
 
   const body = await request.json();
+  const media = parseMedia(body);
+  if ("error" in media) return NextResponse.json({ error: media.error }, { status: 400 });
+  if (!media.data.images) return NextResponse.json({ error: "Add at least one product image" }, { status: 400 });
+  const warranty = parseWarranty(body);
+  if ("error" in warranty) return NextResponse.json({ error: warranty.error }, { status: 400 });
   const slug = (body.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   const product = await writeClient.create({
@@ -42,6 +49,8 @@ export async function POST(request: NextRequest) {
     stock: Number(body.stock || 1),
     condition: body.condition || "new",
     description: body.description || "",
+    ...media.data,
+    ...warranty.data,
     store: { _type: "reference", _ref: store._id },
     status: "new",
   });

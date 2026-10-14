@@ -80,7 +80,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               <CreditCard className="w-5 h-5" />
               Confirm Payment
             </DialogTitle>
-            <Button
+            <Button aria-label="Close payment dialog"
               variant="ghost"
               size="sm"
               onClick={handleClose}

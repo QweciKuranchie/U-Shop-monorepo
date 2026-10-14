@@ -55,13 +55,17 @@ export default async function DashboardLayout({
     redirect("/create-store");
   }
 
-  // 3. Gate access by KYC approval status
-  if (effectiveStore.status === "pending_review") {
-    redirect("/pending-review");
+  // Both the seller and store must be active before operational tools are shown.
+  if (seller?.status === "rejected" || effectiveStore.status === "rejected") {
+    redirect("/rejected");
   }
 
-  if (effectiveStore.status === "rejected") {
-    redirect("/rejected");
+  if (seller?.status === "suspended" || effectiveStore.status === "suspended") {
+    redirect("/suspended");
+  }
+
+  if ((seller && seller.status !== "active") || effectiveStore.status !== "active") {
+    redirect("/pending-review");
   }
 
   const storeName = effectiveStore.name || "My Store";
@@ -77,7 +81,7 @@ export default async function DashboardLayout({
               sellerEmail={user.email}
               sellerType={seller?.seller_type || "personal"}
             />
-            <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+            <main className="flex-1 p-4 sm:p-6 overflow-y-auto">{children}</main>
           </div>
         </div>
         <ToastContainer position="bottom-right" />

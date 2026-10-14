@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { urlFor } from "@repo/sanity";
+import { productImageUrl } from "@repo/sanity";
 import { Product } from "@repo/sanity";
 import Link from "next/link";
 import { Flame, GraduationCap, Tag, StarIcon } from "lucide-react";
@@ -85,7 +85,7 @@ const ProductCard = ({
             className="relative w-full h-full flex items-center justify-center"
           >
             <Image
-              src={urlFor(product.images[0]).url()}
+              src={(productImageUrl(product.images[0]) ?? "/placeholder.svg")}
               alt={product.name || "Product Image"}
               priority={priority}
               fill

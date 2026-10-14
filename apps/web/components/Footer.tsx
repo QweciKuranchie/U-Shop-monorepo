@@ -105,8 +105,7 @@ const Footer = () => {
                 <div>
                   <SubTitle>Join the Newsletter</SubTitle>
                   <SubText>
-                    Subscribe to our newsletter to receive updates and exclusive
-                    deals
+                    Get new arrivals, deals and updates by email
                   </SubText>
                 </div>
               </div>
@@ -156,7 +155,6 @@ const Footer = () => {
                       alt="MTN Mobile Money"
                       width={100}
                       height={60}
-                      unoptimized
                       className="h-5 w-auto object-contain"
                     />
                   </div>
@@ -166,7 +164,6 @@ const Footer = () => {
                       alt="Telecel Cash"
                       width={100}
                       height={60}
-                      unoptimized
                       className="h-5 w-auto object-contain"
                     />
                   </div>
@@ -176,7 +173,6 @@ const Footer = () => {
                       alt="AT Money"
                       width={100}
                       height={60}
-                      unoptimized
                       className="h-5 w-auto object-contain"
                     />
                   </div>
@@ -186,7 +182,6 @@ const Footer = () => {
                       alt="Visa"
                       width={100}
                       height={60}
-                      unoptimized
                       className="h-5 w-auto object-contain"
                     />
                   </div>

@@ -65,9 +65,9 @@ export default function StoresClient({ initialStores }: StoresClientProps) {
           src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80"
           alt="Tech Storefront at Night"
           fill
+          sizes="100vw"
           className="object-cover object-center"
           priority
-          unoptimized
         />
 
         {/* Dark Vignette & Gradient Overlays */}
@@ -198,6 +198,7 @@ export default function StoresClient({ initialStores }: StoresClientProps) {
                           src={logoUrl}
                           alt={store.name || "Store Logo"}
                           fill
+                          sizes="56px"
                           className="object-cover"
                         />
                       ) : (

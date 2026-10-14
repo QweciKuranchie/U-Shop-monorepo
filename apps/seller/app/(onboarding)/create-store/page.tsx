@@ -5,7 +5,7 @@ import { Store } from "lucide-react";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import type { SellerType } from "@repo/supabase/types";
 
-export default async function CreateStorePage() {
+export default async function CreateStorePage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const supabase = await createServerClient();
   const {
     data: { user },
@@ -39,13 +39,15 @@ export default async function CreateStorePage() {
   }
 
   const meta = user.user_metadata || {};
+  const requestedType = (await searchParams).type;
+  const oauthSellerType = requestedType === "business" || requestedType === "student" ? requestedType : "personal";
 
   const initialProfile = {
     email: user.email || "",
     phone: seller?.phone || meta.phone || "",
     firstName: seller?.first_name || meta.first_name || "",
     lastName: seller?.last_name || meta.last_name || "",
-    sellerType: (seller?.seller_type || meta.seller_type || "personal") as SellerType,
+    sellerType: (seller?.seller_type || meta.seller_type || oauthSellerType) as SellerType,
   };
 
   return (

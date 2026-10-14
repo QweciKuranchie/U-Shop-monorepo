@@ -69,9 +69,29 @@ const ATTRIBUTE_VALUES = `,
     attribute->{ _id, title, slug, type }
   }`;
 
-/** `needsSpecs`: true only while a dynamic spec filter is active. */
-export function buildShopQuery(needsSpecs: boolean): string {
-  return `${FILTER} | order(name asc) {
+export const SHOP_SORT_OPTIONS = [
+  { value: "name-asc", label: "Name: A to Z", order: "name asc" },
+  { value: "newest", label: "Newest first", order: "_createdAt desc" },
+  { value: "price-asc", label: "Price: low to high", order: "price asc, name asc" },
+  { value: "price-desc", label: "Price: high to low", order: "price desc, name asc" },
+  { value: "name-desc", label: "Name: Z to A", order: "name desc" },
+] as const;
+
+export type ShopSort = (typeof SHOP_SORT_OPTIONS)[number]["value"];
+export const SHOP_DEFAULT_SORT: ShopSort = "name-asc";
+
+/** Narrows an untrusted string (e.g. a URL param) to a known sort, else the default. */
+export function parseShopSort(value: string | null | undefined): ShopSort {
+  return SHOP_SORT_OPTIONS.find((o) => o.value === value)?.value ?? SHOP_DEFAULT_SORT;
+}
+
+/**
+ * `needsSpecs`: true only while a dynamic spec filter is active.
+ * `sort` only ever maps to a fixed ORDER clause from SHOP_SORT_OPTIONS (never raw input).
+ */
+export function buildShopQuery(needsSpecs: boolean, sort: ShopSort = SHOP_DEFAULT_SORT): string {
+  const order = SHOP_SORT_OPTIONS.find((o) => o.value === sort)?.order ?? "name asc";
+  return `${FILTER} | order(${order}) {
   ${CARD_FIELDS}${needsSpecs ? ATTRIBUTE_VALUES : ""}
 }`;
 }

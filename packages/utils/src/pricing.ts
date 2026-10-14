@@ -29,6 +29,13 @@ const SHIPPING_ZONES: ReadonlyArray<{ fee: number; keywords: readonly string[] }
   { fee: 25, keywords: ["kumasi", "obuasi", "ashanti"] }, // Ashanti
 ];
 
+/** Cheapest delivery fee (Greater Accra), for "from GH₵X" copy. */
+export const MIN_SHIPPING_FEE = Math.min(
+  DEFAULT_SHIPPING_FEE,
+  OTHER_REGIONS_FEE,
+  ...SHIPPING_ZONES.map((z) => z.fee)
+);
+
 export type PromoType = "percentage" | "fixed";
 
 export interface PromoDefinition {
