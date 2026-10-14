@@ -194,6 +194,15 @@ export const productType = defineType({
         Rule.required().positive().error("Price must be greater than 0."),
     }),
     defineField({
+      name: "sellerPrice",
+      title: "Seller price (GHS)",
+      type: "number",
+      group: "main",
+      readOnly: true,
+      description:
+        "What the seller receives before discounts. The listing price is this plus the 8% platform fee, and is set by the seller app.",
+    }),
+    defineField({
       name: "discount",
       title: "Discount Percentage (%)",
       type: "number",

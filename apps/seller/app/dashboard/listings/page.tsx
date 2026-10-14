@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerClient } from "@repo/supabase/server";
+import { sellerShareOfAmount } from "@repo/utils/platform-fee";
 import { client } from "@repo/sanity";
 import Link from "next/link";
 import { Button, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Badge } from "@repo/ui";
@@ -44,7 +45,7 @@ export default async function ListingsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Product</TableHead>
-              <TableHead>Price</TableHead>
+              <TableHead>Your price</TableHead>
               <TableHead>Stock</TableHead>
               <TableHead>Condition</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -55,7 +56,10 @@ export default async function ListingsPage() {
               products.map((item: any) => (
                 <TableRow key={item._id}>
                   <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell>GH₵ {item.price}</TableCell>
+                  <TableCell>
+                    <div>GH₵ {(item.sellerPrice ?? sellerShareOfAmount(item.price)).toFixed(2)}</div>
+                    <div className="text-xs text-muted-foreground">Buyers pay GH₵ {Number(item.price).toFixed(2)}</div>
+                  </TableCell>
                   <TableCell>{item.stock ?? 0}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{item.condition || "new"}</Badge>

@@ -27,6 +27,10 @@
       "import": "./src/rateLimit.ts",
       "types": "./src/rateLimit.ts"
     },
+    "./platform-fee": {
+      "import": "./src/platformFee.ts",
+      "types": "./src/platformFee.ts"
+    },
     "./pricing": {
       "import": "./src/pricing.ts",
       "types": "./src/pricing.ts"
