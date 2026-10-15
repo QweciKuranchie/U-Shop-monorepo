@@ -197,7 +197,7 @@ const ResponsiveOrdersComponent = ({
         </Button>
       );
     } else {
-      return <span className="text-xs text-gray-400">----</span>;
+      return <span className="text-xs text-gray-500">----</span>;
     }
   };
 
@@ -241,7 +241,7 @@ const ResponsiveOrdersComponent = ({
             {renderProductImages(order.products || [], true)}
           </div>
           <div className="font-semibold">
-            <PriceFormatter amount={order?.totalPrice} className="text-black" />
+            <PriceFormatter amount={order?.totalPrice} className="text-gray-900" />
           </div>
         </div>
 

@@ -40,7 +40,7 @@ const ActionMiniBanners: React.FC<ActionMiniBannersProps> = ({ banners }) => {
         <button
           onClick={() => handleScroll("left")}
           aria-label="Scroll banners left"
-          className="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/95 text-gray-800 shadow-md border border-gray-100 hover:text-ushop-pink hover:bg-white hover:scale-105 transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 cursor-pointer"
+          className="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white text-gray-800 shadow-md border border-gray-100 hover:text-ushop-pink hover:bg-white transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -48,7 +48,7 @@ const ActionMiniBanners: React.FC<ActionMiniBannersProps> = ({ banners }) => {
         <button
           onClick={() => handleScroll("right")}
           aria-label="Scroll banners right"
-          className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/95 text-gray-800 shadow-md border border-gray-100 hover:text-ushop-pink hover:bg-white hover:scale-105 transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 cursor-pointer"
+          className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white text-gray-800 shadow-md border border-gray-100 hover:text-ushop-pink hover:bg-white transition-all opacity-0 group-hover/carousel:opacity-100 disabled:opacity-0 cursor-pointer"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -80,7 +80,7 @@ const ActionMiniBanners: React.FC<ActionMiniBannersProps> = ({ banners }) => {
             };
             const content = (
               <div
-                className={`h-full rounded-2xl p-4 sm:p-5 bg-gradient-to-br ${banner.gradientClass} border ${banner.borderClass} shadow-md hover:shadow-xl hoverEffect transform hover:-translate-y-0.5 flex flex-col justify-between relative overflow-hidden group cursor-pointer`}
+                className={`h-full rounded-2xl p-4 sm:p-5 ${banner.gradientClass} border ${banner.borderClass} shadow-md hover:shadow-xl hoverEffect transform flex flex-col justify-between relative overflow-hidden group cursor-pointer`}
               >
                 {/* Background ambient glow circle */}
                 <div className="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
@@ -88,13 +88,13 @@ const ActionMiniBanners: React.FC<ActionMiniBannersProps> = ({ banners }) => {
                 {/* Top Row: Icon + Badge */}
                 <div className="flex items-center justify-between gap-2.5 mb-3.5">
                   <div
-                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${banner.iconBgClass} flex items-center justify-center shadow-xs backdrop-blur-xs group-hover:scale-105 transition-transform`}
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${banner.iconBgClass} flex items-center justify-center shadow-xs transition-transform`}
                   >
                     {banner.icon}
                   </div>
 
                   {banner.badge && (
-                    <span className="text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs tracking-wide uppercase">
+                    <span className="text-xs sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/20 tracking-wide uppercase">
                       {banner.badge}
                     </span>
                   )}

@@ -227,11 +227,11 @@ const ProductGridClient = ({ products: allProducts }: ProductGridClientProps) =>
       {/* Header Section */}
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-3 mb-3 sm:mb-4">
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-r from-ushop-purple to-ushop-purple-dark rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-purple rounded-full"></div>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-dark-color">
             Featured Products
           </h2>
-          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-gradient-to-l from-ushop-purple to-ushop-purple-dark rounded-full"></div>
+          <div className="h-0.5 sm:h-1 w-8 sm:w-12 bg-ushop-purple rounded-full"></div>
         </div>
         <p className="text-light-color text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-4">
           Browse our handpicked selection of top quality tech items
@@ -361,7 +361,7 @@ const ProductGridClient = ({ products: allProducts }: ProductGridClientProps) =>
               className="overflow-hidden"
             >
               <Separator className="my-6" />
-              <Card className="border-ushop-purple/20 bg-gradient-to-br from-white via-ushop_light_bg/30 to-ushop-pink/5">
+              <Card className="border-ushop-purple/20 bg-white">
                 <CardContent className="p-6">
                   <div className="mb-6">
                     <h3 className="text-lg font-bold text-dark-color flex items-center gap-2 mb-2">
@@ -562,14 +562,14 @@ const ProductGridClient = ({ products: allProducts }: ProductGridClientProps) =>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col gap-3 justify-end p-4 bg-gradient-to-br from-ushop-pink/5 to-ushop_light_bg/30 rounded-xl border border-ushop-purple/10">
+                    <div className="flex flex-col gap-3 justify-end p-4 bg-ushop-pink/5 rounded-xl border border-ushop-purple/10">
                       <div className="text-center mb-2">
                         <Label className="text-sm font-bold text-dark-color">
                           Quick Actions
                         </Label>
                       </div>
                       <Button
-                        className="w-full bg-gradient-to-r from-ushop-purple to-ushop-purple-dark hover:from-ushop-purple-dark hover:to-ushop-purple text-white font-semibold shadow-lg hover:shadow-xl hoverEffect transform hover:-translate-y-0.5"
+                        className="w-full bg-ushop-purple hover:bg-ushop-purple-dark text-white font-semibold shadow-lg hover:shadow-xl hoverEffect transform"
                         onClick={() => {
                           // Filters are applied live automatically
                         }}
@@ -662,14 +662,7 @@ const ProductGridClient = ({ products: allProducts }: ProductGridClientProps) =>
                   <motion.div
                     key={product?._id}
                     layout
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{
-                      duration: 0.3,
-                      delay: index * 0.03,
-                      layout: { duration: 0.3 },
-                    }}
+                    transition={{ layout: { duration: 0.2 } }}
                     className="group"
                   >
                     <ProductCard product={product} priority={index < 4} />
@@ -685,7 +678,7 @@ const ProductGridClient = ({ products: allProducts }: ProductGridClientProps) =>
                 size="lg"
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
-                className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-1 hoverEffect transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
+                className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform hoverEffect transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
               >
                 {isLoadingMore ? (
                   <>

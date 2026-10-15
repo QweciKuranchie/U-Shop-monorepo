@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
-  Headphones,
   ShieldCheck,
   MessageSquare,
 } from "lucide-react";
@@ -96,10 +95,6 @@ const ContactPage = () => {
       <Container>
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ushop-pink/10 text-ushop-pink text-xs font-bold uppercase tracking-wider mb-3">
-            <Headphones className="w-3.5 h-3.5" />
-            <span>24/7 Dedicated Support</span>
-          </div>
 
           <Title className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
             Get In Touch With Us
@@ -114,14 +109,14 @@ const ContactPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Left Column: Contact Cards */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-gradient-to-br from-ushop-purple via-[#58158c] to-[#3f0d66] text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
+            <div className="bg-ushop-purple-dark text-white p-6 sm:p-8 rounded-3xl shadow-xl relative overflow-hidden">
               <div className="absolute -right-8 -bottom-8 w-36 h-36 rounded-full bg-white/10 blur-xl pointer-events-none" />
 
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">
                 Contact Information
               </h2>
               <p className="text-xs sm:text-sm text-white/80 mb-8 leading-relaxed">
-                Reach out directly via phone or email — we&apos;re based in Accra and serve buyers and sellers nationwide.
+                Call or email us. We are based in Accra and help buyers and sellers across Ghana.
               </p>
 
               <div className="space-y-6">
@@ -140,7 +135,7 @@ const ContactPage = () => {
                     >
                       {contactConfig.company.phone}
                     </a>
-                    <span className="text-[11px] text-white/60">
+                    <span className="text-xs text-white/60">
                       {contactConfig.responseTimes.quick}
                     </span>
                   </div>
@@ -161,7 +156,7 @@ const ContactPage = () => {
                     >
                       {contactConfig.emails.support}
                     </a>
-                    <span className="text-[11px] text-white/60">
+                    <span className="text-xs text-white/60">
                       {contactConfig.responseTimes.general}
                     </span>
                   </div>
@@ -341,7 +336,7 @@ const ContactPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-ushop-purple to-ushop-pink hover:from-ushop-purple-dark hover:to-ushop-pink/90 text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg hoverEffect flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-8 py-3.5 bg-ushop-purple hover:bg-ushop-purple-dark text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg hoverEffect flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>

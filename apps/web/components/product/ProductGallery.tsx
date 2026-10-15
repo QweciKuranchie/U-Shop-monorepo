@@ -148,7 +148,7 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
                   </span>
                 )}
                 {item.label && (
-                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/55 px-1 text-[10px] leading-4 text-white">
+                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/55 px-1 text-xs leading-4 text-white">
                     {item.label}
                   </span>
                 )}

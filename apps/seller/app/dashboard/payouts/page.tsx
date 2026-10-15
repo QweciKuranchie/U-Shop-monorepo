@@ -22,7 +22,7 @@ export default async function PayoutsPage() {
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Seller Payouts</h1>
         <p className="text-sm text-muted-foreground">
-          Your earnings from paid orders. Figures cover your items only, before any platform fees.
+          Your earnings from paid orders, after the 8% platform fee. Figures cover your items only.
         </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2">

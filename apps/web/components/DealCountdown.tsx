@@ -8,7 +8,7 @@ const TimeUnit = ({ value, label }: { value: number; label: string }) => (
     <span className="text-lg sm:text-2xl md:text-3xl font-extrabold text-red-600">
       {value.toString().padStart(2, "0")}
     </span>
-    <span className="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
+    <span className="text-xs sm:text-xs text-gray-500 font-bold uppercase tracking-wider">
       {label}
     </span>
   </div>

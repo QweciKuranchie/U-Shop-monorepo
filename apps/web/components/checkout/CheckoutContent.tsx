@@ -197,7 +197,7 @@ export function CheckoutContent() {
         });
 
         // Show success message
-        toast.success("Ready for Checkout! 🛒", {
+        toast.success("Ready for checkout", {
           description:
             "Complete your order by selecting a payment method below",
           duration: 4000,
@@ -870,7 +870,7 @@ export function CheckoutContent() {
         </div>
 
         <div className="text-center text-xs text-muted-foreground">
-          <p>🔒 Secure checkout</p>
+          <p>Secure checkout</p>
           <p>Your payment information is encrypted and secure</p>
         </div>
       </div>

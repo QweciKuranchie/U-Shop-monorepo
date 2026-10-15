@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, Badge } from "@repo/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { PLATFORM_FEE_PERCENT, platformFeeOfAmount } from "@repo/utils/platform-fee";
 import { getCurrentStore } from "@/lib/currentStore";
-import { formatGhs, sellerSubtotal, type SellerOrder } from "@/lib/sellerOrders";
+import { formatGhs, sellerSubtotal, sellerGross, type SellerOrder } from "@/lib/sellerOrders";
 
 export default async function OrderDetailPage({
   params,
@@ -44,7 +45,15 @@ export default async function OrderDetailPage({
             </div>
           ))}
           <div className="flex justify-between text-sm border-t pt-3">
-            <span className="text-muted-foreground">Your subtotal:</span>
+            <span className="text-muted-foreground">Buyer paid:</span>
+            <span>{formatGhs(sellerGross(order))}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Platform fee ({PLATFORM_FEE_PERCENT}%):</span>
+            <span>-{formatGhs(platformFeeOfAmount(sellerGross(order)))}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Your earnings:</span>
             <span className="font-bold">{formatGhs(sellerSubtotal(order))}</span>
           </div>
           <div className="flex justify-between text-sm">

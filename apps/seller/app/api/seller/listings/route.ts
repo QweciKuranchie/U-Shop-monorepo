@@ -3,6 +3,8 @@ import { client, writeClient } from "@repo/sanity";
 import { SELLER_STORE_QUERY, SELLER_LISTINGS_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { parseMedia } from "@/lib/media";
+import { buyerPriceFromSellerPrice } from "@repo/utils/platform-fee";
+import { roundMoney } from "@repo/utils/pricing";
 import { parseWarranty } from "@/lib/warranty";
 
 export async function GET() {
@@ -38,13 +40,18 @@ export async function POST(request: NextRequest) {
   if (!media.data.images) return NextResponse.json({ error: "Add at least one product image" }, { status: 400 });
   const warranty = parseWarranty(body);
   if ("error" in warranty) return NextResponse.json({ error: warranty.error }, { status: 400 });
+  const sellerPrice = roundMoney(Number(body.price));
+  if (!Number.isFinite(sellerPrice) || sellerPrice <= 0) {
+    return NextResponse.json({ error: "Enter a price greater than 0" }, { status: 400 });
+  }
   const slug = (body.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   const product = await writeClient.create({
     _type: "product",
     name: body.name,
     slug: { _type: "slug", current: slug },
-    price: Number(body.price),
+    sellerPrice,
+    price: buyerPriceFromSellerPrice(sellerPrice),
     discount: Number(body.discount || 0),
     stock: Number(body.stock || 1),
     condition: body.condition || "new",

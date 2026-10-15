@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Container from "@/components/Container";
 import Link from "next/link";
-import { HelpCircle, MessageSquare, PhoneCall, Mail } from "lucide-react";
+import { MessageSquare, PhoneCall, Mail } from "lucide-react";
 
 interface FAQItem {
   question: string;
@@ -68,10 +68,6 @@ const FAQPage = () => {
       <Container className="max-w-4xl px-4">
         {/* Header Section */}
         <div className="flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-ushop-pink/10 text-ushop-pink text-xs font-bold uppercase tracking-wider mb-3">
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>Help & Support</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
             Frequently Asked Questions
@@ -151,7 +147,7 @@ const FAQPage = () => {
         </div>
 
         {/* Contact CTA Box */}
-        <div className="max-w-2xl mx-auto mt-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-ushop-purple/5 via-white to-ushop-pink/5 border border-ushop-purple/15 text-center shadow-xs">
+        <div className="max-w-2xl mx-auto mt-12 p-6 sm:p-8 rounded-2xl bg-ushop-purple/5 border border-ushop-purple/15 text-center shadow-xs">
           <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
             Still have questions?
           </h3>

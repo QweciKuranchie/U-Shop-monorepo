@@ -1,3 +1,5 @@
+import { sellerShareOfAmount } from "@repo/utils/platform-fee";
+
 export interface SellerOrderItem {
   quantity?: number | null;
   price?: number | null;
@@ -15,12 +17,17 @@ export interface SellerOrder {
   sellerItems?: SellerOrderItem[] | null;
 }
 
-/** What this seller earns from an order: only their own lines, price at purchase x quantity. */
-export function sellerSubtotal(order: Pick<SellerOrder, "sellerItems">): number {
+/** What buyers paid for this seller's lines: price at purchase x quantity. */
+export function sellerGross(order: Pick<SellerOrder, "sellerItems">): number {
   return (order.sellerItems ?? []).reduce(
     (sum, i) => sum + (Number(i.price) || 0) * (Number(i.quantity) || 0),
     0
   );
+}
+
+/** What this seller earns from an order: their lines after the 8% platform fee. */
+export function sellerSubtotal(order: Pick<SellerOrder, "sellerItems">): number {
+  return sellerShareOfAmount(sellerGross(order));
 }
 
 /** Revenue counts only paid orders that were not cancelled. */

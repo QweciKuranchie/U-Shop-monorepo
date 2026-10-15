@@ -155,7 +155,7 @@ export default function OrdersClient({
         ) : (
           <div className="text-center py-10">
             <p className="text-gray-500 text-lg">No orders found.</p>
-            <p className="text-gray-400 text-sm mt-2">
+            <p className="text-gray-500 text-sm mt-2">
               Start shopping to see your orders here.
             </p>
           </div>

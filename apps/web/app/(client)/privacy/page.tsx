@@ -42,10 +42,6 @@ const PrivacyPage = () => {
 
         {/* Header Hero */}
         <div className="text-center max-w-2xl mx-auto my-8 sm:my-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-500/20">
-            <Lock className="w-4 h-4 text-emerald-600" />
-            <span>Master Data Protection Notice</span>
-          </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
             Master Privacy Policy
@@ -65,7 +61,7 @@ const PrivacyPage = () => {
                 download
                 className="text-emerald-600 font-bold hover:underline"
               >
-                📄 Download U-Shop Privacy Policy (PDF)
+                Download U-Shop Privacy Policy (PDF)
               </a>
             </div>
           </div>
@@ -73,7 +69,7 @@ const PrivacyPage = () => {
 
         {/* Document Control Governance Table */}
         <div className="mb-10 bg-white rounded-3xl border border-gray-200/80 p-6 shadow-xs overflow-hidden">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-2">
             <Info className="w-4 h-4 text-emerald-600" />
             Document Control & Governance Metadata
           </h3>

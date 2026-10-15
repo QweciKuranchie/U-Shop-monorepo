@@ -147,7 +147,7 @@ export function AllAddressesSidebar({
                         {address.city}, {address.state} {address.zip}
                       </div>
                       {address.email && (
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-gray-500">
                           {address.email}
                         </div>
                       )}

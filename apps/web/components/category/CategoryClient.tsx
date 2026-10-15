@@ -33,7 +33,7 @@ const POPULAR_SLUGS_CONFIG = [
     slug: "smartphones",
     altSlug: "phones",
     icon: Smartphone,
-    color: "from-blue-500/10 to-indigo-500/10 text-indigo-600 border-indigo-200/60",
+    color: "bg-blue-500/10 text-indigo-600 border-indigo-200/60",
     badgeColor: "bg-indigo-600 text-white",
   },
   {
@@ -41,7 +41,7 @@ const POPULAR_SLUGS_CONFIG = [
     slug: "laptops",
     altSlug: "computers",
     icon: Laptop,
-    color: "from-purple-500/10 to-pink-500/10 text-purple-600 border-purple-200/60",
+    color: "bg-purple-500/10 text-purple-600 border-purple-200/60",
     badgeColor: "bg-purple-600 text-white",
   },
   {
@@ -49,7 +49,7 @@ const POPULAR_SLUGS_CONFIG = [
     slug: "accessories",
     altSlug: "audio",
     icon: Headphones,
-    color: "from-amber-500/10 to-orange-500/10 text-amber-600 border-amber-200/60",
+    color: "bg-amber-500/10 text-amber-600 border-amber-200/60",
     badgeColor: "bg-amber-600 text-white",
   },
   {
@@ -57,7 +57,7 @@ const POPULAR_SLUGS_CONFIG = [
     slug: "appliances",
     altSlug: "tvs-video",
     icon: Tv,
-    color: "from-emerald-500/10 to-teal-500/10 text-emerald-600 border-emerald-200/60",
+    color: "bg-emerald-500/10 text-emerald-600 border-emerald-200/60",
     badgeColor: "bg-emerald-600 text-white",
   },
   {
@@ -65,7 +65,7 @@ const POPULAR_SLUGS_CONFIG = [
     slug: "gaming",
     altSlug: "gaming-gear",
     icon: Gamepad2,
-    color: "from-rose-500/10 to-red-500/10 text-rose-600 border-rose-200/60",
+    color: "bg-rose-500/10 text-rose-600 border-rose-200/60",
     badgeColor: "bg-rose-600 text-white",
   },
 ];
@@ -102,7 +102,7 @@ export default function CategoryClient({
         icon: Smartphone,
         image: phonesCat?.image,
         productCount: (phonesCat as { productCount?: number })?.productCount || 0,
-        gradient: "from-slate-900 via-indigo-950 to-slate-900",
+        gradient: "bg-slate-900",
         accent: "text-indigo-400 border-indigo-500/30",
         btnBg: "bg-indigo-600 hover:bg-indigo-700",
       },
@@ -113,7 +113,7 @@ export default function CategoryClient({
         icon: Laptop,
         image: laptopsCat?.image,
         productCount: (laptopsCat as { productCount?: number })?.productCount || 0,
-        gradient: "from-slate-900 via-purple-950 to-slate-900",
+        gradient: "bg-slate-900",
         accent: "text-purple-400 border-purple-500/30",
         btnBg: "bg-ushop-pink hover:bg-ushop-pink-dark",
       },
@@ -124,7 +124,7 @@ export default function CategoryClient({
         icon: Headphones,
         image: accessoriesCat?.image,
         productCount: (accessoriesCat as { productCount?: number })?.productCount || 0,
-        gradient: "from-slate-900 via-emerald-950 to-slate-900",
+        gradient: "bg-slate-900",
         accent: "text-emerald-400 border-emerald-500/30",
         btnBg: "bg-emerald-600 hover:bg-emerald-700",
       },
@@ -204,7 +204,7 @@ export default function CategoryClient({
         {/* Foreground Content */}
         <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-3xl mx-auto">
           {/* Tagline Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold rounded-full mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 border border-white/20 text-white text-xs font-bold rounded-full mb-3 shadow-xs">
             <Layers className="w-3.5 h-3.5 text-ushop-pink" />
             <span>Product Directory</span>
           </div>
@@ -238,7 +238,7 @@ export default function CategoryClient({
           >
             <div className="absolute -inset-0.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-red-600/40 via-purple-600/30 to-red-600/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity" />
 
-            <div className="relative flex items-center bg-slate-900/65 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
+            <div className="relative flex items-center bg-slate-900/65 border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
               <button
                 type="submit"
                 className="text-gray-300 hover:text-white shrink-0 mr-3 transition-colors cursor-pointer"
@@ -276,7 +276,7 @@ export default function CategoryClient({
               Featured Categories
             </h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Top tech hubs on UShop — Phones, Laptops, and Accessories
+              Phones, laptops and accessories
             </p>
           </div>
         </div>
@@ -291,7 +291,7 @@ export default function CategoryClient({
               <Link
                 key={item.slug}
                 href={`/category/${item.slug}`}
-                className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${item.gradient} p-6 text-white shadow-md hover:shadow-xl hover:scale-[1.01] transition-all duration-300 border border-white/10 group flex flex-col justify-between min-h-[220px]`}
+                className={`relative overflow-hidden rounded-3xl ${item.gradient} p-6 text-white shadow-md hover:shadow-xl hover:scale-[1.01] transition-all duration-300 border border-white/10 group flex flex-col justify-between min-h-[220px]`}
               >
                 {/* Background Image / Glow */}
                 {imageUrl && (
@@ -309,11 +309,11 @@ export default function CategoryClient({
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className={`p-3 rounded-2xl bg-white/10 backdrop-blur-md border ${item.accent} w-fit`}>
+                    <div className={`p-3 rounded-2xl bg-white/10 border ${item.accent} w-fit`}>
                       <Icon className="w-6 h-6" />
                     </div>
                     {item.productCount > 0 && (
-                      <span className="text-xs font-bold bg-white/15 backdrop-blur-md px-3 py-1 rounded-full text-white">
+                      <span className="text-xs font-bold bg-white/15 px-3 py-1 rounded-full text-white">
                         {item.productCount} items
                       </span>
                     )}
@@ -380,7 +380,7 @@ export default function CategoryClient({
                         className="object-contain p-2"
                       />
                     ) : (
-                      <div className={`p-3 rounded-2xl bg-gradient-to-br ${cat.color}`}>
+                      <div className={`p-3 rounded-2xl ${cat.color}`}>
                         <Icon className="w-8 h-8" />
                       </div>
                     )}
@@ -389,7 +389,7 @@ export default function CategoryClient({
                   <h3 className="font-bold text-gray-900 text-sm group-hover:text-ushop-pink transition-colors line-clamp-1 mb-1">
                     {cat.title}
                   </h3>
-                  <p className="text-[11px] text-gray-500 line-clamp-2 leading-tight">
+                  <p className="text-xs text-gray-500 line-clamp-2 leading-tight">
                     {cat.description}
                   </p>
                 </div>
@@ -493,7 +493,7 @@ export default function CategoryClient({
                         {category.description}
                       </p>
                     ) : (
-                      <p className="text-xs text-gray-400 italic mb-3">
+                      <p className="text-xs text-gray-500 italic mb-3">
                         Explore all items in {category.title}.
                       </p>
                     )}
@@ -503,7 +503,7 @@ export default function CategoryClient({
                     <span>Shop {category.title}</span>
                     <div className="flex items-center gap-1.5">
                       {productCount > 0 && (
-                        <span className="text-[11px] font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-normal text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">
                           {productCount}
                         </span>
                       )}

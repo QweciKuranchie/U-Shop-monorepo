@@ -174,7 +174,7 @@ const CategoryList = ({
                 >
                   <span className="truncate">{category?.title}</span>
                   {category.productCount !== undefined && category.productCount > 0 && (
-                    <span className="text-[10px] text-gray-400 font-normal ml-1">
+                    <span className="text-xs text-gray-500 font-normal ml-1">
                       ({category.productCount})
                     </span>
                   )}
@@ -226,7 +226,7 @@ const CategoryList = ({
                                         : (leaf?.slug?.current as string)
                                     )
                                   }
-                                  className={`px-2 py-0.5 rounded cursor-pointer text-[11px] hover:text-ushop-pink hover:bg-ushop-pink/5 ${
+                                  className={`px-2 py-0.5 rounded cursor-pointer text-xs hover:text-ushop-pink hover:bg-ushop-pink/5 ${
                                     isLeafSelected
                                       ? "font-semibold text-ushop-pink bg-ushop-pink/10"
                                       : "text-gray-500"

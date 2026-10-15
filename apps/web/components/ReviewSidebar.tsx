@@ -171,7 +171,7 @@ const ReviewSidebar = React.memo(
                         onClick={() => handleRatingClick(value)}
                         onMouseEnter={() => handleRatingHover(value)}
                         onMouseLeave={handleRatingLeave}
-                        className="transition-transform hover:scale-110 focus:outline-hidden focus:ring-2 focus:ring-ushop-pink focus:ring-offset-2 rounded"
+                        className="transition-transform focus:outline-hidden focus:ring-2 focus:ring-ushop-pink focus:ring-offset-2 rounded"
                         aria-label={`Rate ${value} stars`}
                         disabled={isSubmitting}
                       >

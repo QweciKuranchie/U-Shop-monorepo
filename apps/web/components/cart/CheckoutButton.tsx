@@ -112,7 +112,7 @@ export function CheckoutButton({ cart, selectedAddress }: CheckoutButtonProps) {
         </div>
 
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1 font-medium">
-          <span className="text-ushop-purple-dark">🔒</span> Secure checkout
+          Secure checkout
         </p>
       </div>
     </>

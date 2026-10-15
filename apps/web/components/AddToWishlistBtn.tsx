@@ -67,7 +67,7 @@ const AddToWishlistBtn = ({
         aria-label={existingProduct ? "Remove from wishlist" : "Add to wishlist"}
         title={existingProduct ? "Remove from wishlist" : "Add to wishlist"}
         className={cn(
-          "group relative p-2 rounded-full bg-white/80 backdrop-blur-xs hover:bg-white shadow-xs border border-gray-200/80 hover:border-ushop-purple hoverEffect cursor-pointer z-10",
+          "group relative p-2 rounded-full bg-white hover:bg-white shadow-xs border border-gray-200/80 hover:border-ushop-purple hoverEffect cursor-pointer z-10",
           className
         )}
       >

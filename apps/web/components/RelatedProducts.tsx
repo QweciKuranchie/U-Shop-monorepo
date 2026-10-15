@@ -54,14 +54,14 @@ const RelatedProducts = memo(({
             <button
               onClick={handleScrollLeft}
               aria-label="Scroll left"
-              className="p-1.5 rounded-full bg-white hover:bg-ushop-pink hover:text-white text-zinc-700 transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
+              className="p-1.5 rounded-full bg-white hover:bg-ushop-pink hover:text-white text-zinc-700 transition-all shadow-xs active:scale-95 cursor-pointer"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleScrollRight}
               aria-label="Scroll right"
-              className="p-1.5 rounded-full bg-white hover:bg-ushop-pink hover:text-white text-zinc-700 transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
+              className="p-1.5 rounded-full bg-white hover:bg-ushop-pink hover:text-white text-zinc-700 transition-all shadow-xs active:scale-95 cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

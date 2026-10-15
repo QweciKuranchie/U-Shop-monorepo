@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function EmptyCart() {
   return (
-    <div className="py-10 md:py-20 bg-linear-to-b from-purple-50/40 via-pink-50/20 to-white flex items-center justify-center p-4">
+    <div className="py-10 md:py-20 bg-purple-50/40 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

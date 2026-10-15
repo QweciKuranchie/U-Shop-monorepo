@@ -114,7 +114,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
             <TableCell className="text-sm">
               <PriceFormatter
                 amount={order?.totalPrice}
-                className="text-black font-medium text-xs sm:text-sm"
+                className="text-gray-900 font-medium text-xs sm:text-sm"
               />
             </TableCell>
             <TableCell>
@@ -177,7 +177,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERYResult }) => {
                   )}
                 </Button>
               ) : (
-                <span className="text-xs text-gray-400">----</span>
+                <span className="text-xs text-gray-500">----</span>
               )}
             </TableCell>
             <TableCell>

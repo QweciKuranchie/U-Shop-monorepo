@@ -162,10 +162,10 @@ export default function SingleDealClient({
   return (
     <div>
       {/* Hero Header Banner */}
-      <div className={`my-6 bg-gradient-to-r ${dealInfo.bgGradient} text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative`}>
+      <div className={`my-6 ${dealInfo.bgGradient} text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative`}>
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 bg-white/20 px-3.5 py-1.5 rounded-full mb-4">
               <IconComp className="w-4 h-4 fill-white text-white" />
               <span className="text-xs font-black uppercase tracking-wider">
                 {dealInfo.badgeText}
@@ -182,7 +182,7 @@ export default function SingleDealClient({
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/deals"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold rounded-xl transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-xl transition-all"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>All Deals Hub</span>
@@ -192,7 +192,7 @@ export default function SingleDealClient({
 
           {/* 2. Countdown Box — ONLY shown on Flash Sales */}
           {isFlash && (
-            <div className="w-full lg:w-auto bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-3xl shrink-0">
+            <div className="w-full lg:w-auto bg-white/10 border border-white/20 p-5 rounded-3xl shrink-0">
               <DealCountdown />
             </div>
           )}
@@ -232,18 +232,18 @@ export default function SingleDealClient({
       {!isSpecialOffers && (
         <div className="mb-8 bg-white border border-gray-200/80 rounded-2xl p-4 shadow-xs space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-2 flex-1 max-w-md bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-ushop-pink transition-colors">
-            <Search className="w-4 h-4 text-gray-400 shrink-0" />
+            <Search className="w-4 h-4 text-gray-500 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={`Search in ${dealInfo.title}...`}
-              className="w-full bg-transparent text-xs text-gray-800 outline-none placeholder:text-gray-400 font-medium"
+              className="w-full bg-transparent text-xs text-gray-800 outline-none placeholder:text-gray-500 font-medium"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded-full font-bold transition-colors"
+                className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded-full font-bold transition-colors"
               >
                 Clear
               </button>
@@ -254,7 +254,7 @@ export default function SingleDealClient({
             {/* Category Filter */}
             {categoryOptions.length > 0 && (
               <div className="flex items-center gap-1.5">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-gray-400" />
+                <SlidersHorizontal className="w-3.5 h-3.5 text-gray-500" />
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
@@ -317,7 +317,7 @@ export default function SingleDealClient({
                 size="lg"
                 onClick={handleLoadMore}
                 disabled={isLoadingMore}
-                className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
+                className="px-8 py-3 bg-ushop-pink hover:bg-ushop-pink/90 text-white font-semibold rounded-full hover:shadow-lg transform transition-all inline-flex items-center gap-2 cursor-pointer"
               >
                 {isLoadingMore ? (
                   <>

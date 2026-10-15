@@ -72,7 +72,7 @@ export default function UserLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen py-5 bg-gradient-to-br from-ushop_light_bg via-white to-ushop_light_pink/30">
+    <div className="min-h-screen py-5 bg-ushop_light_bg">
       <Container className="py-6">
         <div className="flex flex-col gap-6">
           {/* Mobile Header */}
@@ -118,7 +118,7 @@ export default function UserLayout({
           <div className="hidden lg:block">
             <div className="bg-white rounded-2xl shadow-xl border border-ushop-pink/15 overflow-hidden">
               {/* User Profile Header */}
-              <div className="p-6 bg-gradient-to-r from-ushop-purple-dark via-ushop-purple to-ushop-pink text-white">
+              <div className="p-6 bg-ushop-purple-dark text-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     {user?.imageUrl ? (
@@ -214,7 +214,7 @@ export default function UserLayout({
           <div className={cn("lg:hidden", sidebarOpen ? "block" : "hidden")}>
             <div className="bg-white rounded-2xl shadow-xl border border-ushop-pink/15 overflow-hidden">
               {/* User Profile Section */}
-              <div className="p-6 bg-gradient-to-r from-ushop-purple-dark via-ushop-purple to-ushop-pink text-white">
+              <div className="p-6 bg-ushop-purple-dark text-white">
                 <div className="flex items-center space-x-4">
                   {user?.imageUrl ? (
                     <Image
@@ -290,7 +290,7 @@ export default function UserLayout({
                       <ChevronRight
                         className={cn(
                           "h-4 w-4 transition-colors",
-                          isActive ? "text-ushop-purple-dark" : "text-gray-400"
+                          isActive ? "text-ushop-purple-dark" : "text-gray-500"
                         )}
                       />
                     </Link>

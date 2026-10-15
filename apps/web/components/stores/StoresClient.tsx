@@ -106,7 +106,7 @@ export default function StoresClient({ initialStores }: StoresClientProps) {
           >
             <div className="absolute -inset-0.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-red-600/40 via-purple-600/30 to-red-600/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity" />
 
-            <div className="relative flex items-center bg-slate-900/65 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
+            <div className="relative flex items-center bg-slate-900/65 border border-white/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 sm:py-3.5 text-white shadow-inner focus-within:border-red-500 focus-within:ring-2 focus-within:ring-red-500/30 transition-all">
               <button
                 type="submit"
                 className="text-gray-300 hover:text-white shrink-0 mr-3 transition-colors cursor-pointer"
@@ -192,7 +192,7 @@ export default function StoresClient({ initialStores }: StoresClientProps) {
                 <div>
                   {/* Store Header Info */}
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="relative w-14 h-14 rounded-2xl bg-ushop-pink/10 border border-ushop-pink/20 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+                    <div className="relative w-14 h-14 rounded-2xl bg-ushop-pink/10 border border-ushop-pink/20 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs transition-transform">
                       {logoUrl ? (
                         <Image
                           src={logoUrl}

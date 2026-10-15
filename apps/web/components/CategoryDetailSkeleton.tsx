@@ -3,7 +3,7 @@ import {  Skeleton  } from "@repo/ui";
 
 const CategoryDetailSkeleton = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ushop_light_bg via-white to-ushop_light_pink">
+    <div className="min-h-screen bg-ushop_light_bg">
       <Container className="py-10">
         {/* Breadcrumb Skeleton */}
         <div className="mb-8">
@@ -18,7 +18,7 @@ const CategoryDetailSkeleton = () => {
         </div>
 
         {/* Category Header Section Skeleton */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 lg:p-8 shadow-md border border-gray-100/50 mb-8">
+        <div className="bg-white rounded-xl p-6 lg:p-8 shadow-md border border-gray-100/50 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             {/* Left Side - Category Info */}
             <div className="flex-1">
@@ -73,7 +73,7 @@ const CategoryDetailSkeleton = () => {
                 style={{ animationDelay: `${delay}ms` }}
               >
                 {/* Product Image Skeleton */}
-                <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200">
+                <div className="relative aspect-square bg-gray-100">
                   <Skeleton className="w-full h-full rounded-none" />
 
                   {/* Sale Badge (some items) */}
@@ -129,7 +129,7 @@ const CategoryDetailSkeleton = () => {
             <Skeleton className="h-10 w-10 rounded" />
             <Skeleton className="h-10 w-10 rounded" />
             <Skeleton className="h-10 w-10 rounded" />
-            <span className="px-2 text-gray-400">...</span>
+            <span className="px-2 text-gray-500">...</span>
             <Skeleton className="h-10 w-10 rounded" />
             <Skeleton className="h-10 w-10 rounded" />
           </div>
@@ -156,7 +156,7 @@ const CategoryDetailSkeleton = () => {
         </div>
 
         {/* Call to Action Section Skeleton */}
-        <div className="mt-12 bg-gradient-to-r from-ushop-purple/10 via-ushop-red/5 to-ushop-purple/10 rounded-xl p-6 lg:p-8 border border-ushop-purple/20 text-center">
+        <div className="mt-12 bg-ushop-purple/10 rounded-xl p-6 lg:p-8 border border-ushop-purple/20 text-center">
           <div className="max-w-2xl mx-auto space-y-4">
             <Skeleton className="h-7 lg:h-8 w-80 mx-auto" />
             <div className="space-y-2">
