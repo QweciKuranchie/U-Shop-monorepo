@@ -25,7 +25,11 @@ import { backendClient } from "@repo/sanity/client";
 const LEGACY_ADMIN_EMAILS = ["support@ushopgh.com", "admin@ushopgh.com"];
 
 function adminAllowList(): Set<string> {
-  const configured = [process.env.ADMIN_EMAIL, ...(process.env.ADMIN_EMAILS?.split(",") ?? [])];
+  const configured = [
+    process.env.ADMIN_EMAIL,
+    process.env.NEXT_PUBLIC_ADMIN_EMAIL,
+    ...(process.env.ADMIN_EMAILS?.split(",") ?? []),
+  ];
   return new Set(
     [...configured, ...LEGACY_ADMIN_EMAILS]
       .filter((e): e is string => Boolean(e))
@@ -47,8 +51,25 @@ async function computeIsAdmin(clerkUserId: string): Promise<boolean> {
 
     const allow = adminAllowList();
     const hasVerifiedAllowedEmail = clerkUser.emailAddresses.some(
-      (e) => e.verification?.status === "verified" && allow.has(e.emailAddress.toLowerCase().trim())
+      (e) =>
+        allow.has(e.emailAddress.toLowerCase().trim()) &&
+        (e.verification?.status === "verified" || process.env.NODE_ENV === "development")
     );
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(`[auth] computeIsAdmin check for user ${clerkUserId}:`, {
+        foundUser: Boolean(clerkUser),
+        pub,
+        priv,
+        emails: clerkUser.emailAddresses.map((e) => ({
+          email: e.emailAddress,
+          status: e.verification?.status,
+        })),
+        allowList: Array.from(allow),
+        hasVerifiedAllowedEmail,
+      });
+    }
+
     if (hasVerifiedAllowedEmail) return true;
 
     const sanityUser = await backendClient
