@@ -283,6 +283,21 @@
   border-radius: 10px;
 }
 
+/* Clerk Bot Protection / Turnstile CAPTCHA */
+#clerk-captcha {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 8px 0;
+  min-height: 0;
+}
+
+#clerk-captcha:empty {
+  display: none !important;
+  margin: 0 !important;
+}
+
 /* Buttons */
 .auth-button {
   border-radius: 24px;
