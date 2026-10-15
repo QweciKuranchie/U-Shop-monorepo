@@ -1,7 +1,9 @@
 import Container from "@/components/Container";
 import DynamicBreadcrumb from "@/components/DynamicBreadcrumb";
 import { Product } from "@repo/sanity";
-import { getDealProducts, getAllProducts } from "@repo/sanity/queries";
+import { getDealProducts } from "@repo/sanity/queries";
+import { getFallbackProducts } from "@/lib/catalogFallback";
+import { pickDisplayProducts } from "@/lib/deals";
 import {
   Zap,
   GraduationCap,
@@ -96,31 +98,15 @@ const SingleDealCategoryPage = async ({ params }: Props) => {
     return notFound();
   }
 
-  // Fetch deal products and all products fallback
-  const [dealProducts, allProducts] = await Promise.all([
-    getDealProducts(),
-    getAllProducts(),
-  ]);
+  // The deal set is the source of truth. General products are only needed when there
+  // are NO deals at all, and then just one bounded page: this used to load the entire
+  // catalogue (getAllProducts) on every request, even when it was never used.
+  const dealProducts = (await getDealProducts()) as unknown as Product[];
+  const rawProducts =
+    dealProducts && dealProducts.length > 0 ? dealProducts : (await getFallbackProducts()).products;
 
-  const rawProducts = (dealProducts && dealProducts.length > 0 ? dealProducts : allProducts) as unknown as Product[];
-
-  // Filter products relevant to the deal category
-  let filteredProducts: Product[] = [];
-
-  if (dealKey === "flash") {
-    filteredProducts = rawProducts.filter((p) => p.isFlashSale || p.status === "hot" || (p.discount && p.discount >= 20));
-  } else if (dealKey === "students") {
-    filteredProducts = rawProducts.filter((p) => Boolean(p.discount || p.isFlashSale || p.featured));
-  } else if (dealKey === "clearance") {
-    filteredProducts = rawProducts.filter((p) => (p.discount && p.discount > 0) || (p.status as string) === "refurbished" || p.status === "good");
-  } else if (dealKey === "black-friday") {
-    filteredProducts = rawProducts.filter((p) => Boolean(p.discount || p.isFlashSale || p.status === "hot"));
-  } else {
-    filteredProducts = rawProducts.filter((p) => Boolean(p.discount || p.featured || p.isFlashSale));
-  }
-
-  // If filtered set is small, fallback to all available deal products
-  const displayProducts = filteredProducts.length > 0 ? filteredProducts : rawProducts;
+  // Products relevant to this deal type; everything we have if none match.
+  const displayProducts = pickDisplayProducts(dealKey, rawProducts);
 
   return (
     <div className="min-h-screen bg-gray-50/50 py-6">
