@@ -33,6 +33,8 @@ function SignUpForm() {
   const [fieldErrors, setFieldErrors] = useState<SignUpErrors>({});
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [draftReady, setDraftReady] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -91,6 +93,11 @@ function SignUpForm() {
         setError(duplicate ? "This email may already have an account. Try signing in or resetting your password." : signUpError.message);
         return;
       }
+      // Supabase returns an empty identities array if the email is already registered and enumeration protection is on
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        setError("An account with this email already exists. Please sign in or reset your password.");
+        return;
+      }
       if (data.user && !data.session) {
         setDraftReady(false);
         try { window.sessionStorage.removeItem("seller-signup-draft"); } catch { /* Storage may be unavailable. */ }
@@ -114,6 +121,31 @@ function SignUpForm() {
     }
   }
 
+  async function handleResendEmail() {
+    if (resending || !email.trim()) return;
+    setResending(true);
+    setResendStatus(null);
+    try {
+      const origin = window.location.origin;
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: email.trim(),
+        options: {
+          emailRedirectTo: `${origin}/auth/confirm?next=/create-store`,
+        },
+      });
+      if (resendError) {
+        setResendStatus(resendError.message);
+      } else {
+        setResendStatus("A new verification link has been sent. Please check your inbox and Spam folder.");
+      }
+    } catch {
+      setResendStatus("Could not resend email right now. Please try again later.");
+    } finally {
+      setResending(false);
+    }
+  }
+
   async function handleGoogleSignUp() {
     if (loading) return;
     setError(null);
@@ -134,9 +166,47 @@ function SignUpForm() {
   }
 
   if (confirmationSent) {
-    return <AuthShell mode="signup">
-      <div className={styles.status} role="status"><strong>Check your email</strong><p>We sent a verification link to {email}. Open it to confirm your account, then continue setting up your store.</p><p><Link href="/sign-in">Already confirmed? Sign in</Link></p></div>
-    </AuthShell>;
+    return (
+      <AuthShell mode="signup">
+        <div className={styles.status} role="status">
+          <strong>Check your email</strong>
+          <p>
+            We sent a verification link to <strong>{email}</strong>. Open it to confirm your account, then continue setting up your store.
+          </p>
+          <p style={{ fontSize: "0.85rem", opacity: 0.85, marginTop: "0.5rem" }}>
+            Don&apos;t see the email? Be sure to check your <strong>Spam or Junk</strong> folder.
+          </p>
+          <div style={{ marginTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <button
+              type="button"
+              className={styles.choice}
+              onClick={handleResendEmail}
+              disabled={resending}
+              style={{ padding: "0.6rem 1rem", textAlign: "center", cursor: "pointer", width: "100%", justifyContent: "center" }}
+            >
+              {resending ? "Resending email…" : "Resend verification email"}
+            </button>
+            {resendStatus && (
+              <p style={{ fontSize: "0.85rem", color: resendStatus.includes("sent") ? "#10b981" : "#ef4444" }}>
+                {resendStatus}
+              </p>
+            )}
+          </div>
+          <p style={{ marginTop: "1.5rem" }}>
+            <Link href="/sign-in">Already confirmed? Sign in</Link>
+          </p>
+          <p style={{ marginTop: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={() => setConfirmationSent(false)}
+              style={{ background: "none", border: "none", color: "inherit", textDecoration: "underline", cursor: "pointer", fontSize: "0.85rem" }}
+            >
+              Entered the wrong email? Go back
+            </button>
+          </p>
+        </div>
+      </AuthShell>
+    );
   }
 
   return <AuthShell mode="signup">

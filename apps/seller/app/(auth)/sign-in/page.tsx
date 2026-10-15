@@ -23,15 +23,44 @@ function SignInForm() {
       urlError === "verification-failed" ? "That verification link has expired or is invalid. Request a new link or sign in again." : null
   );
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState<string | null>(null);
 
   useEffect(() => {
     try { setEmail(window.sessionStorage.getItem("seller-auth-email") || ""); } catch { /* Storage may be unavailable. */ }
   }, []);
 
+  async function handleResend() {
+    if (resending || !email.trim()) return;
+    setResending(true);
+    setResendStatus(null);
+    try {
+      const origin = window.location.origin;
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: email.trim(),
+        options: {
+          emailRedirectTo: `${origin}/auth/confirm?next=/create-store`,
+        },
+      });
+      if (resendError) {
+        setResendStatus(resendError.message);
+      } else {
+        setResendStatus("Verification email resent. Check your inbox and Spam folder.");
+      }
+    } catch {
+      setResendStatus("Could not resend email right now.");
+    } finally {
+      setResending(false);
+    }
+  }
+
   async function handleSignIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (loading) return;
     setError(null);
+    setNeedsConfirmation(false);
     const errors: { email?: string; password?: string } = {};
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) errors.email = "Enter a valid email address.";
     if (!password) errors.password = "Enter your password.";
@@ -42,7 +71,12 @@ function SignInForm() {
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       if (signInError) {
-        setError(signInError.message);
+        if (/not confirmed|confirm/i.test(signInError.message)) {
+          setNeedsConfirmation(true);
+          setError("Your email address has not been confirmed yet. Please verify it to sign in.");
+        } else {
+          setError(signInError.message);
+        }
         return;
       }
       if (!data.user) {
@@ -80,6 +114,24 @@ function SignInForm() {
   return <AuthShell mode="signin">
     <form className={styles.form} onSubmit={handleSignIn} noValidate>
       <AuthError message={error} />
+      {needsConfirmation && (
+        <div style={{ marginBottom: "1rem", textAlign: "center" }}>
+          <button
+            type="button"
+            className={styles.choice}
+            onClick={handleResend}
+            disabled={resending}
+            style={{ padding: "0.5rem 1rem", width: "100%", justifyContent: "center", cursor: "pointer" }}
+          >
+            {resending ? "Resending email…" : "Resend confirmation email"}
+          </button>
+          {resendStatus && (
+            <p style={{ fontSize: "0.85rem", marginTop: "0.5rem", color: resendStatus.includes("resent") ? "#10b981" : "#ef4444" }}>
+              {resendStatus}
+            </p>
+          )}
+        </div>
+      )}
       <div className={styles.fields}>
         <AuthField id="email" label="Email address" type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(event) => { setEmail(event.target.value); try { window.sessionStorage.setItem("seller-auth-email", event.target.value); } catch { /* Storage may be unavailable. */ } setFieldErrors((current) => ({ ...current, email: undefined })); }} error={fieldErrors.email} />
         <div>
