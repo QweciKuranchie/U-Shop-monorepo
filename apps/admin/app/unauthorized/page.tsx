@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
 import { ShieldAlert, ArrowLeft, LogIn } from "lucide-react";
 import { Button } from "@repo/ui";
 
@@ -22,12 +22,12 @@ export default function UnauthorizedPage() {
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild variant="outline" className="w-full sm:w-auto">
-            <Link href="/sign-in">
+          <SignOutButton redirectUrl="/sign-in">
+            <Button variant="outline" className="w-full sm:w-auto">
               <LogIn className="w-4 h-4 mr-2" />
               Sign in with another account
-            </Link>
-          </Button>
+            </Button>
+          </SignOutButton>
           <Button asChild variant="default" className="w-full sm:w-auto">
             <a href={process.env.NEXT_PUBLIC_BASE_URL || "https://ushopgh.com"}>
               <ArrowLeft className="w-4 h-4 mr-2" />
