@@ -303,7 +303,7 @@ export function CheckoutContent() {
 
         if (!initRes.ok || !initData.authorizationUrl) {
           toast.error(initData.error || "Failed to initialize payment");
-          setOrderPlacementState(false, "idle");
+          setOrderPlacementState(false);
           setIsInitiatingPayment(false);
           setActionType(null);
           return;
@@ -332,7 +332,7 @@ export function CheckoutContent() {
               )}`;
             },
             onCancel: () => {
-              setOrderPlacementState(false, "idle");
+              setOrderPlacementState(false);
               setIsInitiatingPayment(false);
               setActionType(null);
               toast.info(
@@ -350,7 +350,7 @@ export function CheckoutContent() {
     } catch (err) {
       console.error("Payment initiation error:", err);
       toast.error("Failed to complete checkout. Please try again.");
-      setOrderPlacementState(false, "idle");
+      setOrderPlacementState(false);
       setIsInitiatingPayment(false);
       setActionType(null);
     }

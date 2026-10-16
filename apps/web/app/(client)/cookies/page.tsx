@@ -132,11 +132,11 @@ export default function CookiesPage() {
             <div className="text-xs sm:text-sm text-gray-600 space-y-1">
               <p className="flex items-center gap-2">
                 <Building className="w-4 h-4 text-gray-400" />
-                {contactConfig.companyName} Data Protection Officer
+                {contactConfig.company.name} Data Protection Officer
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-gray-400" />
-                Email: {contactConfig.email}
+                Email: {contactConfig.emails.support}
               </p>
             </div>
           </section>
