@@ -190,6 +190,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                     </p>
                   </div>
                 </div>
+              ))}
           </div>
         </section>
       </div>
