@@ -772,101 +772,278 @@ export default function AuthSwitch({
         @media (max-width: 870px) {
           .auth-switch {
             min-height: 100vh;
-            padding: 24px 14px !important;
+            padding: 12px 10px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
           }
-          .auth-switch .container:before,
-          .auth-switch .container:after,
-          .auth-switch .container.sign-up-mode:before,
-          .auth-switch .container.sign-up-mode:after {
-            display: none !important;
-            content: none !important;
-            width: 0 !important;
-            height: 0 !important;
-          }
-          .auth-switch .panels-container {
-            display: none !important;
-          }
+
           .auth-switch .container {
-            position: relative !important;
-            min-height: auto !important;
-            height: auto !important;
-            max-height: none !important;
             width: 100% !important;
-            max-width: 440px !important;
-            margin: 0 auto !important;
-            padding: 0 !important;
-            background: #ffffff !important;
-            border-radius: 1.75rem !important;
+            max-width: 430px !important;
+            min-height: 640px !important;
+            height: 90vh !important;
+            max-height: 820px !important;
+            border-radius: 28px !important;
             overflow: hidden !important;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+            position: relative !important;
+            background: #ffffff !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
           }
+
+          /* The Sliding Wave Shape */
+          .auth-switch .container:before {
+            display: block !important;
+            content: "" !important;
+            width: 1500px !important;
+            height: 1500px !important;
+            left: 32% !important;
+            bottom: 74% !important;
+            top: initial !important;
+            right: initial !important;
+            transform: translateX(-50%) !important;
+            transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            border-radius: 50% !important;
+            z-index: 6 !important;
+            background: linear-gradient(-45deg, #520f85 0%, #6B1FA8 45%, #D4009B 100%) !important;
+          }
+
+          .auth-switch .container.sign-up-mode:before {
+            display: block !important;
+            transform: translate(-50%, 100%) !important;
+            bottom: 25% !important;
+            left: 32% !important;
+            top: initial !important;
+            right: initial !important;
+          }
+
+          /* Panels: stacked vertically (top for login mode, bottom for signup mode) */
+          .auth-switch .panels-container {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            grid-template-rows: 1fr 2fr 1fr !important;
+            height: 100% !important;
+            width: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            position: absolute !important;
+            z-index: 7 !important;
+            pointer-events: none !important;
+          }
+
+          .auth-switch .panel {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            padding: 0.75rem 1.25rem !important;
+            grid-column: 1 / 2 !important;
+            z-index: 7 !important;
+          }
+
+          .auth-switch .left-panel {
+            grid-row: 1 / 2 !important;
+            pointer-events: all !important;
+          }
+
+          .auth-switch .right-panel {
+            grid-row: 3 / 4 !important;
+            pointer-events: none !important;
+          }
+
+          .auth-switch .container.sign-up-mode .left-panel {
+            pointer-events: none !important;
+          }
+
+          .auth-switch .container.sign-up-mode .right-panel {
+            pointer-events: all !important;
+          }
+
+          .auth-switch .panel .content {
+            color: #ffffff !important;
+            max-width: 320px !important;
+            margin: 0 auto !important;
+            transition: transform 0.9s ease-in-out !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+          }
+
+          .auth-switch .panel h3 {
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            line-height: 1.2 !important;
+            margin-bottom: 4px !important;
+          }
+
+          .auth-switch .panel p {
+            font-size: 0.75rem !important;
+            line-height: 1.35 !important;
+            padding: 0 !important;
+            margin-bottom: 8px !important;
+            color: rgba(255, 255, 255, 0.92) !important;
+            max-width: 290px !important;
+          }
+
+          .auth-switch .btn.transparent {
+            width: 110px !important;
+            height: 34px !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.05em !important;
+            border-radius: 9999px !important;
+            margin: 0 !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+            color: #ffffff !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+
+          .auth-switch .btn.transparent:hover {
+            background: #ffffff !important;
+            color: #520f85 !important;
+          }
+
+          /* Panel slide transitions on mobile */
+          .auth-switch .left-panel .content {
+            transform: translateY(0px) !important;
+          }
+
+          .auth-switch .right-panel .content {
+            transform: translateY(300px) !important;
+          }
+
+          .auth-switch .container.sign-up-mode .left-panel .content {
+            transform: translateY(-300px) !important;
+          }
+
+          .auth-switch .container.sign-up-mode .right-panel .content {
+            transform: translateY(0px) !important;
+          }
+
+          /* Forms Container & Sliding Motion */
           .auth-switch .forms-container {
-            position: relative !important;
+            position: absolute !important;
             width: 100% !important;
-            height: auto !important;
-            top: auto !important;
-            left: auto !important;
-            display: block !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 5 !important;
           }
+
           .auth-switch .signin-signup {
-            position: relative !important;
+            position: absolute !important;
             width: 100% !important;
-            top: auto !important;
-            left: auto !important;
-            transform: none !important;
-            transition: none !important;
+            left: 50% !important;
+            top: 96% !important;
+            transform: translate(-50%, -100%) !important;
+            transition: 1s 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
             height: auto !important;
-            display: block !important;
-            z-index: 1 !important;
+            max-height: 72% !important;
+            z-index: 5 !important;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
           }
+
+          .auth-switch .container.sign-up-mode .signin-signup {
+            top: 3% !important;
+            transform: translate(-50%, 0%) !important;
+            left: 50% !important;
+          }
+
           .auth-switch form {
             position: relative !important;
-            transform: none !important;
             width: 100% !important;
-            padding: 2rem 1.5rem !important;
-            transition: none !important;
-            min-height: auto !important;
-            height: auto !important;
-            max-height: none !important;
-            overflow: visible !important;
+            padding: 0.5rem 1.25rem 0.75rem !important;
+            max-height: 100% !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            flex-direction: column !important;
           }
+
           .auth-switch form.sign-in-form {
-            display: flex !important;
             opacity: 1 !important;
+            z-index: 2 !important;
             pointer-events: all !important;
           }
+
           .auth-switch form.sign-up-form {
-            display: none !important;
             opacity: 0 !important;
+            z-index: 1 !important;
             pointer-events: none !important;
           }
+
           .auth-switch .container.sign-up-mode form.sign-in-form {
-            display: none !important;
             opacity: 0 !important;
+            z-index: 1 !important;
             pointer-events: none !important;
           }
+
           .auth-switch .container.sign-up-mode form.sign-up-form {
-            display: flex !important;
             opacity: 1 !important;
+            z-index: 2 !important;
             pointer-events: all !important;
+          }
+
+          /* Compact Form Elements for Mobile View */
+          .auth-switch .title {
+            font-size: 1.45rem !important;
+            margin-bottom: 2px !important;
+          }
+
+          .auth-switch .subtitle {
+            font-size: 0.74rem !important;
+            margin-bottom: 8px !important;
+          }
+
+          .auth-switch .social-btn-google {
+            height: 38px !important;
+            font-size: 0.82rem !important;
+            margin-bottom: 4px !important;
+          }
+
+          .auth-switch .divider {
+            margin: 4px 0 !important;
+          }
+
+          .auth-switch .divider-text {
+            font-size: 0.65rem !important;
+          }
+
+          .auth-switch .input-field {
+            height: 38px !important;
+            margin: 2.5px 0 !important;
+            border-radius: 38px !important;
+            padding: 0 12px !important;
+          }
+
+          .auth-switch .input-field input {
+            font-size: 0.82rem !important;
+          }
+
+          .auth-switch .btn {
+            height: 40px !important;
+            font-size: 0.82rem !important;
+            margin: 6px 0 4px !important;
           }
         }
 
         @media (max-width: 480px) {
           .auth-switch {
-            padding: 16px 10px !important;
+            padding: 8px 6px !important;
+          }
+          .auth-switch .container {
+            border-radius: 24px !important;
           }
           .auth-switch form {
-            padding: 1.75rem 1.15rem !important;
-          }
-          .auth-switch .input-field {
-            max-width: 100% !important;
-          }
-          .auth-switch .title {
-            font-size: 1.65rem !important;
+            padding: 0.35rem 1rem 0.5rem !important;
           }
         }
       `}</style>
