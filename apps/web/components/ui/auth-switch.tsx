@@ -770,40 +770,68 @@ export default function AuthSwitch({
         }
 
         @media (max-width: 870px) {
-          .auth-switch .container:before {
+          .auth-switch {
+            min-height: 100vh;
+            padding: 24px 14px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+          .auth-switch .container:before,
+          .auth-switch .container:after,
+          .auth-switch .container.sign-up-mode:before,
+          .auth-switch .container.sign-up-mode:after {
             display: none !important;
+            content: none !important;
+            width: 0 !important;
+            height: 0 !important;
           }
           .auth-switch .panels-container {
             display: none !important;
           }
           .auth-switch .container {
+            position: relative !important;
             min-height: auto !important;
             height: auto !important;
             max-height: none !important;
             width: 100% !important;
-            max-width: 460px !important;
-            margin: 1.5rem auto !important;
-            padding: 1.5rem 0.25rem !important;
+            max-width: 440px !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            background: #ffffff !important;
             border-radius: 1.75rem !important;
-            overflow: visible !important;
-            box-shadow: 0 12px 40px -12px rgba(82, 15, 133, 0.3) !important;
+            overflow: hidden !important;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+          }
+          .auth-switch .forms-container {
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            top: auto !important;
+            left: auto !important;
+            display: block !important;
           }
           .auth-switch .signin-signup {
-            position: static !important;
+            position: relative !important;
             width: 100% !important;
             top: auto !important;
             left: auto !important;
             transform: none !important;
             transition: none !important;
             height: auto !important;
+            display: block !important;
+            z-index: 1 !important;
           }
           .auth-switch form {
-            position: static !important;
+            position: relative !important;
             transform: none !important;
             width: 100% !important;
-            padding: 0.5rem 1.25rem !important;
+            padding: 2rem 1.5rem !important;
             transition: none !important;
             min-height: auto !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
           }
           .auth-switch form.sign-in-form {
             display: flex !important;
@@ -827,12 +855,18 @@ export default function AuthSwitch({
           }
         }
 
-        @media (max-width: 570px) {
+        @media (max-width: 480px) {
+          .auth-switch {
+            padding: 16px 10px !important;
+          }
           .auth-switch form {
-            padding: 0.5rem 0.75rem !important;
+            padding: 1.75rem 1.15rem !important;
           }
           .auth-switch .input-field {
             max-width: 100% !important;
+          }
+          .auth-switch .title {
+            font-size: 1.65rem !important;
           }
         }
       `}</style>
