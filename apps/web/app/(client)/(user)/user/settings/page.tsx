@@ -151,29 +151,30 @@ export default function UserSettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-4xl">
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 text-sm mt-1">
           Manage your account preferences and privacy settings
         </p>
       </div>
 
       {/* Notification Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Bell className="mr-2 h-5 w-5" />
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center">
+            <Bell className="mr-2 h-5 w-5 text-ushop-pink" />
             Notification Preferences
-          </CardTitle>
-          <CardDescription>
+          </h2>
+          <p className="text-sm text-gray-500">
             Choose how you want to be notified about account activity
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
+          </p>
+        </div>
+
+        <div className="space-y-4 divide-y divide-gray-100">
+          <div className="flex items-center justify-between pt-3">
             <div className="space-y-0.5">
-              <Label>Email Notifications</Label>
+              <Label className="text-sm font-semibold text-gray-800">Email Notifications</Label>
               <p className="text-sm text-gray-500">
                 Receive notifications via email
               </p>
@@ -187,9 +188,9 @@ export default function UserSettingsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4">
             <div className="space-y-0.5">
-              <Label>Push Notifications</Label>
+              <Label className="text-sm font-semibold text-gray-800">Push Notifications</Label>
               <p className="text-sm text-gray-500">
                 Receive push notifications in your browser
               </p>
@@ -203,9 +204,9 @@ export default function UserSettingsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4">
             <div className="space-y-0.5">
-              <Label>Order Updates</Label>
+              <Label className="text-sm font-semibold text-gray-800">Order Updates</Label>
               <p className="text-sm text-gray-500">
                 Get notified about order status changes
               </p>
@@ -218,9 +219,9 @@ export default function UserSettingsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4">
             <div className="space-y-0.5">
-              <Label>Marketing Emails</Label>
+              <Label className="text-sm font-semibold text-gray-800">Marketing Emails</Label>
               <p className="text-sm text-gray-500">
                 Receive promotional offers and updates
               </p>
@@ -232,24 +233,27 @@ export default function UserSettingsPage() {
               }
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
+
+      <Separator />
 
       {/* Security Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Shield className="mr-2 h-5 w-5" />
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center">
+            <Shield className="mr-2 h-5 w-5 text-ushop-pink" />
             Security & Privacy
-          </CardTitle>
-          <CardDescription>
+          </h2>
+          <p className="text-sm text-gray-500">
             Manage your account security and privacy preferences
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
+          </p>
+        </div>
+
+        <div className="space-y-4 divide-y divide-gray-100">
+          <div className="flex items-center justify-between pt-3">
             <div className="space-y-0.5">
-              <Label>Two-Factor Authentication</Label>
+              <Label className="text-sm font-semibold text-gray-800">Two-Factor Authentication</Label>
               <p className="text-sm text-gray-500">
                 Add an extra layer of security to your account
               </p>
@@ -262,9 +266,9 @@ export default function UserSettingsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-4">
             <div className="space-y-0.5">
-              <Label>Profile Visibility</Label>
+              <Label className="text-sm font-semibold text-gray-800">Profile Visibility</Label>
               <p className="text-sm text-gray-500">
                 Make your profile visible to other users
               </p>
@@ -276,64 +280,65 @@ export default function UserSettingsPage() {
               }
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
+
+      <Separator />
 
       {/* Newsletter Subscription */}
       <NewsletterSubscription />
 
+      <Separator />
+
       {/* Data Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Download className="mr-2 h-5 w-5" />
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 flex items-center">
+            <Download className="mr-2 h-5 w-5 text-ushop-pink" />
             Data Management
-          </CardTitle>
-          <CardDescription>Export or delete your account data</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </h2>
+          <p className="text-sm text-gray-500">Export or delete your account data</p>
+        </div>
+
+        <div className="space-y-6 pt-2">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Export Data</Label>
+              <Label className="text-sm font-semibold text-gray-800">Export Data</Label>
               <p className="text-sm text-gray-500">
                 Download a copy of your account data
               </p>
             </div>
-            <Button variant="outline" onClick={handleExportData}>
+            <Button variant="outline" onClick={handleExportData} className="rounded-xl">
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
           </div>
 
-          <Separator />
-
-          <div className="space-y-4">
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-              <div className="flex items-start space-x-3">
-                <Trash2 className="h-5 w-5 text-red-500 mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-red-800">
-                    Delete Account
-                  </h3>
-                  <p className="text-sm text-red-700 mt-1">
-                    Once you delete your account, there is no going back. Please
-                    be certain.
-                  </p>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="mt-3"
-                    onClick={handleDeleteAccount}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Account
-                  </Button>
-                </div>
+          <div className="rounded-2xl border border-red-200/80 bg-red-50/60 p-5">
+            <div className="flex items-start space-x-3">
+              <Trash2 className="h-5 w-5 text-red-500 mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold text-red-800">
+                  Delete Account
+                </h3>
+                <p className="text-sm text-red-700 mt-1">
+                  Once you delete your account, there is no going back. Please
+                  be certain.
+                </p>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="mt-3 rounded-xl"
+                  onClick={handleDeleteAccount}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Account
+                </Button>
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </section>
     </div>
   );
 }

@@ -72,12 +72,12 @@ export default function UserLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen py-5 bg-ushop_light_bg">
-      <Container className="py-6">
+    <div className="min-h-screen py-4 bg-white">
+      <Container className="py-4">
         <div className="flex flex-col gap-6">
           {/* Mobile Header */}
           <div className="lg:hidden">
-            <div className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-ushop-pink/15">
+            <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-xl border border-gray-100">
               <div className="flex items-center space-x-3">
                 {user?.imageUrl ? (
                   <Image
@@ -116,9 +116,9 @@ export default function UserLayout({
 
           {/* Desktop Top Navigation */}
           <div className="hidden lg:block">
-            <div className="bg-white rounded-2xl shadow-xl border border-ushop-pink/15 overflow-hidden">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
               {/* User Profile Header */}
-              <div className="p-6 bg-ushop-purple-dark text-white">
+              <div className="p-6 bg-ushop-purple-dark text-white rounded-2xl">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     {user?.imageUrl ? (
@@ -171,10 +171,10 @@ export default function UserLayout({
                         key={item.title}
                         href={item.href}
                         className={cn(
-                          "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group border",
+                          "flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                           isActive
-                            ? "bg-ushop_light_pink/60 border-ushop-pink/40 shadow-sm"
-                            : "hover:bg-ushop_light_pink/30 border-gray-200 hover:border-ushop-pink/30"
+                            ? "bg-ushop_light_pink/70 text-ushop-purple-dark font-semibold shadow-sm"
+                            : "bg-zinc-50 hover:bg-zinc-100/80 text-gray-700"
                         )}
                       >
                         <div
@@ -182,7 +182,7 @@ export default function UserLayout({
                             "p-2 rounded-lg transition-colors",
                             isActive
                               ? "bg-ushop-purple text-white shadow-sm"
-                              : "bg-gray-100 text-gray-600 group-hover:bg-ushop-purple/20 group-hover:text-ushop-purple-dark"
+                              : "bg-white text-gray-600 group-hover:bg-ushop-purple/20 group-hover:text-ushop-purple-dark"
                           )}
                         >
                           <item.icon className="h-4 w-4" />
@@ -193,7 +193,7 @@ export default function UserLayout({
                               "font-medium text-sm",
                               isActive
                                 ? "text-ushop-purple-dark font-semibold"
-                                : "text-ushop-purple-dark"
+                                : "text-gray-900"
                             )}
                           >
                             {item.title}
@@ -212,7 +212,7 @@ export default function UserLayout({
 
           {/* Mobile Sidebar */}
           <div className={cn("lg:hidden", sidebarOpen ? "block" : "hidden")}>
-            <div className="bg-white rounded-2xl shadow-xl border border-ushop-pink/15 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               {/* User Profile Section */}
               <div className="p-6 bg-ushop-purple-dark text-white">
                 <div className="flex items-center space-x-4">
@@ -314,10 +314,8 @@ export default function UserLayout({
           </div>
 
           {/* Main Content */}
-          <div className="w-full">
-            <div className="bg-white rounded-2xl shadow-xl border border-ushop-pink/15 overflow-hidden">
-              <div className="p-6 lg:p-8">{children}</div>
-            </div>
+          <div className="w-full pt-2">
+            <div>{children}</div>
           </div>
         </div>
       </Container>

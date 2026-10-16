@@ -56,6 +56,7 @@ export function CheckoutContent() {
   const {
     items: cart,
     resetCart,
+    setOrderPlacementState,
   } = useCartStore();
   const { placeOrder, isPlacingOrder, orderStep } = useOrderPlacement({
     user: user!,
@@ -302,16 +303,19 @@ export function CheckoutContent() {
 
         if (!initRes.ok || !initData.authorizationUrl) {
           toast.error(initData.error || "Failed to initialize payment");
+          setOrderPlacementState(false, "idle");
           setIsInitiatingPayment(false);
           setActionType(null);
           return;
         }
 
-        if (channel === "card") {
+        const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+        const isMock = initData.accessCode === "mock_dev_access_code" || !publicKey;
+
+        if (channel === "card" && !isMock) {
           // Dynamically import @paystack/inline-js to avoid SSR errors
           const PaystackPop = (await import("@paystack/inline-js")).default;
           const paystack = new PaystackPop();
-          const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
 
           paystack.newTransaction({
             key: publicKey || "",
@@ -328,6 +332,7 @@ export function CheckoutContent() {
               )}`;
             },
             onCancel: () => {
+              setOrderPlacementState(false, "idle");
               setIsInitiatingPayment(false);
               setActionType(null);
               toast.info(
@@ -336,7 +341,7 @@ export function CheckoutContent() {
             },
           });
         } else {
-          // Mobile Money: full-page redirect to Paystack authorizationUrl
+          // Mobile Money or dev mock flow: full-page redirect to Paystack authorizationUrl
           resetCart();
           setIsRedirecting(true);
           window.location.href = initData.authorizationUrl;
@@ -345,6 +350,7 @@ export function CheckoutContent() {
     } catch (err) {
       console.error("Payment initiation error:", err);
       toast.error("Failed to complete checkout. Please try again.");
+      setOrderPlacementState(false, "idle");
       setIsInitiatingPayment(false);
       setActionType(null);
     }
@@ -409,8 +415,7 @@ export function CheckoutContent() {
             <CreditCard className="w-5 h-5 text-ushop-pink" />
             <h2 className="text-lg font-bold text-gray-900">Payment Method</h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
               <RadioGroup
                 value={selectedPaymentMethod}
                 onValueChange={(value) => {
@@ -569,8 +574,7 @@ export function CheckoutContent() {
                   </div>
                 )}
               </RadioGroup>
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         {/* Shipping Address */}
@@ -579,8 +583,7 @@ export function CheckoutContent() {
             <MapPin className="w-5 h-5 text-ushop-pink" />
             <h2 className="text-lg font-bold text-gray-900">Shipping Address</h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6">
               {isLoadingAddresses ? (
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/40">
@@ -634,19 +637,17 @@ export function CheckoutContent() {
                   isLoading={isLoadingAddresses}
                 />
               )}
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         {/* Order Items */}
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 text-ushop-pink" />
-            <h2 className="text-lg font-bold text-gray-900">Order Items ({cart.length})</h2>
+            <h2 className="text-lg font-bold text-gray-900">Order Items ({cart?.length ?? 0})</h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6 space-y-3">
-              {cart.map((item: CartItem) => (
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
+              {(cart || []).map((item: CartItem) => (
                 <div
                   key={item.product._id}
                   className="flex gap-3 p-3.5 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors"
@@ -682,8 +683,7 @@ export function CheckoutContent() {
                   </div>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+          </div>
         </section>
       </div>
 
@@ -692,51 +692,35 @@ export function CheckoutContent() {
         {/* Order Summary */}
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900">Order Summary</h2>
-          <Card>
-            <CardContent className="p-5 sm:p-6 space-y-3">
-              <div className="flex justify-between">
-                <span>Subtotal ({cart.length} {cart.length === 1 ? "item" : "items"})</span>
-                <PriceFormatter amount={finalSubtotal} />
-              </div>
-              {totalDiscount > 0 && (
-                <div className="flex justify-between text-green-600 text-sm font-medium">
-                  <span>Product Savings</span>
-                  <span>
-                    -<PriceFormatter amount={totalDiscount} />
-                  </span>
-                </div>
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
+            <div className="flex justify-between text-gray-700">
+              <span>Subtotal ({(cart || []).length} {(cart || []).length === 1 ? "item" : "items"})</span>
+              <PriceFormatter amount={totals.currentSubtotal} />
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Discount Applied</span>
+              {promoDiscountAmount + businessDiscount > 0 ? (
+                <span className="text-emerald-600 font-medium">
+                  -<PriceFormatter amount={promoDiscountAmount + businessDiscount} />
+                </span>
+              ) : (
+                <span><PriceFormatter amount={0} /></span>
               )}
-              {businessDiscount > 0 && (
-                <div className="flex justify-between text-blue-600 text-sm font-medium">
-                  <span>Business Account Discount (2%)</span>
-                  <span>
-                    -<PriceFormatter amount={businessDiscount} />
-                  </span>
-                </div>
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Shipping Fee</span>
+              {shipping === 0 ? (
+                <span className="text-emerald-600 font-medium">Free</span>
+              ) : (
+                <PriceFormatter amount={shipping} />
               )}
-              {promoDiscountAmount > 0 && (
-                <div className="flex justify-between text-emerald-600 text-sm font-medium">
-                  <span>Promo Discount ({appliedDiscount?.code})</span>
-                  <span>
-                    -<PriceFormatter amount={promoDiscountAmount} />
-                  </span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                {shipping === 0 ? (
-                  <span className="text-green-600 font-medium">Free</span>
-                ) : (
-                  <PriceFormatter amount={shipping} />
-                )}
-              </div>
-              <Separator />
-              <div className="flex justify-between text-lg font-bold">
-                <span>Total</span>
-                <PriceFormatter amount={total} />
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-lg font-bold text-gray-900">
+              <span>Total</span>
+              <PriceFormatter amount={total} />
+            </div>
+          </div>
         </section>
 
         {/* Discount Code */}
@@ -745,8 +729,7 @@ export function CheckoutContent() {
             <Tag className="w-4 h-4 text-ushop-pink" />
             <h3 className="text-sm font-semibold text-gray-900">Discount Code</h3>
           </div>
-          <Card>
-            <CardContent className="p-5">
+          <div className="bg-zinc-50/70 rounded-2xl p-5">
               <div className="space-y-3">
                 {appliedDiscount ? (
                   <div className="flex items-center justify-between p-3 bg-green-50 rounded-xl animate-in fade-in-0 duration-300">
@@ -827,9 +810,8 @@ export function CheckoutContent() {
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-      </section>
+          </div>
+        </section>
 
         <div className="space-y-3">
           <Button

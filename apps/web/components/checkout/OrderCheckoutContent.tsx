@@ -74,8 +74,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
               {order.orderStatus}
             </Badge>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6">
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div>
                   <p className="text-muted-foreground">Customer</p>
@@ -93,8 +92,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         {/* Shipping Address */}
@@ -103,8 +101,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
             <MapPin className="w-5 h-5 text-ushop-pink" />
             <h2 className="text-lg font-bold text-gray-900">Shipping Address</h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6">
               <div className="space-y-1">
                 <p className="font-medium">{order.address?.name}</p>
                 <p className="text-muted-foreground">{order.address?.address}</p>
@@ -112,8 +109,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                   {order.address?.city}, {order.address?.state} {order.address?.zip}
                 </p>
               </div>
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         {/* Payment Method */}
@@ -122,8 +118,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
             <CreditCard className="w-5 h-5 text-ushop-pink" />
             <h2 className="text-lg font-bold text-gray-900">Payment Method</h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6">
               <RadioGroup
                 value={selectedPaymentMethod}
                 onValueChange={(value) =>
@@ -150,8 +145,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                   </div>
                 </div>
               </RadioGroup>
-            </CardContent>
-          </Card>
+          </div>
         </section>
 
         {/* Order Items */}
@@ -162,8 +156,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
               Order Items ({order.products?.length ?? 0})
             </h2>
           </div>
-          <Card>
-            <CardContent className="p-5 sm:p-6 space-y-3">
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {(order.products ?? []).map((item: any, index: number) => (
                 <div key={index} className="flex gap-3 p-3.5 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
@@ -197,9 +190,7 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
                     </p>
                   </div>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
+          </div>
         </section>
       </div>
 
@@ -207,27 +198,35 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
       <div className="space-y-6">
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900">Order Summary</h2>
-          <Card>
-            <CardContent className="p-5 sm:p-6 space-y-3">
-              <div className="flex justify-between">
-                <span>Subtotal ({order.products?.length ?? 0} items)</span>
-                <PriceFormatter amount={order.subtotal} />
-              </div>
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                {order.shipping === 0 ? (
-                  <span className="text-green-600 font-medium">Free</span>
-                ) : (
-                  <PriceFormatter amount={order.shipping} />
-                )}
-              </div>
-              <Separator />
-              <div className="flex justify-between text-lg font-bold">
-                <span>Total</span>
-                <PriceFormatter amount={order.totalPrice} />
-              </div>
-            </CardContent>
-          </Card>
+          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
+            <div className="flex justify-between text-gray-700">
+              <span>Subtotal ({(order.products || []).length} {(order.products || []).length === 1 ? "item" : "items"})</span>
+              <PriceFormatter amount={order.subtotal ?? order.totalPrice} />
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Discount Applied</span>
+              {(order.discount ?? 0) > 0 ? (
+                <span className="text-emerald-600 font-medium">
+                  -<PriceFormatter amount={order.discount} />
+                </span>
+              ) : (
+                <span><PriceFormatter amount={0} /></span>
+              )}
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Shipping Fee</span>
+              {order.shipping === 0 ? (
+                <span className="text-emerald-600 font-medium">Free</span>
+              ) : (
+                <PriceFormatter amount={order.shipping} />
+              )}
+            </div>
+            <Separator />
+            <div className="flex justify-between text-lg font-bold text-gray-900">
+              <span>Total</span>
+              <PriceFormatter amount={order.totalPrice} />
+            </div>
+          </div>
         </section>
 
         <Button
