@@ -199,35 +199,44 @@ export function OrderCheckoutContent({ order }: OrderCheckoutContentProps) {
       <div className="space-y-6">
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900">Order Summary</h2>
-          <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
-            <div className="flex justify-between text-gray-700">
-              <span>Subtotal ({(order.products || []).length} {(order.products || []).length === 1 ? "item" : "items"})</span>
-              <PriceFormatter amount={order.subtotal ?? order.totalPrice} />
-            </div>
-            <div className="flex justify-between text-gray-700">
-              <span>Discount Applied</span>
-              {(order.discount ?? 0) > 0 ? (
-                <span className="text-emerald-600 font-medium">
-                  -<PriceFormatter amount={order.discount} />
-                </span>
-              ) : (
-                <span><PriceFormatter amount={0} /></span>
-              )}
-            </div>
-            <div className="flex justify-between text-gray-700">
-              <span>Shipping Fee</span>
-              {order.shipping === 0 ? (
-                <span className="text-emerald-600 font-medium">Free</span>
-              ) : (
-                <PriceFormatter amount={order.shipping} />
-              )}
-            </div>
-            <Separator />
-            <div className="flex justify-between text-lg font-bold text-gray-900">
-              <span>Total</span>
-              <PriceFormatter amount={order.totalPrice} />
-            </div>
-          </div>
+          {(() => {
+            const subtotalAmount = typeof order.subtotal === "number" ? order.subtotal : (typeof order.totalPrice === "number" ? order.totalPrice : 0);
+            const discountAmount = typeof order.discount === "number" ? order.discount : 0;
+            const shippingAmount = typeof order.shipping === "number" ? order.shipping : 0;
+            const totalAmount = typeof order.totalPrice === "number" ? order.totalPrice : 0;
+
+            return (
+              <div className="bg-zinc-50/70 rounded-2xl p-5 sm:p-6 space-y-3">
+                <div className="flex justify-between text-gray-700">
+                  <span>Subtotal ({(order.products || []).length} {(order.products || []).length === 1 ? "item" : "items"})</span>
+                  <PriceFormatter amount={subtotalAmount} />
+                </div>
+                <div className="flex justify-between text-gray-700">
+                  <span>Discount Applied</span>
+                  {discountAmount > 0 ? (
+                    <span className="text-emerald-600 font-medium">
+                      -<PriceFormatter amount={discountAmount} />
+                    </span>
+                  ) : (
+                    <span><PriceFormatter amount={0} /></span>
+                  )}
+                </div>
+                <div className="flex justify-between text-gray-700">
+                  <span>Shipping Fee</span>
+                  {shippingAmount === 0 ? (
+                    <span className="text-emerald-600 font-medium">Free</span>
+                  ) : (
+                    <PriceFormatter amount={shippingAmount} />
+                  )}
+                </div>
+                <Separator />
+                <div className="flex justify-between text-lg font-bold text-gray-900">
+                  <span>Total</span>
+                  <PriceFormatter amount={totalAmount} />
+                </div>
+              </div>
+            );
+          })()}
         </section>
 
         <Button
