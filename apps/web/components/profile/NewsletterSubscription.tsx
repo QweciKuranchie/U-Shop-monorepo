@@ -131,19 +131,20 @@ export default function NewsletterSubscription() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Mail className="mr-2 h-5 w-5" />
+    <section className="space-y-4">
+      <div>
+        <h2 className="text-lg font-bold text-gray-900 flex items-center">
+          <Mail className="mr-2 h-5 w-5 text-ushop-pink" />
           Newsletter Subscription
-        </CardTitle>
-        <CardDescription>
+        </h2>
+        <p className="text-sm text-gray-500">
           Manage your newsletter subscription preferences
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        </p>
+      </div>
+
+      <div className="space-y-4 pt-1">
         {/* Current Status */}
-        <div className="flex items-center justify-between p-4 rounded-lg border bg-gray-50">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50/80">
           <div className="flex items-center space-x-3">
             {isSubscribed ? (
               <>
@@ -153,22 +154,22 @@ export default function NewsletterSubscription() {
                   </div>
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-semibold text-gray-900 text-sm">
                     Subscribed to Newsletter
                   </p>
-                  <p className="text-sm text-gray-600">{userEmail}</p>
+                  <p className="text-xs text-gray-600 mt-0.5">{userEmail}</p>
                 </div>
               </>
             ) : (
               <>
                 <div className="shrink-0">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gray-200/70 rounded-full flex items-center justify-center">
                     <XCircle className="h-5 w-5 text-gray-500" />
                   </div>
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">Not Subscribed</p>
-                  <p className="text-sm text-gray-600">{userEmail}</p>
+                  <p className="font-semibold text-gray-900 text-sm">Not Subscribed</p>
+                  <p className="text-xs text-gray-600 mt-0.5">{userEmail}</p>
                 </div>
               </>
             )}
@@ -177,7 +178,7 @@ export default function NewsletterSubscription() {
 
         {/* Benefits Section */}
         {!isSubscribed && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-4">
             <h4 className="font-semibold text-blue-900 text-sm mb-3">
               Newsletter Benefits:
             </h4>
@@ -207,13 +208,13 @@ export default function NewsletterSubscription() {
         )}
 
         {/* Action Button */}
-        <div className="pt-2">
+        <div className="pt-1">
           {isSubscribed ? (
             <Button
               variant="outline"
               onClick={handleUnsubscribe}
               disabled={isProcessing}
-              className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+              className="w-full rounded-xl border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
             >
               {isProcessing ? (
                 <>
@@ -231,7 +232,7 @@ export default function NewsletterSubscription() {
             <Button
               onClick={handleSubscribe}
               disabled={isProcessing}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full rounded-xl bg-ushop-pink hover:bg-ushop-magenta text-white shadow-sm"
             >
               {isProcessing ? (
                 <>
@@ -254,7 +255,7 @@ export default function NewsletterSubscription() {
             ? "You can resubscribe at any time"
             : "Join 50,000+ subscribers and never miss a deal"}
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 }

@@ -141,7 +141,7 @@ export function ClientCartContent() {
     return <CartSkeleton />;
   }
 
-  if (error && (!userData || (userData.addresses.length === 0 && userData.orders.length === 0))) {
+  if (error && (!userData || (((userData.addresses || []).length === 0) && ((userData.orders || []).length === 0)))) {
     console.error("Cart content error:", error);
   }
 

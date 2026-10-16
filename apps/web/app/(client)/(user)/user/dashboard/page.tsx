@@ -131,17 +131,17 @@ export default function UserDashboardPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="space-y-8">
       {/* Welcome Header */}
-      <div className="mb-8">
+      <div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <User className="h-6 w-6 text-blue-600" />
+            <div className="p-2 bg-purple-100/70 rounded-xl">
+              <User className="h-6 w-6 text-ushop-purple-dark" />
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-ushop-purple-dark">
+                <h1 className="text-2xl sm:text-3xl font-bold text-ushop-purple-dark">
                   Welcome back,{" "}
                   {user?.firstName ||
                     user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] ||
@@ -149,7 +149,7 @@ export default function UserDashboardPage() {
                   !
                 </h1>
               </div>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 mt-1 text-sm">
                 Here&apos;s what&apos;s happening with your account today
               </p>
             </div>
@@ -160,64 +160,63 @@ export default function UserDashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <Card className="bg-ushop-purple text-white border-0 shadow-md hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+        <div className="bg-ushop-purple text-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-row items-center justify-between pb-3">
+            <span className="text-sm font-medium">Total Orders</span>
             <Package className="h-5 w-5" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div>
             <div className="text-3xl font-bold mb-1">{stats.ordersCount}</div>
             <p className="text-xs text-purple-100">Orders placed</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="bg-ushop-pink text-white border-0 shadow-md hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium">Notifications</CardTitle>
+        <div className="bg-ushop-pink text-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-row items-center justify-between pb-3">
+            <span className="text-sm font-medium">Notifications</span>
             <Bell className="h-5 w-5" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div>
             <div className="text-3xl font-bold mb-1">
               {stats.notificationsCount}
             </div>
             <p className="text-xs text-pink-100">
               {stats.unreadNotifications} unread
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card className="bg-gray-800 text-white border-0 shadow-md hover:shadow-lg transition-shadow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium">Wishlist</CardTitle>
+        <div className="bg-gray-800 text-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div className="flex flex-row items-center justify-between pb-3">
+            <span className="text-sm font-medium">Wishlist</span>
             <Heart className="h-5 w-5" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div>
             <div className="text-3xl font-bold mb-1">{stats.wishlistCount}</div>
             <p className="text-xs text-gray-300">Items saved</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Content Section with Proper Spacing */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Activity */}
-        <Card className="shadow-lg border-0">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-5 w-5 text-gray-600" />
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-              </div>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/user/notifications">
-                  View All
-                  <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
+        <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Clock className="h-5 w-5 text-ushop-pink" />
+              <h2 className="text-lg font-bold text-gray-900">Recent Activity</h2>
             </div>
-            <CardDescription>Your latest account activity</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-0">
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/user/notifications">
+                View All
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <p className="text-sm text-gray-500">Your latest account activity</p>
+
+          <div className="pt-2">
             {recentActivity.length === 0 ? (
               <div className="text-center py-8">
                 <Clock className="h-12 w-12 text-gray-300 mx-auto mb-4" />
@@ -250,73 +249,70 @@ export default function UserDashboardPage() {
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Quick Actions */}
-        <Card className="shadow-lg border-0 h-fit">
-          <CardHeader className="pb-4">
-            <div className="flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-gray-600" />
-              <CardTitle className="text-lg">Quick Actions</CardTitle>
-            </div>
-            <CardDescription>Frequently used features</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="grid grid-cols-1 gap-3">
-              <Link href="/user/orders">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start h-12 hover:bg-blue-50 hover:border-blue-200 transition-colors"
-                >
-                  <Package className="mr-3 h-4 w-4 text-blue-500" />
-                  <span className="font-medium">View Orders</span>
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Button>
-              </Link>
+        <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-4 h-fit">
+          <div className="flex items-center space-x-2">
+            <TrendingUp className="h-5 w-5 text-ushop-pink" />
+            <h2 className="text-lg font-bold text-gray-900">Quick Actions</h2>
+          </div>
+          <p className="text-sm text-gray-500">Frequently used features</p>
 
-              <Link href="/user/notifications">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start h-12 hover:bg-purple-50 hover:border-purple-200 transition-colors"
-                >
-                  <Bell className="mr-3 h-4 w-4 text-purple-500" />
-                  <span className="font-medium">Notifications</span>
-                  {stats.unreadNotifications > 0 && (
-                    <Badge variant="destructive" className="ml-auto">
-                      {stats.unreadNotifications}
-                    </Badge>
-                  )}
-                  {stats.unreadNotifications === 0 && (
-                    <ArrowRight className="ml-auto h-4 w-4" />
-                  )}
-                </Button>
-              </Link>
+          <div className="grid grid-cols-1 gap-3 pt-2">
+            <Link href="/user/orders">
+              <Button
+                variant="outline"
+                className="w-full justify-start h-12 bg-white hover:bg-purple-50/60 border-gray-200/80 rounded-xl transition-colors"
+              >
+                <Package className="mr-3 h-4 w-4 text-blue-500" />
+                <span className="font-medium text-gray-900">View Orders</span>
+                <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
+              </Button>
+            </Link>
 
-              <Link href="/wishlist">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start h-12 hover:bg-red-50 hover:border-red-200 transition-colors"
-                >
-                  <Heart className="mr-3 h-4 w-4 text-red-500" />
-                  <span className="font-medium">Wishlist</span>
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Button>
-              </Link>
+            <Link href="/user/notifications">
+              <Button
+                variant="outline"
+                className="w-full justify-start h-12 bg-white hover:bg-purple-50/60 border-gray-200/80 rounded-xl transition-colors"
+              >
+                <Bell className="mr-3 h-4 w-4 text-purple-500" />
+                <span className="font-medium text-gray-900">Notifications</span>
+                {stats.unreadNotifications > 0 && (
+                  <Badge variant="destructive" className="ml-auto">
+                    {stats.unreadNotifications}
+                  </Badge>
+                )}
+                {stats.unreadNotifications === 0 && (
+                  <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
+                )}
+              </Button>
+            </Link>
 
-              <Link href="/user/profile">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start h-12 hover:bg-green-50 hover:border-green-200 transition-colors"
-                >
-                  <User className="mr-3 h-4 w-4 text-green-500" />
-                  <span className="font-medium">Profile Settings</span>
-                  <ArrowRight className="ml-auto h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+            <Link href="/wishlist">
+              <Button
+                variant="outline"
+                className="w-full justify-start h-12 bg-white hover:bg-purple-50/60 border-gray-200/80 rounded-xl transition-colors"
+              >
+                <Heart className="mr-3 h-4 w-4 text-red-500" />
+                <span className="font-medium text-gray-900">Wishlist</span>
+                <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
+              </Button>
+            </Link>
+
+            <Link href="/user/profile">
+              <Button
+                variant="outline"
+                className="w-full justify-start h-12 bg-white hover:bg-purple-50/60 border-gray-200/80 rounded-xl transition-colors"
+              >
+                <User className="mr-3 h-4 w-4 text-green-500" />
+                <span className="font-medium text-gray-900">Profile Settings</span>
+                <ArrowRight className="ml-auto h-4 w-4 text-gray-400" />
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

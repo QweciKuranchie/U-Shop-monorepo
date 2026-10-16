@@ -770,91 +770,69 @@ export default function AuthSwitch({
         }
 
         @media (max-width: 870px) {
-          .auth-switch .container {
-            min-height: 720px;
-            height: auto;
-            max-height: 94vh;
-          }
-          .auth-switch .signin-signup {
-            width: 100%;
-            top: 92%;
-            transform: translate(-50%, -100%);
-            transition: 1s 0.8s ease-in-out;
-          }
-          .auth-switch .signin-signup,
-          .auth-switch .container.sign-up-mode .signin-signup {
-            left: 50%;
+          .auth-switch .container:before {
+            display: none !important;
           }
           .auth-switch .panels-container {
-            grid-template-columns: 1fr;
-            grid-template-rows: 1fr 2fr 1fr;
+            display: none !important;
           }
-          .auth-switch .panel {
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            padding: 1.8rem 8%;
-            grid-column: 1 / 2;
+          .auth-switch .container {
+            min-height: auto !important;
+            height: auto !important;
+            max-height: none !important;
+            width: 100% !important;
+            max-width: 460px !important;
+            margin: 1.5rem auto !important;
+            padding: 1.5rem 0.25rem !important;
+            border-radius: 1.75rem !important;
+            overflow: visible !important;
+            box-shadow: 0 12px 40px -12px rgba(82, 15, 133, 0.3) !important;
           }
-          .auth-switch .right-panel {
-            grid-row: 3 / 4;
+          .auth-switch .signin-signup {
+            position: static !important;
+            width: 100% !important;
+            top: auto !important;
+            left: auto !important;
+            transform: none !important;
+            transition: none !important;
+            height: auto !important;
           }
-          .auth-switch .left-panel {
-            grid-row: 1 / 2;
+          .auth-switch form {
+            position: static !important;
+            transform: none !important;
+            width: 100% !important;
+            padding: 0.5rem 1.25rem !important;
+            transition: none !important;
+            min-height: auto !important;
           }
-          .auth-switch .panel .content {
-            padding-right: 8%;
-            transition: transform 0.9s ease-in-out;
-            transition-delay: 0.8s;
+          .auth-switch form.sign-in-form {
+            display: flex !important;
+            opacity: 1 !important;
+            pointer-events: all !important;
           }
-          .auth-switch .panel h3 {
-            font-size: 1.25rem;
+          .auth-switch form.sign-up-form {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
           }
-          .auth-switch .panel p {
-            font-size: 0.75rem;
-            padding: 0.3rem 0;
+          .auth-switch .container.sign-up-mode form.sign-in-form {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
           }
-          .auth-switch .btn.transparent {
-            width: 110px;
-            height: 36px;
-            font-size: 0.75rem;
-          }
-          .auth-switch .container:before {
-            width: 1500px;
-            height: 1500px;
-            transform: translateX(-50%);
-            left: 30%;
-            bottom: 68%;
-            right: initial;
-            top: initial;
-            transition: 2s ease-in-out;
-          }
-          .auth-switch .container.sign-up-mode:before {
-            transform: translate(-50%, 100%);
-            bottom: 32%;
-            right: initial;
-          }
-          .auth-switch .container.sign-up-mode .left-panel .content {
-            transform: translateY(-300px);
-          }
-          .auth-switch .container.sign-up-mode .right-panel .content {
-            transform: translateY(0px);
-          }
-          .auth-switch .right-panel .content {
-            transform: translateY(300px);
-          }
-          .auth-switch .container.sign-up-mode .signin-signup {
-            top: 8%;
-            transform: translate(-50%, 0);
+          .auth-switch .container.sign-up-mode form.sign-up-form {
+            display: flex !important;
+            opacity: 1 !important;
+            pointer-events: all !important;
           }
         }
 
         @media (max-width: 570px) {
           .auth-switch form {
-            padding: 1rem 1.25rem;
+            padding: 0.5rem 0.75rem !important;
           }
-          .auth-switch .panel .content {
-            padding: 0.3rem 0.6rem;
+          .auth-switch .input-field {
+            max-width: 100% !important;
           }
         }
       `}</style>

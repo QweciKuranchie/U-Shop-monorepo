@@ -112,8 +112,8 @@ const CardList = async ({ title }: { title: string }) => {
           ) : (
             <p className="text-sm text-muted-foreground py-4 text-center">No products found</p>
           )
-        ) : orders.length > 0 ? (
-          orders.map((item: any) => (
+        ) : (orders || []).length > 0 ? (
+          (orders || []).map((item: any) => (
             <Card
               key={item._id}
               className="flex flex-row items-center justify-between gap-4 p-3 hover:bg-accent/50 transition-colors"

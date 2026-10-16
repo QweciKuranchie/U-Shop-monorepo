@@ -354,6 +354,7 @@ export interface SanityOrder {
   address?: SanityOrderAddress;
   shippingAddress?: SanityOrderAddress;
   subtotal?: number;
+  discount?: number;
   tax?: number;
   shipping?: number;
   totalPrice?: number;

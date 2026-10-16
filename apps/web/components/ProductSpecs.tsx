@@ -1,8 +1,7 @@
 "use client";
 
 import { Product } from "@repo/sanity";
-import {  Card, CardContent, CardHeader, CardTitle  } from "@repo/ui";
-import {  Badge  } from "@repo/ui";
+import { Badge } from "@repo/ui";
 import { FREE_SHIPPING_THRESHOLD, MIN_SHIPPING_FEE } from "@repo/utils/pricing";
 import { Package, Truck, Shield, Award } from "lucide-react";
 
@@ -45,20 +44,19 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
   const hasWarranty =
     (listing.warrantyType === "seller_warranty" || listing.warrantyType === "manufacturer_warranty") &&
     Boolean(listing.warrantyDuration);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
       {/* Product Features */}
-      <Card className="border-2 border-gray-100 hover:border-ushop-pink/30 transition-colors">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-ushop-pink" />
-            <CardTitle className="text-sm font-semibold">
-              Product Info
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="flex justify-between text-sm">
+      <div className="bg-zinc-50/80 rounded-xl p-4.5 space-y-3 transition-colors hover:bg-zinc-100/60">
+        <div className="flex items-center gap-2">
+          <Package className="h-5 w-5 text-ushop-pink" />
+          <h3 className="text-sm font-semibold text-gray-900">
+            Product Info
+          </h3>
+        </div>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
             <span className="text-gray-600">Stock:</span>
             <Badge
               variant={product?.stock === 0 ? "destructive" : "default"}
@@ -74,7 +72,7 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
             </Badge>
           </div>
           {Boolean(product?.brand || (product as unknown as Record<string, unknown>)?.brandName) && (
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between">
               <span className="text-gray-600">Brand:</span>
               <span className="font-medium">
                 {((product?.brand as unknown as Record<string, string>)?.name) ||
@@ -84,42 +82,38 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
               </span>
             </div>
           )}
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between">
             <span className="text-gray-600">SKU:</span>
             <span className="font-medium text-xs text-gray-500">
               #{product?.slug?.current?.slice(-8).toUpperCase()}
             </span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Shipping Info */}
-      <Card className="border-2 border-gray-100 hover:border-ushop-pink/30 transition-colors">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <Truck className="h-5 w-5 text-ushop-pink" />
-            <CardTitle className="text-sm font-semibold">Shipping</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+      <div className="bg-zinc-50/80 rounded-xl p-4.5 space-y-3 transition-colors hover:bg-zinc-100/60">
+        <div className="flex items-center gap-2">
+          <Truck className="h-5 w-5 text-ushop-pink" />
+          <h3 className="text-sm font-semibold text-gray-900">Shipping</h3>
+        </div>
+        <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2">
             <span className="text-emerald-600 font-medium">
               Free on orders of GH₵{FREE_SHIPPING_THRESHOLD}+
             </span>
           </div>
           <div className="text-gray-600">Delivery from GH₵{MIN_SHIPPING_FEE}, shown at checkout</div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Warranty: comes from the seller's listing, never hardcoded */}
-      <Card className="border-2 border-gray-100 hover:border-ushop-pink/30 transition-colors">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-ushop-pink" />
-            <CardTitle className="text-sm font-semibold">Warranty</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+      <div className="bg-zinc-50/80 rounded-xl p-4.5 space-y-3 transition-colors hover:bg-zinc-100/60">
+        <div className="flex items-center gap-2">
+          <Shield className="h-5 w-5 text-ushop-pink" />
+          <h3 className="text-sm font-semibold text-gray-900">Warranty</h3>
+        </div>
+        <div className="space-y-2 text-sm">
           {hasWarranty ? (
             <div className="text-gray-600">
               <span className="font-medium text-ushop-purple">
@@ -138,18 +132,16 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
             Return Policy (defective items)
           </div>
           {listing.freeTechSupport && <div className="text-gray-600">Free Tech Support from the seller</div>}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Trust: only facts that come from the listing and the seller's store */}
-      <Card className="border-2 border-gray-100 hover:border-ushop-pink/30 transition-colors">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-ushop-pink" />
-            <CardTitle className="text-sm font-semibold">Condition & Seller</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm">
+      <div className="bg-zinc-50/80 rounded-xl p-4.5 space-y-3 transition-colors hover:bg-zinc-100/60">
+        <div className="flex items-center gap-2">
+          <Award className="h-5 w-5 text-ushop-pink" />
+          <h3 className="text-sm font-semibold text-gray-900">Condition & Seller</h3>
+        </div>
+        <div className="space-y-2 text-sm">
           {condition && (
             <div className="flex justify-between">
               <span className="text-gray-600">Condition:</span>
@@ -165,8 +157,8 @@ const ProductSpecs = ({ product }: ProductSpecsProps) => {
           <p className="text-xs text-gray-500">
             Check the seller&apos;s reviews below and pay securely through UShop checkout.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

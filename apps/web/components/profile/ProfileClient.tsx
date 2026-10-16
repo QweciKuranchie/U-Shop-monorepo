@@ -202,10 +202,10 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="space-y-8">
       {/* Profile Header */}
-      <Card className="shadow-lg border border-ushop-pink/15">
-        <CardHeader className="pb-4">
+      <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-6">
+        <div>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-4">
               <Avatar className="h-16 w-16 border-2 border-ushop-pink/30">
@@ -241,8 +241,8 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
               <span>Edit Profile</span>
             </Button>
           </div>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center space-x-3 p-3 bg-ushop_light_pink/40 rounded-xl border border-ushop-pink/10">
               <div className="p-2 bg-ushop-purple text-white rounded-lg">
@@ -285,20 +285,20 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Account Information */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Personal Information */}
-        <Card className="shadow-lg border border-ushop-pink/15">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-ushop-purple-dark">
+        <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-4">
+          <div>
+            <div className="flex items-center space-x-2 text-ushop-purple-dark font-bold text-lg">
               <User className="h-5 w-5 text-ushop-pink" />
               <span>Personal Information</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+            </div>
+          </div>
+          <div className="space-y-4">
             <div className="space-y-3">
               <div>
                 <label className="text-sm font-medium text-gray-500">
@@ -367,18 +367,18 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
                 </>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Account Stats */}
-        <Card className="shadow-lg border border-ushop-pink/15">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-ushop-purple-dark">
+        <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-4">
+          <div>
+            <div className="flex items-center space-x-2 text-ushop-purple-dark font-bold text-lg">
               <Shield className="h-5 w-5 text-ushop-pink" />
               <span>Account Overview</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+            </div>
+          </div>
+          <div>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3.5 bg-ushop_light_pink/40 rounded-xl border border-ushop-pink/10">
                 <span className="text-gray-700 font-medium">Reward Points</span>
@@ -410,21 +410,21 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
                 </span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Shipping Addresses */}
-      <Card className="shadow-lg border border-ushop-pink/15">
-        <CardHeader>
+      <div className="bg-zinc-50/70 rounded-2xl p-6 space-y-4">
+        <div>
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <CardTitle className="flex items-center space-x-2 text-ushop-purple-dark">
+            <div className="flex items-center space-x-2 text-ushop-purple-dark font-bold text-lg">
               <MapPin className="h-5 w-5 text-ushop-pink" />
               <span>Shipping Addresses</span>
               {loadingAddresses && (
                 <Loader2 className="w-4 h-4 text-ushop-pink animate-spin ml-2" />
               )}
-            </CardTitle>
+            </div>
             <Button
               onClick={handleAddAddress}
               className="bg-ushop-pink hover:bg-ushop-magenta text-white font-semibold shadow-sm transition-all flex items-center space-x-2 px-5 py-2.5 rounded-xl"
@@ -433,11 +433,11 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
               <span>Add Address</span>
             </Button>
           </div>
-        </CardHeader>
-        <CardContent>
-          {addresses.length > 0 ? (
+        </div>
+        <div>
+          {(addresses || []).length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {addresses.map((address) => (
+              {(addresses || []).map((address) => (
                 <div
                   key={address._id || address.name}
                   className="border border-gray-200 rounded-xl p-5 space-y-3 hover:shadow-md hover:border-ushop-pink/30 transition-all bg-white flex flex-col justify-between"
@@ -518,8 +518,8 @@ export default function ProfileClient({ userData }: ProfileClientProps) {
               </Button>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Profile Edit Sidebar */}
       {profileSidebarOpen && (
