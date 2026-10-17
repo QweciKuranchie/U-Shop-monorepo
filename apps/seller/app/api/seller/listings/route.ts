@@ -1,5 +1,7 @@
 import { createServerClient } from "@repo/supabase/server";
 import { client, writeClient } from "@repo/sanity";
+import { normalizeListingScalars } from "@repo/utils";
+import { requireActiveStore } from "@/lib/activeStore";
 import { SELLER_STORE_QUERY, SELLER_LISTINGS_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { parseMedia } from "@/lib/media";
@@ -24,38 +26,37 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const guard = await requireActiveStore();
+  if (guard instanceof NextResponse) return guard;
+  const { store } = guard;
 
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const store = await client.fetch(SELLER_STORE_QUERY, { userId: user.id });
-  if (!store) return NextResponse.json({ error: "Store not found" }, { status: 404 });
-
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+  const scalars = normalizeListingScalars({ ...body, name: body.name });
+  if (!scalars.ok) return NextResponse.json({ error: scalars.error }, { status: 400 });
   const media = parseMedia(body);
   if ("error" in media) return NextResponse.json({ error: media.error }, { status: 400 });
   if (!media.data.images) return NextResponse.json({ error: "Add at least one product image" }, { status: 400 });
   const warranty = parseWarranty(body);
   if ("error" in warranty) return NextResponse.json({ error: warranty.error }, { status: 400 });
   const sellerPrice = roundMoney(Number(body.price));
-  if (!Number.isFinite(sellerPrice) || sellerPrice <= 0) {
-    return NextResponse.json({ error: "Enter a price greater than 0" }, { status: 400 });
+  if (!Number.isFinite(sellerPrice) || sellerPrice <= 0 || sellerPrice > 1_000_000) {
+    return NextResponse.json({ error: "Enter a price between 0.01 and 1,000,000" }, { status: 400 });
   }
-  const slug = (body.name || "product").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const slug = String(scalars.data.name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "product";
 
   const product = await writeClient.create({
     _type: "product",
-    name: body.name,
+    name: scalars.data.name,
     slug: { _type: "slug", current: slug },
     sellerPrice,
     price: buyerPriceFromSellerPrice(sellerPrice),
-    discount: Number(body.discount || 0),
-    stock: Number(body.stock || 1),
-    condition: body.condition || "new",
-    description: body.description || "",
+    discount: scalars.data.discount ?? 0,
+    stock: scalars.data.stock ?? 1,
+    condition: scalars.data.condition || "new",
+    description: scalars.data.description ?? "",
     ...media.data,
     ...warranty.data,
     store: { _type: "reference", _ref: store._id },

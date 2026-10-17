@@ -29,7 +29,8 @@ export async function uploadToImageKit(
   filename: string,
   folder: string
 ): Promise<string | null> {
-  return uploadFileToImageKit(fileBuffer, filename, `/ushop/kyc/${folder}`);
+  // National ID / student ID / business registration: never on the public CDN.
+  return uploadFileToImageKit(fileBuffer, filename, `/ushop/kyc/${folder}`, { isPrivate: true });
 }
 
 /**

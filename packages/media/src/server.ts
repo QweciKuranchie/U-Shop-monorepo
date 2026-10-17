@@ -25,7 +25,8 @@ export function getImageKitAuthParams(): ImageKitAuthParams {
 export async function uploadFileToImageKit(
   fileBuffer: Buffer,
   fileName: string,
-  folder: string
+  folder: string,
+  options: { isPrivate?: boolean } = {}
 ): Promise<string | null> {
   const privateKey = process.env.IMAGEKIT_PRIVATE_KEY;
   if (!privateKey) {
@@ -42,6 +43,9 @@ export async function uploadFileToImageKit(
       fileName,
       folder,
       useUniqueFileName: true,
+      // Private files are not served from the public CDN URL; they need a signed
+      // URL. Required for identity documents.
+      ...(options.isPrivate ? { isPrivateFile: true } : {}),
     });
 
     return response.url ?? null;

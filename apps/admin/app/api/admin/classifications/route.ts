@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logAdminAction } from "@/lib/adminLog";
 import { client, writeClient } from "@repo/sanity";
-import { auth } from "@clerk/nextjs/server";
+import { requireAdminApi } from "@/lib/adminApi";
 
 export async function GET() {
   try {
@@ -33,13 +33,15 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Was `auth()` only: ANY signed-in Clerk account (every customer) could create
+    // product classifications. Writes require an administrator.
+    const guard = await requireAdminApi();
+    if (guard instanceof NextResponse) return guard;
+    const userId = guard.userId;
 
-    const body = await req.json();
-    const { title, slug } = body;
+    const body = await req.json().catch(() => null);
+    const title = typeof body?.title === "string" ? body.title.trim().slice(0, 120) : "";
+    const slug = typeof body?.slug === "string" ? body.slug.slice(0, 120) : undefined;
 
     if (!title) {
       return NextResponse.json(

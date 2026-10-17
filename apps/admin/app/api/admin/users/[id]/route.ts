@@ -49,6 +49,9 @@ export async function DELETE(
     }
 
     const { id } = await params;
+    if (id === userId) {
+      return NextResponse.json({ error: "You cannot delete your own account" }, { status: 400 });
+    }
     const client = await clerkClient();
     await client.users.deleteUser(id);
     await logAdminAction("warn", "User deleted", { targetUserId: id }, userId);
@@ -80,9 +83,23 @@ export async function PATCH(
     }
 
     const { id } = await params;
-    const body = await req.json();
+    const body = await req.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+    // Only profile fields are editable here. The raw body used to be forwarded to
+    // Clerk, so this endpoint could also set passwords, primary emails, metadata
+    // (admin role!) and ban state. Roles go through /users/[id]/role, which logs it.
+    const updates: { firstName?: string; lastName?: string; username?: string } = {};
+    for (const key of ["firstName", "lastName", "username"] as const) {
+      if (typeof body[key] === "string") updates[key] = body[key].trim().slice(0, 80);
+    }
+    if (Object.keys(updates).length === 0) {
+      return NextResponse.json({ error: "No editable fields provided" }, { status: 400 });
+    }
     const client = await clerkClient();
-    const updatedUser = await client.users.updateUser(id, body);
+    const updatedUser = await client.users.updateUser(id, updates);
+    await logAdminAction("info", "User profile updated", { targetUserId: id, fields: Object.keys(updates) }, userId);
 
     return NextResponse.json(updatedUser);
   } catch (error: unknown) {

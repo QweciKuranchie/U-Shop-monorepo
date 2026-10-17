@@ -10,13 +10,23 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { firstName, lastName, phone, dateOfBirth, clerkUserId } = body;
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+    // Identity is the verified session, NEVER a `clerkUserId` from the body: that
+    // let any signed-in user overwrite another customer's name, phone and DOB.
+    const text = (v: unknown, max: number) =>
+      typeof v === "string" ? v.trim().slice(0, max) : undefined;
+    const firstName = text(body.firstName, 80);
+    const lastName = text(body.lastName, 80);
+    const phone = text(body.phone, 30);
+    const dateOfBirth = text(body.dateOfBirth, 10);
 
     // Update or create user in Sanity
     const sanityUser = {
       _type: "user",
-      clerkUserId: clerkUserId || userId,
+      clerkUserId: userId,
       email: "", // We'll get this from Clerk
       firstName,
       lastName,
@@ -28,7 +38,7 @@ export async function PUT(request: NextRequest) {
     // Check if user exists in Sanity
     const existingUser = await backendClient.fetch(
       `*[_type == "user" && clerkUserId == $clerkUserId][0]`,
-      { clerkUserId: clerkUserId || userId }
+      { clerkUserId: userId }
     );
 
     let result;
