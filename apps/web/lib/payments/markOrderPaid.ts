@@ -2,6 +2,7 @@ import { writeClient } from "@repo/sanity";
 import { sendOrderConfirmationEmail } from "@/lib/emailService";
 import { sendOrderStatusNotification } from "@/lib/notificationService";
 import { ORDER_STATUSES, PAYMENT_STATUSES } from "@/lib/orderStatus";
+import { addWalletCredit } from "@/lib/wallet/walletService";
 import { buildOrderConfirmationData, type OrderForEmail } from "@/lib/orders/orderEmail";
 
 export interface PaidCharge {
@@ -63,12 +64,52 @@ export async function markOrderPaid(
   charge: PaidCharge
 ): Promise<{ transitioned: boolean }> {
   for (let attempt = 0; attempt < 4; attempt++) {
-    const current = await writeClient.fetch<{ _rev: string; paymentStatus?: string } | null>(
-      `*[_type == "order" && _id == $orderId][0]{ _rev, paymentStatus }`,
+    const current = await writeClient.fetch<{ _rev: string; paymentStatus?: string; orderStatus?: string; clerkUserId?: string; orderNumber?: string } | null>(
+      `*[_type == "order" && _id == $orderId][0]{ _rev, paymentStatus, orderStatus, clerkUserId, orderNumber }`,
       { orderId }
     );
     if (!current) return { transitioned: false };
     if (current.paymentStatus === PAYMENT_STATUSES.PAID) return { transitioned: false };
+
+    // The customer cancelled while a payment was in flight. Record the money but
+    // do NOT reopen the order or fire "paid" side effects: flag it for a refund.
+    if (current.orderStatus === ORDER_STATUSES.CANCELLED) {
+      console.error("Payment received for a CANCELLED order; refund required", { orderId, ...charge, rawPayload: undefined });
+      try {
+        await writeClient
+          .patch(orderId)
+          .ifRevisionId(current._rev)
+          .set({
+            paymentStatus: PAYMENT_STATUSES.PAID,
+            paystackReference: charge.reference,
+            paystackTransactionId: String(charge.transactionId),
+            amountPaid: charge.amountPesewas / 100,
+            paidAt: new Date().toISOString(),
+            refundRequired: true,
+          })
+          .commit();
+        // Give the money back right away (idempotent per order). If that fails the
+        // `refundRequired` flag above is the reconciliation trail.
+        if (current.clerkUserId) {
+          const credit = await addWalletCredit(
+            current.clerkUserId,
+            charge.amountPesewas / 100,
+            `Refund: payment received after order #${current.orderNumber ?? orderId} was cancelled`,
+            orderId,
+            "system"
+          );
+          if (credit.success) {
+            await writeClient.patch(orderId).set({ refundRequired: false }).commit().catch(() => undefined);
+          } else {
+            console.error("Auto-refund to wallet failed; manual refund required", { orderId, message: credit.message });
+          }
+        }
+        return { transitioned: false };
+      } catch (error) {
+        if (isRevisionConflict(error)) continue;
+        throw error;
+      }
+    }
 
     try {
       await writeClient

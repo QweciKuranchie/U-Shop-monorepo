@@ -43,10 +43,10 @@ export async function POST(req: NextRequest) {
     }
 
     const order = await writeClient.fetch<{
-      _id: string; orderNumber?: string; totalPrice?: number; amountPaid?: number;
+      _id: string; _rev: string; orderNumber?: string; totalPrice?: number; amountPaid?: number;
       paymentStatus?: string; orderStatus?: string; clerkUserId?: string;
     } | null>(
-      `*[_type == "order" && _id == $orderId][0]{ _id, orderNumber, totalPrice, amountPaid, paymentStatus, orderStatus, clerkUserId }`,
+      `*[_type == "order" && _id == $orderId][0]{ _id, _rev, orderNumber, totalPrice, amountPaid, paymentStatus, orderStatus, clerkUserId }`,
       { orderId }
     );
 
@@ -55,8 +55,13 @@ export async function POST(req: NextRequest) {
     if (order.orderStatus === "cancelled") {
       return NextResponse.json({ error: "Order is already cancelled" }, { status: 400 });
     }
-    if (["delivered", "completed"].includes(order.orderStatus ?? "")) {
-      return NextResponse.json({ error: "Cannot cancel delivered or completed orders" }, { status: 400 });
+    // Once goods have left the seller, "cancel" would refund a parcel the buyer is
+    // about to receive. Those go through support (returns), like the admin flow.
+    if (["shipped", "out_for_delivery", "delivered", "completed"].includes(order.orderStatus ?? "")) {
+      return NextResponse.json(
+        { error: "This order has already shipped. Please contact support to arrange a return." },
+        { status: 400 }
+      );
     }
 
     // Refund only what was really paid.
@@ -77,10 +82,24 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    await writeClient
-      .patch(orderId)
-      .set({ orderStatus: "cancelled", cancelledAt: new Date().toISOString(), cancelledBy: userId })
-      .commit();
+    // Revision-guarded: if a payment landed (or the order moved) between our read
+    // and this write, Sanity answers 409 instead of cancelling an order whose
+    // payment status we have not seen, which would take the money with no refund.
+    try {
+      await writeClient
+        .patch(orderId)
+        .ifRevisionId(order._rev)
+        .set({ orderStatus: "cancelled", cancelledAt: new Date().toISOString(), cancelledBy: userId })
+        .commit();
+    } catch (error) {
+      if ((error as { statusCode?: number })?.statusCode === 409) {
+        return NextResponse.json(
+          { error: "Your order just changed. Please refresh and try again." },
+          { status: 409 }
+        );
+      }
+      throw error;
+    }
 
     return NextResponse.json(
       {
