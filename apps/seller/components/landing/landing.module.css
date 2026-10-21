@@ -117,7 +117,7 @@
 }
 .brand img {
   display: block;
-  width: 136px;
+  width: 104px;
   height: auto;
 }
 .brand span {
@@ -1911,7 +1911,7 @@
     gap: 4px;
   }
   .brand img {
-    width: 106px;
+    width: 84px;
   }
   .brandDesktopLabel {
     display: none;
