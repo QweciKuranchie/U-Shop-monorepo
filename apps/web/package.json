@@ -29,7 +29,7 @@
     "db:seed-all": "tsx scripts/seed-all.ts",
     "db:nuke": "tsx scripts/nuke-content.ts",
     "typegen": "pnpm dlx sanity@latest schema extract && pnpm dlx sanity@latest typegen generate",
-    "test": "node --import tsx --test \"lib/**/*.test.ts\""
+    "test": "node --conditions=import --import tsx --test \"lib/**/*.test.ts\""
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

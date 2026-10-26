@@ -6,6 +6,7 @@ import { addWalletCredit } from "@/lib/wallet/walletService";
 import { verifyIsAdmin } from "@repo/auth";
 import { sendOrderStatusNotification } from "@/lib/notificationService";
 import { revalidatePath } from "next/cache";
+import { releaseStock } from "@/lib/orders/stock";
 
 /**
  * Admin: Approve cancellation request and cancel order with refund
@@ -105,6 +106,7 @@ export async function approveCancellationRequest(
         cancellationRequested: false,
       })
       .commit();
+    await releaseStock(orderId).catch((e) => console.error("releaseStock failed for", orderId, e));
 
     // Send notification to customer
     try {
@@ -333,6 +335,7 @@ export async function cancelOrder(
         refundAmount: walletRefunded ? refundAmount : 0,
       })
       .commit();
+    await releaseStock(orderId).catch((e) => console.error("releaseStock failed for", orderId, e));
 
     // Send notification to customer
     try {

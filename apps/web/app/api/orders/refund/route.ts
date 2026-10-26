@@ -4,6 +4,7 @@ import { checkRateLimitByKey } from "@repo/utils/rate-limit";
 import { getAuthUser } from "@/lib/getAuthUser";
 import { PAYMENT_STATUSES } from "@/lib/orderStatus";
 import { addWalletCredit } from "@/lib/wallet/walletService";
+import { releaseStock } from "@/lib/orders/stock";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -100,6 +101,10 @@ export async function POST(req: NextRequest) {
       }
       throw error;
     }
+
+    // The order no longer needs its reserved stock (idempotent; best effort so a
+    // hiccup here never turns a completed cancellation into an error).
+    await releaseStock(orderId, userId).catch((e) => console.error("releaseStock failed for", orderId, e));
 
     return NextResponse.json(
       {

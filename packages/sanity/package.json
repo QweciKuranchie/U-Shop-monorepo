@@ -11,6 +11,10 @@
       "import": "./src/client.ts",
       "types": "./src/client.ts"
     },
+    "./order-stock": {
+      "import": "./src/orderStock.ts",
+      "types": "./src/orderStock.ts"
+    },
     "./env": {
       "import": "./src/env.ts",
       "types": "./src/env.ts"

@@ -34,27 +34,6 @@ export async function uploadToImageKit(
 }
 
 /**
- * Uploads a KYC document to Sanity asset storage (if configured)
- */
-export async function uploadToSanityAsset(
-  fileBuffer: Buffer,
-  filename: string,
-  contentType: string
-): Promise<string | null> {
-  try {
-    const assetType = contentType.startsWith("image/") ? "image" : "file";
-    const asset = await backendClient.assets.upload(assetType, fileBuffer, {
-      filename,
-      contentType,
-    });
-    return asset._id ?? null;
-  } catch (err) {
-    console.error("Sanity asset upload error:", err);
-    return null;
-  }
-}
-
-/**
  * Syncs the store record from Supabase into Sanity CMS as a store document
  */
 export async function syncStoreToSanity(params: SyncStoreParams): Promise<string | null> {
