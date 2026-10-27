@@ -1,32 +1,19 @@
-import { createServerClient } from "@repo/supabase/server";
 import { client, writeClient } from "@repo/sanity";
-import { SELLER_STORE_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
-import { omitProtectedFields } from "@repo/utils";
+import { pickAllowedFields, normalizeListingScalars, SELLER_LISTING_FIELDS } from "@repo/utils";
+import { requireActiveStore } from "@/lib/activeStore";
 import { parseMedia } from "@/lib/media";
 import { buyerPriceFromSellerPrice } from "@repo/utils/platform-fee";
 import { roundMoney } from "@repo/utils/pricing";
 import { parseWarranty } from "@/lib/warranty";
 
-// Fields a seller must not set on their own listing: ownership, merchandising
-// controlled by U-Shop, and review-derived aggregates.
-const PROTECTED_PRODUCT_FIELDS = ["sellerPrice", "store", "featured", "averageRating", "totalReviews", "ratingDistribution"];
-
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const store = await client.fetch(SELLER_STORE_QUERY, { userId: user.id });
-  if (!store) {
-    return NextResponse.json({ error: "Store not found" }, { status: 404 });
-  }
+  const guard = await requireActiveStore();
+  if (guard instanceof NextResponse) return guard;
+  const { store } = guard;
 
   const { id } = await params;
 
@@ -39,15 +26,20 @@ export async function PATCH(
     return NextResponse.json({ error: "Not found or not authorized" }, { status: 404 });
   }
 
-  const updates = omitProtectedFields(await request.json().catch(() => null), PROTECTED_PRODUCT_FIELDS);
+  // Allow-list: anything not named in SELLER_LISTING_FIELDS (ownership, deal
+  // flags, status, slug, ratings, sellerPrice…) is silently ignored.
+  const updates = pickAllowedFields(await request.json().catch(() => null), SELLER_LISTING_FIELDS);
   if (!updates || Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "No permitted fields to update" }, { status: 400 });
   }
+  const scalars = normalizeListingScalars(updates);
+  if (!scalars.ok) return NextResponse.json({ error: scalars.error }, { status: 400 });
+  Object.assign(updates, scalars.data);
   // The seller sends their own price; the listing price adds the 8% platform fee.
   if ("price" in updates) {
     const sellerPrice = roundMoney(Number((updates as Record<string, unknown>).price));
-    if (!Number.isFinite(sellerPrice) || sellerPrice <= 0) {
-      return NextResponse.json({ error: "Enter a price greater than 0" }, { status: 400 });
+    if (!Number.isFinite(sellerPrice) || sellerPrice <= 0 || sellerPrice > 1_000_000) {
+      return NextResponse.json({ error: "Enter a price between 0.01 and 1,000,000" }, { status: 400 });
     }
     Object.assign(updates, { sellerPrice, price: buyerPriceFromSellerPrice(sellerPrice) });
   }
@@ -80,17 +72,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const store = await client.fetch(SELLER_STORE_QUERY, { userId: user.id });
-  if (!store) {
-    return NextResponse.json({ error: "Store not found" }, { status: 404 });
-  }
+  const guard = await requireActiveStore();
+  if (guard instanceof NextResponse) return guard;
+  const { store } = guard;
 
   const { id } = await params;
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeClient } from "@repo/sanity";
+import { writeClient, releaseStock } from "@repo/sanity";
 import { ORDER_STATUS_VALUES } from "@repo/utils";
 import { requireAdminApi } from "@/lib/adminApi";
 import { logAdminAction } from "@/lib/adminLog";
@@ -57,6 +57,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (orderStatus !== undefined) patch.orderStatus = orderStatus;
     if (paymentStatus !== undefined) patch.paymentStatus = paymentStatus;
     const updated = await writeClient.patch(id).set(patch).commit();
+    // Cancelling returns the stock that was reserved when the order was placed.
+    if (orderStatus === "cancelled" && current.orderStatus !== "cancelled") {
+      await releaseStock(id, guard.userId).catch((e) => console.error("releaseStock failed for", id, e));
+    }
 
     await logAdminAction(
       "info",

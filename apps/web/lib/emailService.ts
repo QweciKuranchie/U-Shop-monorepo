@@ -1,4 +1,10 @@
 import { Resend } from "resend";
+import { escapeHtml } from "@/lib/newsletterToken";
+
+// User- and seller-controlled text (names, product titles, addresses, notes) must
+// be escaped before it goes into an HTML email we send from our own domain;
+// otherwise a product titled `<a href=phish>` becomes a link in a U-Shop receipt.
+const esc = (v: unknown): string => escapeHtml(String(v ?? ""));
 
 let resendInstance: Resend | null = null;
 
@@ -176,9 +182,9 @@ const sendOrderStatusEmail = async (
       <p>UShop Order Update</p>
     </div>
     <div class="content">
-      <p>Hi ${customerName},</p>
+      <p>Hi ${esc(customerName)},</p>
       <div class="status-box">
-        <p>${bodyText}</p>
+        <p>${esc(bodyText)}</p>
       </div>
       <p>You can track your order at <a href="${baseUrl}/user/orders">My Orders</a>.</p>
       <p>Thank you for shopping with UShop!</p>
@@ -633,7 +639,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
         <div class="content">
             <!-- Greeting -->
             <div class="greeting">
-                <h2>Hi ${data.customerName}!</h2>
+                <h2>Hi ${esc(data.customerName)}!</h2>
                 <p>We're excited to let you know that your order has been confirmed and is being prepared for shipment. You'll receive another email when your order is on its way.</p>
             </div>
             
@@ -661,12 +667,12 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
                                 <td>
                                     ${
                                       item.image
-                                        ? `<img src="${item.image}" alt="${item.name}" class="item-image" />`
+                                        ? `<img src="${esc(item.image)}" alt="${esc(item.name)}" class="item-image" />`
                                         : `<div class="item-image" style="background-color: #e9ecef; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #6c757d;">No Image</div>`
                                     }
                                 </td>
                                 <td>
-                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-name">${esc(item.name)}</div>
                                 </td>
                                 <td style="text-align: center;">
                                     <span class="quantity">${
@@ -709,12 +715,12 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
             <div class="shipping-info">
                 <h3>📦 Shipping Address</h3>
                 <div class="address">
-                    <strong>${data.shippingAddress.name}</strong><br>
-                    ${data.shippingAddress.street}<br>
-                    ${data.shippingAddress.city}, ${
+                    <strong>${esc(data.shippingAddress.name)}</strong><br>
+                    ${esc(data.shippingAddress.street)}<br>
+                    ${esc(data.shippingAddress.city)}, ${esc(
     data.shippingAddress.state
-  } ${data.shippingAddress.zipCode}<br>
-                    ${data.shippingAddress.country}
+  )} ${esc(data.shippingAddress.zipCode)}<br>
+                    ${esc(data.shippingAddress.country)}
                 </div>
             </div>
             

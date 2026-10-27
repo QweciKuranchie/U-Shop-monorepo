@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getImageKitAuthParams } from "@repo/media";
-import { checkRateLimit } from "@repo/utils/rate-limit";
+import { checkRateLimitByKey } from "@repo/utils/rate-limit";
+import { getAuthUser } from "@/lib/getAuthUser";
 
 export async function GET(request: NextRequest) {
+  // The signature lets the holder upload to OUR ImageKit account, so it is only
+  // issued to signed-in users (it used to be public: anyone could use our storage
+  // and bandwidth to host files).
+  const { userId } = await getAuthUser(request);
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
-    const rateLimitError = await checkRateLimit(request, "imagekit-auth", {
+    const rateLimitError = await checkRateLimitByKey(userId, "imagekit-auth", {
       limit: 20,
       windowMs: 60 * 1000,
     });

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { subscribeToNewsletter } from "@/actions/subscriptionActions";
+import { subscribeToNewsletter } from "@/lib/newsletter/subscriptions";
 import { sendMail } from "@/lib/emailService";
 import { checkRateLimit, getClientIp } from "@repo/utils/rate-limit";
 import { escapeHtml, unsubscribeToken } from "@/lib/newsletterToken";

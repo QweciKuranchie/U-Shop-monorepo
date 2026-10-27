@@ -10,8 +10,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { clerkUserId, email, firstName, lastName } = body;
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+    // The request is always filed for the SIGNED-IN user. Taking `clerkUserId`
+    // from the body let anyone file (or pre-empt, via the duplicate check below)
+    // a request in somebody else's name.
+    const clerkUserId = userId;
+    const text = (v: unknown, max: number) =>
+      typeof v === "string" ? v.trim().slice(0, max) : "";
+    const email = text(body.email, 254);
+    const firstName = text(body.firstName, 80);
+    const lastName = text(body.lastName, 80);
 
     // Check if user request already exists
     const existingRequest = await backendClient.fetch(

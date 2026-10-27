@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyIsAdmin } from "@repo/auth";
-import { writeClient } from "@repo/sanity";
+import { writeClient, releaseStock } from "@repo/sanity";
 import { sendOrderStatusNotification } from "@/lib/notificationService";
 import { getAuthUser } from "@/lib/getAuthUser";
 
@@ -89,6 +89,10 @@ export async function POST(
     .patch(orderId)
     .set({ orderStatus: normalizedStatus, updatedAt: new Date().toISOString() })
     .commit();
+
+  if (normalizedStatus === "cancelled" && order.orderStatus !== "cancelled") {
+    await releaseStock(orderId, userId).catch((e) => console.error("releaseStock failed for", orderId, e));
+  }
 
   // Trigger notification pipeline for key milestones
   if (KEY_MILESTONE_STATUSES.has(normalizedStatus)) {

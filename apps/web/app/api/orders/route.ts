@@ -8,6 +8,7 @@ import { getAuthUser } from "@/lib/getAuthUser";
 import { ORDER_STATUSES, PAYMENT_METHODS } from "@/lib/orderStatus";
 import { sendOrderStatusNotification } from "@/lib/notificationService";
 import { buildOrderData, generateOrderNumber } from "@/lib/orders/buildOrderData";
+import { createOrderReservingStock, releaseExpiredReservations } from "@/lib/orders/stock";
 
 /**
  * Order creation is SERVER-AUTHORITATIVE.
@@ -95,6 +96,10 @@ export async function POST(request: NextRequest) {
       wanted.set(line.product._id, (wanted.get(line.product._id) ?? 0) + line.quantity);
     }
     const productIds = [...wanted.keys()];
+
+    // Abandoned, unpaid card/MoMo orders must not keep stock locked: free any that
+    // have expired for these products before we read their stock.
+    await releaseExpiredReservations(productIds).catch((e) => console.error("releaseExpiredReservations:", e));
 
     const clerkEmails = (user.emailAddresses ?? []).map((e) => e.emailAddress.toLowerCase());
 
@@ -214,10 +219,33 @@ export async function POST(request: NextRequest) {
       tax: totals.tax,
     });
 
-    const createdOrder = documentId
-      ? await writeClient.createIfNotExists({ ...orderData, _id: documentId })
-      : await writeClient.create(orderData);
-    const isNewOrder = createdOrder.orderNumber === orderNumber;
+    // Reserve stock and create the order in ONE transaction. Two buyers racing for
+    // the last unit cannot both succeed (the loser gets INSUFFICIENT_STOCK).
+    const reserved = await createOrderReservingStock(
+      documentId ? { ...orderData, _id: documentId } : orderData,
+      wanted,
+      userId
+    );
+    if (!reserved.ok) {
+      if (reserved.code === "PRODUCT_UNAVAILABLE") {
+        return NextResponse.json(
+          { error: "Some items in your cart are no longer available", code: "PRODUCT_UNAVAILABLE" },
+          { status: 409 }
+        );
+      }
+      if (reserved.code === "INSUFFICIENT_STOCK") {
+        return NextResponse.json(
+          { error: `${reserved.names.join(", ")} ${reserved.names.length > 1 ? "have" : "has"} insufficient stock`, code: "INSUFFICIENT_STOCK" },
+          { status: 409 }
+        );
+      }
+      return NextResponse.json(
+        { error: "Lots of people are buying right now. Please try again.", code: "STOCK_BUSY" },
+        { status: 409 }
+      );
+    }
+    const createdOrder = reserved.order;
+    const isNewOrder = reserved.created;
 
     if (isNewOrder) {
       // Off the critical path: the shopper no longer waits on a push notification.

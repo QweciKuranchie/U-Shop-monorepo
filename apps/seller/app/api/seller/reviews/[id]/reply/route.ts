@@ -1,18 +1,14 @@
-import { createServerClient } from "@repo/supabase/server";
 import { client, writeClient } from "@repo/sanity";
-import { SELLER_STORE_QUERY } from "@repo/sanity/queries";
 import { NextRequest, NextResponse } from "next/server";
+import { requireActiveStore } from "@/lib/activeStore";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 /** Returns the seller's store id if the review is on one of their products. */
 async function authorise(id: string): Promise<{ error: NextResponse } | { ok: true }> {
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-
-  const store = await client.fetch(SELLER_STORE_QUERY, { userId: user.id });
-  if (!store) return { error: NextResponse.json({ error: "Store not found" }, { status: 404 }) };
+  const guard = await requireActiveStore();
+  if (guard instanceof NextResponse) return { error: guard };
+  const { store } = guard;
 
   const review = await client.fetch(
     `*[_type == "review" && _id == $id && product->store._ref == $storeId][0]{ _id }`,

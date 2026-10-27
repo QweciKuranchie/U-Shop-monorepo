@@ -4,6 +4,9 @@ import { auth } from "@clerk/nextjs/server";
 import { backendClient } from "@repo/sanity";
 import { v4 as uuidv4 } from "uuid";
 import { debitWallet } from "@/lib/wallet/walletService";
+import { checkRateLimitByKey } from "@repo/utils/rate-limit";
+
+const MIN_WITHDRAWAL = 10;
 
 // Types
 interface WalletTransaction {
@@ -150,19 +153,38 @@ export async function requestWithdrawal(data: {
       return { success: false, message: "Unauthorized" };
     }
 
-    // Validate amount
-    if (data.amount <= 0) {
+    // Rate limit per user: this is a public Server Action.
+    const limited = await checkRateLimitByKey(userId, "wallet:withdraw", { limit: 5, windowMs: 10 * 60_000 });
+    if (limited) return { success: false, message: "Too many requests. Please try again later." };
+
+    // `data` comes from the browser. A non-number (or NaN) used to sail through
+    // the `<= 0` / `< MIN` checks because every comparison with NaN is false.
+    const amount = Math.round(Number(data?.amount) * 100) / 100;
+    if (!Number.isFinite(amount) || amount <= 0) {
       return { success: false, message: "Invalid amount" };
     }
-
-    // Minimum withdrawal amount
-    if (data.amount < 10) {
-      return { success: false, message: "Minimum withdrawal amount is $10" };
+    if (amount < MIN_WITHDRAWAL) {
+      return { success: false, message: `Minimum withdrawal amount is GH₵${MIN_WITHDRAWAL}` };
     }
+    if (!["bank", "paypal", "stripe", "check"].includes(data.method)) {
+      return { success: false, message: "Invalid withdrawal method" };
+    }
+    const clip = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : undefined);
+    const bankDetails = data.bankDetails
+      ? {
+          accountHolderName: clip(data.bankDetails.accountHolderName, 100) ?? "",
+          bankName: clip(data.bankDetails.bankName, 100) ?? "",
+          accountNumber: clip(data.bankDetails.accountNumber, 40) ?? "",
+          routingNumber: clip(data.bankDetails.routingNumber, 40),
+          swiftCode: clip(data.bankDetails.swiftCode, 20),
+        }
+      : undefined;
+    const paypalEmail = clip(data.paypalEmail, 254);
 
     const user = await backendClient.fetch(
       `*[_type == "user" && clerkUserId == $userId][0]{ 
         _id, 
+        _rev,
         walletBalance, 
         withdrawalRequests 
       }`,
@@ -175,22 +197,28 @@ export async function requestWithdrawal(data: {
 
     const currentBalance = user.walletBalance || 0;
 
-    if (currentBalance < data.amount) {
+    // Requests do not move money until an admin pays them out, so the balance
+    // alone does not stop a user filing the same GH₵ many times. Everything still
+    // open counts against what is available.
+    const openTotal = ((user.withdrawalRequests ?? []) as WithdrawalRequest[])
+      .filter((r) => ["pending", "approved", "processing"].includes(r.status))
+      .reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+    const available = Math.round((currentBalance - openTotal) * 100) / 100;
+
+    if (available < amount) {
       return {
         success: false,
-        message: `Insufficient balance. Available: $${currentBalance.toFixed(
-          2
-        )}`,
+        message: `Insufficient balance. Available: GH₵${Math.max(0, available).toFixed(2)}`,
       };
     }
 
     // Create withdrawal request
     const withdrawalRequest: WithdrawalRequest = {
       id: uuidv4(),
-      amount: data.amount,
+      amount,
       method: data.method,
-      bankDetails: data.bankDetails,
-      paypalEmail: data.paypalEmail,
+      bankDetails,
+      paypalEmail,
       status: "pending",
       requestedAt: new Date().toISOString(),
     };
@@ -198,6 +226,7 @@ export async function requestWithdrawal(data: {
     // Add withdrawal request
     await backendClient
       .patch(user._id)
+      .ifRevisionId(user._rev)
       .set({
         withdrawalRequests: [
           withdrawalRequest,
