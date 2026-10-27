@@ -87,7 +87,7 @@ export function AuthShell({ mode, children }: { mode: Mode; children: ReactNode 
     <section className={styles.formSide} aria-label="Seller authentication">
       <header className={styles.header}>
         <Link href="/" className={styles.brand} aria-label="U-Shop Seller Center home">
-          <Image src={landingAsset("asset-ushop-official-logo-desktop-navigation.png")} alt="U-Shop" width={144} height={65} priority />
+          <Image src={landingAsset("asset-ushop-official-logo-desktop-navigation.png")} alt="U-Shop" width={104} height={47} priority />
           <span>SELLER CENTER</span>
         </Link>
         <Link href="/" className={styles.back}><ArrowLeft size={14} aria-hidden="true" /><span className={styles.backDesktop}>Back to U-Shop</span><span className={styles.backMobile}>Back</span></Link>

@@ -2,7 +2,7 @@
 
 import { createServerClient } from "@repo/supabase/server";
 import { redirect } from "next/navigation";
-import { uploadToImageKit, uploadToSanityAsset, syncStoreToSanity } from "@/lib/kyc-sync";
+import { uploadToImageKit, syncStoreToSanity } from "@/lib/kyc-sync";
 import type { SellerType } from "@repo/supabase/types";
 
 export async function createStoreAction(formData: FormData) {
@@ -161,8 +161,9 @@ export async function createStoreAction(formData: FormData) {
       // Sync to ImageKit
       const imagekitUrl = await uploadToImageKit(buffer, safeFilename, seller.id);
 
-      // Sync to Sanity Assets
-      const sanityAssetId = await uploadToSanityAsset(buffer, safeFilename, file.type);
+      // KYC documents are NOT mirrored to Sanity assets: those are served from a
+      // public CDN URL. They live in the private Supabase bucket (and a private
+      // ImageKit copy) only.
 
       // Record in kyc_documents table
       if (kycSubmission?.id) {
@@ -171,7 +172,6 @@ export async function createStoreAction(formData: FormData) {
           document_type: type as any,
           storage_path: storagePath,
           imagekit_url: imagekitUrl,
-          sanity_asset_id: sanityAssetId,
           original_filename: file.name,
           file_size: file.size,
           mime_type: file.type,

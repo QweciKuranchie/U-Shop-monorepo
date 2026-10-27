@@ -29,28 +29,8 @@ export async function uploadToImageKit(
   filename: string,
   folder: string
 ): Promise<string | null> {
-  return uploadFileToImageKit(fileBuffer, filename, `/ushop/kyc/${folder}`);
-}
-
-/**
- * Uploads a KYC document to Sanity asset storage (if configured)
- */
-export async function uploadToSanityAsset(
-  fileBuffer: Buffer,
-  filename: string,
-  contentType: string
-): Promise<string | null> {
-  try {
-    const assetType = contentType.startsWith("image/") ? "image" : "file";
-    const asset = await backendClient.assets.upload(assetType, fileBuffer, {
-      filename,
-      contentType,
-    });
-    return asset._id ?? null;
-  } catch (err) {
-    console.error("Sanity asset upload error:", err);
-    return null;
-  }
+  // National ID / student ID / business registration: never on the public CDN.
+  return uploadFileToImageKit(fileBuffer, filename, `/ushop/kyc/${folder}`, { isPrivate: true });
 }
 
 /**

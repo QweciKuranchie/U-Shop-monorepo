@@ -4,9 +4,9 @@
 .signin .formSide{min-height:900px}
 .header{height:113px;display:flex;align-items:flex-start;justify-content:space-between;padding:24px clamp(30px,6.25vw,90px) 0;gap:16px}
 .brand{display:flex;align-items:center;gap:14px;flex-shrink:0;text-decoration:none;color:#716d76}
-.brand img{width:144px;height:65px;object-fit:contain}
+.brand img{width:104px;height:47px;object-fit:contain}
 .brand span{font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:.01em}
-.back{display:inline-flex;align-items:center;gap:6px;margin-top:24px;color:#716d76;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;transition:color .2s ease}
+.back{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#716d76;font-size:12px;font-weight:500;text-decoration:none;white-space:nowrap;transition:color .2s ease}
 .back:hover,.switchPrompt a:hover,.forgot:hover{color:var(--purple)}
 .backMobile,.mobileIntro{display:none}
 .formPanel{width:min(546px,calc(100% - 70px));margin:0 auto;will-change:transform,opacity}
@@ -94,7 +94,7 @@
 @keyframes authFieldEnter{from{opacity:.55;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:1200px){
   .header{padding-left:32px;padding-right:32px}
-  .brand{gap:7px}.brand img{width:126px;height:58px}.brand span{font-size:9px}
+  .brand{gap:7px}.brand img{width:96px;height:43px}.brand span{font-size:9px}
   .formPanel{width:calc(100% - 64px)}
   .editorialInner{padding:0 30px}
   .editorial h2{font-size:39px}
@@ -105,8 +105,8 @@
   .formSide,.signup .formSide,.signin .formSide{min-height:100vh}
   .header{height:136px;padding:24px max(28px,7.5vw) 0;align-items:flex-start}
   .header::after{content:"";position:absolute;left:max(28px,7.5vw);right:max(28px,7.5vw);top:112px;height:3px;background:var(--purple)}
-  .brand img{width:145px;height:65px}.brand span{font-size:11px;gap:14px}
-  .back{margin-top:26px}
+  .brand img{width:96px;height:43px}.brand span{font-size:11px;gap:14px}
+  .back{margin-top:14px}
   .mobileIntro{display:block;background:var(--purple);color:#fff;padding:31px max(28px,8.9vw) 31px;min-height:187px}
   .mobileIntro p{margin:0 0 22px;font-size:11px;font-weight:800}
   .mobileIntro h1{margin:0 0 19px;font-size:37px;font-weight:700;line-height:1.15;letter-spacing:-.02em}
@@ -121,8 +121,8 @@
   .header,.signin .header{height:93px;padding:15px 22px 0}
   .signin .header{height:137px}
   .header::after{display:none}
-  .brand{gap:10px}.brand img{width:118px;height:54px}.brand span{font-size:10px}
-  .back{margin-top:19px;font-size:12px}.backDesktop{display:none}.backMobile{display:inline}
+  .brand{gap:8px}.brand img{width:84px;height:38px}.brand span{font-size:10px}
+  .back{margin-top:11px;font-size:12px}.backDesktop{display:none}.backMobile{display:inline}
   .mobileIntro{min-height:150px;padding:19px 24px 25px}
   .signin .mobileIntro{min-height:132px;padding-top:14px;padding-bottom:12px}
   .mobileIntro p{margin-bottom:20px;font-size:11px}
@@ -156,7 +156,7 @@
   .footnote{display:none}
 }
 @media(max-width:360px){
-  .brand{gap:5px}.brand img{width:101px;height:46px}.brand span{font-size:9px}
+  .brand{gap:5px}.brand img{width:76px;height:34px}.brand span{font-size:9px}
   .header{padding-left:18px;padding-right:18px}
   .formPanel,.signup .formPanel,.signin .formPanel{width:calc(100% - 36px)}
   .mobileIntro{padding-left:18px;padding-right:18px}

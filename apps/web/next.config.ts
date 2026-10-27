@@ -35,6 +35,22 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
+          // Clickjacking: only this site and U-Shop's Sanity Studio (Presentation/visual editing) may frame it
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self' https://sanity.ushopgh.com https://*.sanity.studio" },
+        ],
+      },
+    ];
+  },
   async redirects() {
     const rawStudioUrl =
       process.env.NEXT_PUBLIC_SANITY_STUDIO_URL ||
