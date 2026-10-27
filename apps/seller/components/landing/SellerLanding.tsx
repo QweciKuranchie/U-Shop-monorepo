@@ -56,7 +56,7 @@ const faqs = [
 
 function Brand({ footer = false }: { footer?: boolean }) {
   return <Link href="/" className={`${styles.brand} ${footer ? styles.footerBrand : ""}`} aria-label="U-Shop Seller Center home">
-    <Image src={asset("asset-ushop-official-logo-desktop-navigation.png")} alt="U-Shop" width={150} height={68} priority={!footer} />
+    <Image src={asset("asset-ushop-official-logo-desktop-navigation.png")} alt="U-Shop" width={104} height={47} priority={!footer} />
     <span className={styles.brandDesktopLabel}>SELLER CENTER</span><span className={styles.brandMobileLabel}>SELLER</span>
   </Link>;
 }
