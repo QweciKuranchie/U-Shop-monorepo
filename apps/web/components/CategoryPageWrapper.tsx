@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Category, Product } from "@repo/sanity";
-import { client } from "@repo/sanity";
 import { urlFor } from "@repo/sanity";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,39 +33,14 @@ const CategoryPageWrapper = ({ slug }: Props) => {
     const fetchData = async () => {
       try {
         setCategoryLoading(true);
-        // Fetch categories directly using Sanity client
-        const categoriesQuery = `*[_type == "category"] {
-          _id,
-          title,
-          slug,
-          description,
-          image,
-          featured,
-          range
-        }`;
-        const fetchedCategories = await client.fetch(categoriesQuery);
-        setCategories(fetchedCategories);
-
-        // Find current category
-        const current = fetchedCategories.find(
-          (cat: Category) => cat.slug?.current === slug
-        );
+        // Server endpoint, not Sanity directly: the dataset is private.
+        const res = await fetch(`/api/catalog/category/${encodeURIComponent(slug)}`);
+        if (!res.ok) throw new Error(`Category request failed (${res.status})`);
+        const data: { categories: Category[]; products: Product[] } = await res.json();
+        setCategories(data.categories);
+        const current = data.categories.find((cat: Category) => cat.slug?.current === slug);
         setCurrentCategory(current || null);
-
-        // Fetch products for the current category
-        const productsQuery = `
-          *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)] {
-            ...,
-            brand->{
-              _id,
-              title
-            }
-          }
-        `;
-        const fetchedProducts: Product[] = await client.fetch(productsQuery, {
-          slug,
-        });
-        setProducts(fetchedProducts);
+        setProducts(data.products);
       } catch (err) {
         console.error("Error fetching categories:", err);
         setError("Failed to load category data");

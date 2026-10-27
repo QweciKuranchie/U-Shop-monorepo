@@ -1,9 +1,6 @@
 "use client";
 import { Brand, Category, Product } from "@repo/sanity";
-import { client } from "@repo/sanity";
 import {
-  buildShopParams,
-  buildShopQuery,
   parseShopSort,
   SHOP_SORT_OPTIONS,
   type ShopSort,
@@ -127,19 +124,22 @@ const Shop = ({ categories, brands, classifications = [] }: Props) => {
         // query). The projection is slim; `attributeValues` are fetched only while a
         // spec filter needs them.
         const needsSpecs = Object.keys(dynamicAttrFilters).length > 0;
-        const data: ExtendedProduct[] = await client.fetch(
-          buildShopQuery(needsSpecs, sort),
-          buildShopParams({
-            searchQuery,
-            classification: selectedClassification,
-            category: selectedCategory,
-            brand: selectedBrand,
-            price: selectedPrice,
-            condition: selectedCondition,
-            warranty: selectedWarranty,
-          }),
-          { next: { revalidate: 0 } }
-        );
+        const qs = new URLSearchParams({ sort });
+        if (needsSpecs) qs.set("specs", "1");
+        const filters: Record<string, string | null | undefined> = {
+          q: searchQuery,
+          classification: selectedClassification,
+          category: selectedCategory,
+          brand: selectedBrand,
+          price: selectedPrice,
+          condition: selectedCondition,
+          warranty: selectedWarranty,
+        };
+        for (const [k, v] of Object.entries(filters)) if (v) qs.set(k, v);
+        // Server endpoint, not Sanity directly: the dataset is private.
+        const res = await fetch(`/api/catalog/shop?${qs.toString()}`);
+        if (!res.ok) throw new Error(`Catalogue request failed (${res.status})`);
+        const data: ExtendedProduct[] = await res.json();
 
         // Apply Dynamic Spec Filters
         let filteredData = data;

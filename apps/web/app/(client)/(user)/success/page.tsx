@@ -6,8 +6,6 @@ import { useEffect, useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { MY_ORDERS_QUERYResult } from "@repo/sanity";
-import { client } from "@repo/sanity";
-import { defineQuery } from "next-sanity";
 import { useUser } from "@clerk/nextjs";
 import {  Card, CardContent, CardHeader, CardTitle  } from "@repo/ui";
 import {  Button  } from "@repo/ui";
@@ -24,13 +22,6 @@ const SuccessContent = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  const query =
-    defineQuery(`*[_type == 'order' && clerkUserId == $userId] | order(orderDate desc){
-  ...,products[]{
-    ...,product->
-  }
-}`);
-
   useEffect(() => {
     const fetchData = async () => {
       if (!userId) {
@@ -38,15 +29,18 @@ const SuccessContent = () => {
       }
 
       try {
-        const ordersData = await client.fetch(query, { userId });
-        setOrders(ordersData as MY_ORDERS_QUERYResult);
+        // Own orders via the authenticated API (identity from the session), not a
+        // direct Sanity query with a client-supplied user id.
+        const res = await fetch("/api/orders/success", { cache: "no-store" });
+        if (!res.ok) throw new Error(`Orders request failed (${res.status})`);
+        setOrders((await res.json()) as MY_ORDERS_QUERYResult);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchData();
-  }, [userId, query]);
+  }, [userId]);
 
   return (
     <div className="min-h-screen bg-green-50 py-12 px-4">
